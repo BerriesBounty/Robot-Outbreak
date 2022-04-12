@@ -13,9 +13,6 @@ class Enemy(Creature):
         self.rect.x = x
         self.rect.y = y
 
-    def hurt(self, n):
-        self.health -= n
-
     def update(self):
         if self.health <= 0:
             self.kill()

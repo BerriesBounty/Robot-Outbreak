@@ -1,5 +1,4 @@
-import pygame, sys
-from pygame.locals import *  # imports functions
+import pygame
 import game
 pygame.init()  # initialize modules
 

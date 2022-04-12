@@ -9,19 +9,16 @@ from weapons.weapon import Weapon
 class Sword(Weapon):
     def __init__(self, entity, enemies):
         super().__init__(entity, enemies)
-        self.attackSpeed = 0.25
+        self.attackSpeed = 1
         self.damage = 3
-        self.image = assets.cannon
-        self.rect = pygame.Rect((self.entity.rect.x + self.entity.rect.width, self.entity.rect.y),
-                                       (18, 26))
+        self.image = assets.sword
+        self.rect = self.image.get_rect()
 
     def attack(self):
-        self.attactRect = pygame.Rect((self.entity.rect.x + self.entity.rect.width, self.entity.rect.y),
-                                      (50, 50))
-
+        attactRect = pygame.Rect((self.entity.rect.x + self.entity.rect.width, self.entity.rect.y), (10, 10))
         hit_list = []
         for e in self.enemies:
-            if self.attactRect.colliderect(e.rect):
+            if attactRect.colliderect(e.rect):
                 hit_list.append(e)
         for hit in hit_list:
             hit.hurt(self.damage)

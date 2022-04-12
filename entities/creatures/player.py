@@ -17,7 +17,7 @@ class Player(Creature):
         self.setxy()
         self.direction = 12  # direction of clock
 
-        self.weapon = Sword(self, self.world.all_list)
+        self.weapon = Sword(self, self.world.target_list)
         self.world.all_list.add(self.weapon)
         self.attackSpeed = self.weapon.get_attackSpeed()
         self.lastAttack = time.perf_counter()
@@ -46,14 +46,6 @@ class Player(Creature):
         self.xmove = 0
         self.ymove = 0
         keys = self.world.game.get_inputManager().get_keys()
-        if keys[pygame.K_d]:
-            self.xmove += self.speed
-            self.direction = 3
-            self.rect.x += self.speed
-        if keys[pygame.K_a]:
-            self.xmove -= self.speed
-            self.direction = 9
-            self.rect.x -= self.speed
         if keys[pygame.K_s]:
             self.ymove += self.speed
             self.direction = 12
@@ -62,6 +54,14 @@ class Player(Creature):
             self.ymove -= self.speed
             self.direction = 12
             self.rect.y -= self.speed
+        if keys[pygame.K_d]:
+            self.xmove += self.speed
+            self.direction = 3
+            self.rect.x += self.speed
+        if keys[pygame.K_a]:
+            self.xmove -= self.speed
+            self.direction = 9
+            self.rect.x -= self.speed
 
     def checkAttack(self):
         self.attackTimer += time.perf_counter() - self.lastAttack
