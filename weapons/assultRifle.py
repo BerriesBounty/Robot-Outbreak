@@ -5,8 +5,8 @@ from weapons.weapon import Weapon
 
 
 class AssultRifle(Weapon):
-    def __init__(self, entity):
-        super().__init__(entity)
+    def __init__(self, entity, enemies):
+        super().__init__(entity, enemies)
         self.attackSpeed = 0.25
 
     def attack(self):

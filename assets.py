@@ -9,7 +9,7 @@ HEIGHT = 26
 def init():
     global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font, playerSheet
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
-    playerSheet = pygame.image.load("res/playerSpriteSheet.png")
+    playerSheet = pygame.image.load("res/playerSpriteSheet.png").convert_alpha()
     playerSheet.set_colorkey((186, 200, 216))
 
     bullet = spriteSheet.subsurface((16, 32, 16, 16))
