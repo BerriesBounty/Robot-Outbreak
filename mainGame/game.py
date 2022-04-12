@@ -3,7 +3,7 @@ import sys
 import time
 from pygame.locals import *  # imports functions
 import assets
-import input.inputManager as inputManager
+import inputManager as inputManager
 import states.gameState as gameState
 import states.state
 from states import startingState
