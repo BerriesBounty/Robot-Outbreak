@@ -11,7 +11,7 @@ class AssaultRifle(Weapon):
         self.attackSpeed = 0.25
         self.image = pygame.transform.scale(assets.assaultRifle, (35, 13))
         self.image.set_colorkey((98, 22, 107))
-        self.image.blit(assets.hand, (10, 10))
+        self.image.blit(assets.hand, (10, 5))
 
         self.rect = self.image.get_rect()
 
