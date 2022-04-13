@@ -18,11 +18,12 @@ class Player(Creature):
         self.direction = 12  # direction of clock
 
         self.weapon = Sword(self, self.world.target_list)
-        self.world.all_list.add(self.weapon)
         self.attackSpeed = self.weapon.get_attackSpeed()
         self.lastAttack = time.perf_counter()
         self.attackTimer = self.attackSpeed
 
+        self.world.all_list.add(self)
+        self.world.all_list.add(self.weapon)
 
     def setxy(self):
         self.rect.x = self.world.game.width / 2 - self.rect.width / 2

@@ -16,15 +16,14 @@ class World:
         self.target_list = pygame.sprite.Group()
         self.all_list = pygame.sprite.Group()
 
-        self.cannon = Player(self)
-        self.all_list.add(self.cannon)
-
         for i in range(20):
             target = Enemy(self)
             target.setxy(random.randint(0, self.game.get_width() - target.rect.width),
                          random.randint(0, self.game.get_height() / 2))
             self.target_list.add(target)
             self.all_list.add(target)
+
+        self.player = Player(self)
 
     def tick(self):
         self.all_list.update()

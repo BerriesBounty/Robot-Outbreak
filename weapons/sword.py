@@ -24,7 +24,7 @@ class Sword(Weapon):
             hit.hurt(self.damage)
 
     def update(self):
-        self.rect.x = self.entity.rect.x + self.entity.rect.width
+        self.rect.x = self.entity.rect.x + self.entity.rect.width/2
         self.rect.y = self.entity.rect.y
 
     def get_attackSpeed(self):
