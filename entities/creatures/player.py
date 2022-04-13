@@ -2,7 +2,7 @@ import time
 import pygame
 import assets
 from entities.creatures.creature import Creature
-from weapons.assultRifle import AssultRifle
+from weapons.assaultRifle import AssaultRifle
 from weapons.sword import Sword
 
 
@@ -17,7 +17,7 @@ class Player(Creature):
         self.setxy()
         self.direction = 12  # direction of clock
 
-        self.weapon = Sword(self, self.world.target_list)
+        self.weapon = AssaultRifle(self, self.world.target_list)
         self.attackSpeed = self.weapon.get_attackSpeed()
         self.lastAttack = time.perf_counter()
         self.attackTimer = self.attackSpeed

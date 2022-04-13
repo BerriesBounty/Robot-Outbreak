@@ -1,13 +1,19 @@
-import time
+import pygame
 
+import assets
 from bullet import Bullet
 from weapons.weapon import Weapon
 
 
-class AssultRifle(Weapon):
+class AssaultRifle(Weapon):
     def __init__(self, entity, enemies):
         super().__init__(entity, enemies)
         self.attackSpeed = 0.25
+        self.image = pygame.transform.scale(assets.assaultRifle, (35, 13))
+        self.image.set_colorkey((98, 22, 107))
+        self.image.blit(assets.hand, (10, 10))
+
+        self.rect = self.image.get_rect()
 
     def attack(self):
         bullet = Bullet(self.entity.world, self.entity.world.game.get_inputManager().get_x(),
@@ -18,7 +24,8 @@ class AssultRifle(Weapon):
         self.entity.world.bullet_list.add(bullet)
 
     def update(self):
-        pass
+        self.rect.x = self.entity.rect.x + 8
+        self.rect.y = self.entity.rect.y + 22
 
     def get_attackSpeed(self):
         return self.attackSpeed
