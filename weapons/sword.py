@@ -15,10 +15,10 @@ class Sword(Weapon):
         self.rect = self.image.get_rect()
 
     def attack(self):
-        attactRect = pygame.Rect((self.entity.rect.x + self.entity.rect.width, self.entity.rect.y), (10, 10))
+        attackRect = pygame.Rect((self.entity.rect.x + self.entity.rect.width, self.entity.rect.y), (10, 10))
         hit_list = []
         for e in self.enemies:
-            if attactRect.colliderect(e.rect):
+            if attackRect.colliderect(e.rect):
                 hit_list.append(e)
         for hit in hit_list:
             hit.hurt(self.damage)
