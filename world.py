@@ -6,8 +6,8 @@ from entities.creatures.player import Player
 
 
 class World:
-    def __init__(self, game, path):
-        self.game = game
+    def __init__(self, state, path):
+        self.state = state
         self.width = self.height = self.spawnX = self.spawnY = None
         self.tiles = []
         # self.load_world(path)
@@ -18,8 +18,8 @@ class World:
 
         for i in range(20):
             target = Enemy(self)
-            target.setxy(random.randint(0, self.game.get_width() - target.rect.width),
-                         random.randint(0, self.game.get_height() / 2))
+            target.setxy(random.randint(0, self.state.get_game().get_width() - target.rect.width),
+                         random.randint(0, self.state.get_game().get_height() / 2))
             self.target_list.add(target)
             self.all_list.add(target)
 
@@ -43,3 +43,6 @@ class World:
             self.tiles.append([])
             for y in range(self.height):
                 self.tiles[x].append(int(content[(x * self.height + y) + 4]))
+
+    def get_state(self):
+        return self.state

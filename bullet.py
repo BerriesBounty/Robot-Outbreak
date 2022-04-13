@@ -6,9 +6,9 @@ import assets
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, world, mx, my):
+    def __init__(self, enemies, mx, my):
         super().__init__()
-        self.world = world
+        self.enemies = enemies
         self.image = assets.bullet
         self.rect = self.image.get_rect()
         self.mx = mx
@@ -48,7 +48,7 @@ class Bullet(pygame.sprite.Sprite):
         self.checkCollision()
 
     def checkCollision(self):
-        hit_list = pygame.sprite.spritecollide(self, self.world.target_list, False)
+        hit_list = pygame.sprite.spritecollide(self, self.enemies, False)
         for hit in hit_list:
             hit.hurt(self.damage)
             self.kill()

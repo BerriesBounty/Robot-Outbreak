@@ -27,8 +27,8 @@ class Player(Creature):
         self.world.all_list.add(self.weapon)
 
     def setxy(self):
-        self.rect.x = self.world.game.width / 2 - self.rect.width / 2
-        self.rect.y = self.world.game.height - self.rect.height
+        self.rect.x = self.world.get_state().get_game().width / 2 - self.rect.width / 2
+        self.rect.y = self.world.get_state().get_game().height - self.rect.height
 
     def update(self):
         self.getInput()
@@ -45,7 +45,7 @@ class Player(Creature):
     def getInput(self):
         self.xmove = 0
         self.ymove = 0
-        keys = self.world.game.get_inputManager().get_keys()
+        keys = self.world.get_state().get_game().get_inputManager().get_keys()
         if keys[pygame.K_s]:
             self.ymove += self.speed
             self.rect.y += self.speed
@@ -56,26 +56,26 @@ class Player(Creature):
             self.xmove += self.speed
             self.rect.x += self.speed
             if not self.attacking:
-                self.direction = 3
+                self.direction = 0
         if keys[pygame.K_a]:
             self.xmove -= self.speed
             self.rect.x -= self.speed
             if not self.attacking:
-                self.direction = 9
+                self.direction = 1
 
     def checkAttack(self):
         self.attackTimer += time.perf_counter() - self.lastAttack
         self.lastAttack = time.perf_counter()
         if self.attackTimer < self.attackSpeed:
             return
-        elif self.world.game.get_inputManager().get_pressed(0):
+        elif self.world.get_state().get_game().get_inputManager().get_pressed(0):
             self.attacking = True
-            x = self.world.game.get_inputManager().get_x()
-            y = self.world.game.get_inputManager().get_y()
+            x = self.world.get_state().get_game().get_inputManager().get_x()
+            y = self.world.get_state().get_game().get_inputManager().get_y()
             if x - self.rect.x > 0:
-                self.direction = 3
+                self.direction = 0
             else:
-                self.direction = 9
+                self.direction = 1
 
             self.weapon.attack(x, y)
             self.attackTimer = 0

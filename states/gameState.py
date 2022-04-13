@@ -7,7 +7,7 @@ from states.state import State
 class GameState(State):
     def __init__(self, game):
         super().__init__(game)
-        self.world = world.World(self.game, "hello")
+        self.world = world.World(self, "hello")
 
     def tick(self):
         if self.game.get_inputManager().get_keys()[pygame.K_TAB]:
