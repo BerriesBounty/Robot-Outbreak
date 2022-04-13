@@ -15,12 +15,13 @@ class Player(Creature):
         self.image = self.center
         self.rect = self.image.get_rect()
         self.setxy()
-        self.direction = 12  # direction of clock
+        self.direction = 0  # direction of clock
 
         self.weapon = AssaultRifle(self, self.world.target_list)
         self.attackSpeed = self.weapon.get_attackSpeed()
         self.lastAttack = time.perf_counter()
         self.attackTimer = self.attackSpeed
+        self.attacking = False
 
         self.world.all_list.add(self)
         self.world.all_list.add(self.weapon)
@@ -35,8 +36,6 @@ class Player(Creature):
             self.image = self.right
         elif self.direction == 9:
             self.image = self.left
-        else:
-            self.image = self.center
 
         self.checkAttack()
 
@@ -49,20 +48,20 @@ class Player(Creature):
         keys = self.world.game.get_inputManager().get_keys()
         if keys[pygame.K_s]:
             self.ymove += self.speed
-            self.direction = 12
             self.rect.y += self.speed
         if keys[pygame.K_w]:
             self.ymove -= self.speed
-            self.direction = 12
             self.rect.y -= self.speed
         if keys[pygame.K_d]:
             self.xmove += self.speed
-            self.direction = 3
             self.rect.x += self.speed
+            if not self.attacking:
+                self.direction = 3
         if keys[pygame.K_a]:
             self.xmove -= self.speed
-            self.direction = 9
             self.rect.x -= self.speed
+            if not self.attacking:
+                self.direction = 9
 
     def checkAttack(self):
         self.attackTimer += time.perf_counter() - self.lastAttack
@@ -70,5 +69,15 @@ class Player(Creature):
         if self.attackTimer < self.attackSpeed:
             return
         elif self.world.game.get_inputManager().get_pressed(0):
-            self.weapon.attack()
+            self.attacking = True
+            x = self.world.game.get_inputManager().get_x()
+            y = self.world.game.get_inputManager().get_y()
+            if x - self.rect.x > 0:
+                self.direction = 3
+            else:
+                self.direction = 9
+
+            self.weapon.attack(x, y)
             self.attackTimer = 0
+        else:
+            self.attacking = False
