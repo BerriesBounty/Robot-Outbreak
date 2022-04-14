@@ -32,12 +32,16 @@ class Player(Creature):
 
     def update(self):
         self.getInput()
-        if self.direction == 3:
-            self.image = self.right
-        elif self.direction == 9:
-            self.image = self.left
 
-        self.checkAttack()
+        x = self.world.get_state().get_game().get_inputManager().get_x()
+        y = self.world.get_state().get_game().get_inputManager().get_y()
+        if x - self.rect.x > 0:
+            self.direction = 0
+            self.image = self.right
+        else:
+            self.direction = 1
+            self.image = self.left
+        self.checkAttack(x, y)
 
     def die(self):
         pass
@@ -63,20 +67,13 @@ class Player(Creature):
             if not self.attacking:
                 self.direction = 1
 
-    def checkAttack(self):
+    def checkAttack(self, x, y):
         self.attackTimer += time.perf_counter() - self.lastAttack
         self.lastAttack = time.perf_counter()
         if self.attackTimer < self.attackSpeed:
             return
         elif self.world.get_state().get_game().get_inputManager().get_pressed(0):
             self.attacking = True
-            x = self.world.get_state().get_game().get_inputManager().get_x()
-            y = self.world.get_state().get_game().get_inputManager().get_y()
-            if x - self.rect.x > 0:
-                self.direction = 0
-            else:
-                self.direction = 1
-
             self.weapon.attack(x, y)
             self.attackTimer = 0
         else:
