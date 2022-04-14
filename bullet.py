@@ -2,7 +2,7 @@ import math
 
 import pygame
 
-import assets
+from gfx import assets
 
 
 class Bullet(pygame.sprite.Sprite):

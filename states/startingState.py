@@ -1,6 +1,6 @@
 import pygame.font
 
-import assets
+from gfx import assets
 from states.state import State
 
 

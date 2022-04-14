@@ -1,24 +1,28 @@
 import time
 import pygame
-import assets
+from gfx import assets
 from entities.creatures.creature import Creature
+from gfx.animation import Animation
 from weapons.assaultRifle import AssaultRifle
-from weapons.sword import Sword
 
 
 class Player(Creature):
     def __init__(self, world):
         super().__init__(world)
-        self.left = pygame.transform.scale(assets.leftCannon, (36, 48))
-        self.right = pygame.transform.scale(assets.rightCannon, (36, 48))
-        self.center = pygame.transform.scale(assets.cannon, (36, 48))
-        self.image = self.center
+        self.left = assets.leftCannon
+        self.right = assets.rightCannon
+        self.idleRight = Animation(0.2, assets.playerIdleRight)
+        self.idleLeft = Animation(0.2, assets.playerIdleLeft)
+
+        self.curAnimation = self.idleRight
+        self.image = self.curAnimation.getCurrentFrame()
         self.rect = self.image.get_rect()
+
         self.setxy()
         self.direction = 0  # direction of clock
 
-        self.weapon = Sword(self, self.world.target_list)
-        self.attackSpeed = self.weapon.get_attackSpeed()
+        self.weapon = AssaultRifle(self, self.world.target_list)
+        self.attackSpeed = self.weapon.attackSpeed
         self.lastAttack = time.perf_counter()
         self.attackTimer = self.attackSpeed
         self.attacking = False
@@ -27,21 +31,25 @@ class Player(Creature):
         self.world.all_list.add(self.weapon)
 
     def setxy(self):
-        self.rect.x = self.world.get_state().get_game().width / 2 - self.rect.width / 2
-        self.rect.y = self.world.get_state().get_game().height - self.rect.height
+        self.rect.x = self.world.state.game.width / 2 - self.rect.width / 2
+        self.rect.y = self.world.state.game.height - self.rect.height
 
     def update(self):
+        self.idleRight.tick()
+        self.idleLeft.tick()
+
         self.getInput()
 
-        mx = self.world.get_state().get_game().get_inputManager().get_x()
-        my = self.world.get_state().get_game().get_inputManager().get_y()
-        if mx - self.rect.x > 0:
+        mx = self.world.state.game.inputManager.x
+        if mx - self.rect.x + self.rect.width / 2 > 0:
             self.direction = 0
-            self.image = self.right
+            self.curAnimation = self.idleRight
         else:
             self.direction = 1
             self.image = self.left
-        self.checkAttack(mx, my)
+        self.checkAttack()
+
+        self.image = self.getAnimationFrame()
 
     def die(self):
         pass
@@ -49,7 +57,7 @@ class Player(Creature):
     def getInput(self):
         self.xmove = 0
         self.ymove = 0
-        keys = self.world.get_state().get_game().get_inputManager().get_keys()
+        keys = self.world.state.game.inputManager.keys
         if keys[pygame.K_s]:
             self.ymove += self.speed
             self.rect.y += self.speed
@@ -67,14 +75,20 @@ class Player(Creature):
             if not self.attacking:
                 self.direction = 1
 
-    def checkAttack(self, x, y):
+    def checkAttack(self):
         self.attackTimer += time.perf_counter() - self.lastAttack
         self.lastAttack = time.perf_counter()
         if self.attackTimer < self.attackSpeed:
             return
-        elif self.world.get_state().get_game().get_inputManager().get_pressed(0):
+        elif self.world.state.game.inputManager.get_pressed(0):
             self.attacking = True
-            self.weapon.attack(x, y)
+            self.weapon.attack()
             self.attackTimer = 0
         else:
             self.attacking = False
+
+    def getAnimationFrame(self):
+        if self.direction == 0:
+            return self.idleRight.getCurrentFrame()
+        else:
+            return self.idleLeft.getCurrentFrame()

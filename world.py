@@ -18,8 +18,8 @@ class World:
 
         for i in range(20):
             target = Enemy(self)
-            target.setxy(random.randint(0, self.state.get_game().get_width() - target.rect.width),
-                         random.randint(0, self.state.get_game().get_height() / 2))
+            target.setxy(random.randint(0, self.state.game.width - target.rect.width),
+                         random.randint(0, self.state.game.height / 2))
             self.target_list.add(target)
             self.all_list.add(target)
 
@@ -43,6 +43,3 @@ class World:
             self.tiles.append([])
             for y in range(self.height):
                 self.tiles[x].append(int(content[(x * self.height + y) + 4]))
-
-    def get_state(self):
-        return self.state

@@ -2,7 +2,7 @@ import pygame
 import sys
 import time
 from pygame.locals import *  # imports functions
-import assets
+from gfx import assets
 import inputManager as inputManager
 import states.gameState as gameState
 import states.state
@@ -12,18 +12,20 @@ from states import startingState
 class Game:
     def __init__(self, name, width, height):
         pygame.init()  # initialize modules
-        self.name = name
-        self.width = width
+        self.name = name  # name of program
+        self.width = width  # width/height of program
         self.height = height
         self.display = pygame.display.set_mode((self.width, self.height))
-        self.inputManager = inputManager.InputManager()
-        self.clock = pygame.time.Clock()
-        assets.init()
 
+        self.inputManager = inputManager.InputManager()  # taking in all inputs of keyboard & mouse
+        self.clock = pygame.time.Clock()
+        assets.init()  # assets class stores all the images
+
+        # states are the different parts of a game
         self.stateManager = states.state.StateManager()
-        self.gameState = gameState.GameState(self)
-        self.startingState = startingState.StartingState(self)
-        self.stateManager.set_state(self.startingState)
+        self.gameState = gameState.GameState(self)  # the actual gameplay
+        self.startingState = startingState.StartingState(self)  # the stating menu
+        self.stateManager.set_state(self.gameState) #set the current state the game is in
 
     def start(self):
 
@@ -52,8 +54,8 @@ class Game:
             #     print(f"fps: {ticks}")
             #     ticks = 0
             #     timer = 0
-            self.tick()
-            self.render(self.display)
+            self.tick()  # updating on the different classes
+            self.render(self.display)  # drawing all the sprites
 
             pygame.display.update()
             self.clock.tick(60)
@@ -77,7 +79,7 @@ class Game:
             if event.type == pygame.MOUSEMOTION:
                 self.inputManager.mouseMoved()
 
-        pygame.display.set_caption(f"X: {self.inputManager.get_x()} Y: {self.inputManager.get_y()}")
+        pygame.display.set_caption(f"X: {self.inputManager.x} Y: {self.inputManager.y}")
 
         if self.stateManager.get_state() is not None:
             self.stateManager.get_state().tick()
@@ -87,15 +89,3 @@ class Game:
 
         if self.stateManager.get_state() is not None:
             self.stateManager.get_state().render(display)
-
-    def get_inputManager(self):
-        return self.inputManager
-
-    def get_stateManager(self):
-        return self.stateManager
-
-    def get_width(self):
-        return self.width
-
-    def get_height(self):
-        return self.height

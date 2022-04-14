@@ -10,12 +10,9 @@ class GameState(State):
         self.world = world.World(self, "hello")
 
     def tick(self):
-        if self.game.get_inputManager().get_keys()[pygame.K_TAB]:
+        if self.game.inputManager.keys[pygame.K_TAB]:
             pass
         self.world.tick()
 
     def render(self, display):
         self.world.render(display)
-
-    def get_game(self):
-        return self.game

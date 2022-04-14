@@ -44,21 +44,9 @@ class InputManager:
         self.x = mouse[0]
         self.y = mouse[1]
 
-    def get_x(self):
-        return self.x
-
-    def get_y(self):
-        return self.y
-
     def get_pressed(self, n):
         return self.mouse[n]
 
     def get_justPressed(self, n):
         return self.justPressed[n]
-
-    def get_keys(self):
-        return self.keys
-
-    def get_keyReleased(self):
-        return self.keyReleased
 

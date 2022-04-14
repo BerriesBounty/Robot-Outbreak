@@ -1,4 +1,4 @@
-import assets
+from gfx import assets
 from entities.creatures.creature import Creature
 
 
