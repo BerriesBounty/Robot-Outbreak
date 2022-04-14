@@ -12,6 +12,7 @@ class Weapon(Sprite, ABC):
         self.image = None
         self.rect = None
         self.enemies = enemies
+        self.rimage = self.limage = None
 
     @abstractmethod
     def update(self):

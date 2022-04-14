@@ -17,7 +17,7 @@ class Player(Creature):
         self.setxy()
         self.direction = 0  # direction of clock
 
-        self.weapon = AssaultRifle(self, self.world.target_list)
+        self.weapon = Sword(self, self.world.target_list)
         self.attackSpeed = self.weapon.get_attackSpeed()
         self.lastAttack = time.perf_counter()
         self.attackTimer = self.attackSpeed
@@ -33,15 +33,15 @@ class Player(Creature):
     def update(self):
         self.getInput()
 
-        x = self.world.get_state().get_game().get_inputManager().get_x()
-        y = self.world.get_state().get_game().get_inputManager().get_y()
-        if x - self.rect.x > 0:
+        mx = self.world.get_state().get_game().get_inputManager().get_x()
+        my = self.world.get_state().get_game().get_inputManager().get_y()
+        if mx - self.rect.x > 0:
             self.direction = 0
             self.image = self.right
         else:
             self.direction = 1
             self.image = self.left
-        self.checkAttack(x, y)
+        self.checkAttack(mx, my)
 
     def die(self):
         pass

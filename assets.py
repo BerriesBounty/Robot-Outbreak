@@ -1,20 +1,20 @@
 import pygame
 
 spriteSheet = cannon = bullet = target = leftCannon\
-    = rightCannon = font = playerSheet = sword = gunSheet = hand = None
-assaultRifle = [None] * 2
+    = rightCannon = font = playerSheet = gunSheet = hand = None
+assaultRifle = sword = [None] * 2
 WIDTH = 18
 HEIGHT = 26
 
 #colors
-purple = ( 98,  22, 107)
+purple = (98,  22, 107)
 
 def init():
     global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font, \
-        playerSheet, sword, gunSheet, assaultRifle, hand
+        playerSheet, gunSheet, assaultRifle, hand, sword
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
     gunSheet = loadImage("res/gunSheet.png", purple)
-    playerSheet = loadImage("res/oneHandSheet.png", (186, 200, 216))
+    playerSheet = loadImage("res/oneHandSheet.png", (186, 20, 216))
 
     bullet = spriteSheet.subsurface((16, 32, 16, 16))
     cannon = playerSheet.subsurface((0, 0, WIDTH, HEIGHT))
@@ -24,9 +24,14 @@ def init():
 
     sword = pygame.image.load("res/sword.png")
 
-    baseRifle = pygame.transform.scale(gunSheet.subsurface((0, 0, 96, 96)), (48, 48))
-    assaultRifle[0] = baseRifle
-    assaultRifle[1] = pygame.transform.flip(baseRifle, True, False)
+    baseRifle = gunSheet.subsurface((0, 0, 96, 96))
+    baseSword = gunSheet.subsurface((0, 0, 96, 96))
+
+    # assaultRifle[0] = pygame.transform.scale(baseRifle, (48, 48))
+    # assaultRifle[1] = pygame.transform.flip(assaultRifle[0], True, False)
+    sword[0] = pygame.transform.scale(baseSword, (48, 48))
+    sword[1] = pygame.transform.flip(baseSword, True, False)
+
 
     hand = pygame.transform.scale(pygame.image.load("res/hand.png"), (8, 8))
     hand.set_colorkey((186, 200, 216))

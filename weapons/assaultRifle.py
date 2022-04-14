@@ -11,16 +11,15 @@ class AssaultRifle(Weapon):
     def __init__(self, entity, enemies):
         super().__init__(entity, enemies)
         self.attackSpeed = 0.25
+        self.damage = 1
         self.rimage = assets.assaultRifle[0]
         self.limage = assets.assaultRifle[1]
 
-        # self.ogimage.set_colorkey(assets.purple)
-        # self.image.blit(assets.hand, (15, 9))
         self.image = self.rimage
         self.rect = self.image.get_rect()
-        self.rimage.blit(assets.hand, (self.rect.width / 2, self.rect.height / 2))
-        self.limage.blit(assets.hand, (self.rect.width / 2, self.rect.height / 2))
         self.xOffset = 2
+        self.rimage.blit(assets.hand, (self.rect.width / 2, self.rect.height / 2))
+        self.limage.blit(assets.hand, (self.rect.width / 2 - 7, self.rect.height / 2))
 
     def attack(self, x, y):
         bullet = Bullet(self.enemies, x, y)
@@ -47,8 +46,10 @@ class AssaultRifle(Weapon):
         if dx == 0:
             dx = 0.01
         angle = -math.degrees(math.atan(dy/dx))
+        if self.rect.x - 1 <= mx <= self.entity.rect.x:
+            angle = -angle
         self.image = assets.rot_center(curImage, angle)
-        # self.image.blit(assets.hand, (self.rect.width/2, self.rect.height/2))
+        print(dx, dy)
 
 
     def get_attackSpeed(self):
