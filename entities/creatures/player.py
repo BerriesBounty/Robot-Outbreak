@@ -12,7 +12,7 @@ class Player(Creature):
         super().__init__(world)
         self.left = assets.leftCannon
         self.right = assets.rightCannon
-        self.idleRight = Animation(0.5, assets.playerIdleRight)
+        self.idleRight = Animation(0.15, assets.playerIdleRight)
         self.idleLeft = Animation(0.15, assets.playerIdleLeft)
         self.walkingRight = Animation(0.15, assets.playerWalkingRight)
         self.walkingLeft = Animation(0.15, assets.playerWalkingLeft)
@@ -25,14 +25,16 @@ class Player(Creature):
         self.setxy()
         self.direction = 0  # direction of clock
 
-        self.weapon = Sword(self, self.world.target_list)
-        self.attackSpeed = self.weapon.attackSpeed
+        self.weapons = [None] * 2
+        self.weapons[0] = AssaultRifle(self, self.world.target_list)
+        self.weapons[1] = Sword(self, self.world.target_list)
+        self.equippedWeapon = self.weapons[0]
         self.lastAttack = time.perf_counter()
-        self.attackTimer = self.attackSpeed
+        self.attackTimer = self.equippedWeapon.attackSpeed
         self.attacking = False
 
         self.world.entityManager.add(self)
-        self.world.entityManager.add(self.weapon)
+        self.world.entityManager.add(self.equippedWeapon)
 
     def setxy(self):
         self.rect.x = self.world.state.game.width / 2 - self.rect.width / 2
@@ -81,19 +83,34 @@ class Player(Creature):
             self.rect.x -= self.speed
             if not self.attacking:
                 self.direction = 1
+
         if self.xmove != 0 or self.ymove != 0:
             self.ismoving = True
         else:
             self.ismoving = False
 
+        if keys[pygame.K_1]:
+            if self.equippedWeapon != self.weapons[0]:
+                self.world.entityManager.remove(self.equippedWeapon)
+                self.equippedWeapon = self.weapons[0]
+                self.world.entityManager.add(self.equippedWeapon)
+        if keys[pygame.K_2]:
+            if self.equippedWeapon != self.weapons[1]:
+                self.world.entityManager.remove(self.equippedWeapon)
+                self.equippedWeapon = self.weapons[1]
+                self.world.entityManager.add(self.equippedWeapon)
+
+
+
+
     def checkAttack(self):
         self.attackTimer += time.perf_counter() - self.lastAttack
         self.lastAttack = time.perf_counter()
-        if self.attackTimer < self.attackSpeed:
+        if self.attackTimer < self.equippedWeapon.attackSpeed or self.equippedWeapon.reloading:
             return
         elif self.world.state.game.inputManager.get_pressed(0):
             self.attacking = True
-            self.weapon.attack()
+            self.equippedWeapon.attack()
             self.attackTimer = 0
         else:
             self.attacking = False
