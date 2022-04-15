@@ -4,6 +4,7 @@ from gfx import assets
 from entities.creatures.creature import Creature
 from gfx.animation import Animation
 from weapons.assaultRifle import AssaultRifle
+from weapons.sword import Sword
 
 
 class Player(Creature):
@@ -11,8 +12,10 @@ class Player(Creature):
         super().__init__(world)
         self.left = assets.leftCannon
         self.right = assets.rightCannon
-        self.idleRight = Animation(0.15, assets.playerIdleRight)
+        self.idleRight = Animation(0.5, assets.playerIdleRight)
         self.idleLeft = Animation(0.15, assets.playerIdleLeft)
+        self.walkingRight = Animation(0.15, assets.playerWalkingRight)
+        self.walkingLeft = Animation(0.15, assets.playerWalkingLeft)
         self.ismoving = False
 
         self.curAnimation = self.idleRight
@@ -22,14 +25,12 @@ class Player(Creature):
         self.setxy()
         self.direction = 0  # direction of clock
 
-        self.weapon = AssaultRifle(self, self.world.target_list)
+        self.weapon = Sword(self, self.world.target_list)
         self.attackSpeed = self.weapon.attackSpeed
         self.lastAttack = time.perf_counter()
         self.attackTimer = self.attackSpeed
         self.attacking = False
 
-        # self.world.all_list.add(self)
-        # self.world.all_list.add(self.weapon)
         self.world.entityManager.add(self)
         self.world.entityManager.add(self.weapon)
 
@@ -40,6 +41,8 @@ class Player(Creature):
     def update(self):
         self.idleRight.tick()
         self.idleLeft.tick()
+        self.walkingLeft.tick()
+        self.walkingRight.tick()
 
         self.getInput()
 
@@ -103,7 +106,7 @@ class Player(Creature):
                 return self.idleLeft.getCurrentFrame()
         else:
             if self.direction == 0:
-                return self.idleRight.getCurrentFrame()
+                return self.walkingRight.getCurrentFrame()
             else:
-                return self.idleLeft.getCurrentFrame()
+                return self.walkingLeft.getCurrentFrame()
 

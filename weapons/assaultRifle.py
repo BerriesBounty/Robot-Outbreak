@@ -55,6 +55,3 @@ class AssaultRifle(Weapon):
         else:
             angle = -math.degrees(math.atan(dy/dx))
         self.image = assets.rot_center(curImage, angle)
-
-    def render(self, display):
-        display.blit(self.image, self.rect)

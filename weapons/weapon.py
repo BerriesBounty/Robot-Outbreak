@@ -19,6 +19,3 @@ class Weapon(Sprite, ABC):
     def update(self):
         pass
 
-    @abstractmethod
-    def render(self, display):
-        pass

@@ -1,26 +1,29 @@
 import pygame
 
 spriteSheet = cannon = bullet = target = leftCannon\
-    = rightCannon = font36 = playerSheet = gunSheet = hand = None
+    = rightCannon = font36 = hand = None
 
 assaultRifle = []
 sword = []
 
 playerIdleRight = []
 playerIdleLeft = []
+playerWalkingRight = []
+playerWalkingLeft = []
 
-WIDTH = 36
-HEIGHT = 48
+WIDTH = 34
+HEIGHT = 54
 
 #colors
-purple = (98,  22, 17)
+purple = (98,  22, 107)
 
 def init():
-    global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font36, \
-        playerSheet, gunSheet, assaultRifle, hand, sword, playerIdleRight, playerIdleLeft
+    global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font36,\
+        assaultRifle, hand, sword, playerIdleRight, playerIdleLeft
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
     gunSheet = loadImage("res/gunSheet.png", purple)
     playerSheet = pygame.transform.scale(loadImage("res/oneHandSheet.png", (186, 200, 216)), (144, 208))
+    playerWalkingSheet = pygame.transform.scale(loadImage("res/playerWalkingSheet.png", (186, 200, 216)), (212, 232))
 
     bullet = spriteSheet.subsurface((16, 32, 16, 16))
     target = spriteSheet.subsurface((0, 0, 32, 32))
@@ -38,6 +41,20 @@ def init():
     playerIdleLeft.append(pygame.transform.flip(playerIdleRight[1], True, False))
     playerIdleLeft.append(pygame.transform.flip(playerIdleRight[2], True, False))
     playerIdleLeft.append(pygame.transform.flip(playerIdleRight[3], True, False))
+
+    playerWalkingRight.append(playerWalkingSheet.subsurface((0, HEIGHT, WIDTH, HEIGHT)))
+    playerWalkingRight.append(playerWalkingSheet.subsurface((WIDTH, HEIGHT, WIDTH, HEIGHT)))
+    playerWalkingRight.append(playerWalkingSheet.subsurface((WIDTH * 2, HEIGHT, WIDTH, HEIGHT)))
+    playerWalkingRight.append(playerWalkingSheet.subsurface((WIDTH * 3, HEIGHT, WIDTH, HEIGHT)))
+    playerWalkingRight.append(playerWalkingSheet.subsurface((WIDTH * 4, HEIGHT, WIDTH, HEIGHT)))
+    playerWalkingRight.append(playerWalkingSheet.subsurface((WIDTH * 5, HEIGHT, WIDTH, HEIGHT)))
+
+    playerWalkingLeft.append(pygame.transform.flip(playerWalkingRight[0], True, False))
+    playerWalkingLeft.append(pygame.transform.flip(playerWalkingRight[1], True, False))
+    playerWalkingLeft.append(pygame.transform.flip(playerWalkingRight[2], True, False))
+    playerWalkingLeft.append(pygame.transform.flip(playerWalkingRight[3], True, False))
+    playerWalkingLeft.append(pygame.transform.flip(playerWalkingRight[4], True, False))
+    playerWalkingLeft.append(pygame.transform.flip(playerWalkingRight[5], True, False))
 
     baseRifle = pygame.transform.scale(gunSheet.subsurface((0, 0, 96, 96)), (48, 48))
     assaultRifle.append(baseRifle)

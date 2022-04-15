@@ -21,7 +21,12 @@ class Sword(Weapon):
         self.limage.blit(assets.hand, (self.rect.width / 2 - 5, self.rect.height / 2 - 5))
 
     def attack(self):
-        attackRect = pygame.Rect((self.entity.rect.x + self.entity.rect.width, self.entity.rect.y), (10, 10))
+        if self.entity.direction == 0:
+            x = self.entity.rect.x + self.entity.rect.width
+        else:
+            x = self.entity.rect.x - 10
+        attackRect = pygame.Rect((x, self.entity.rect.y),
+                                 (10, self.entity.rect.height))
         hit_list = []
         for e in self.enemies:
             if attackRect.colliderect(e.rect):
@@ -31,7 +36,7 @@ class Sword(Weapon):
 
     def update(self):
         self.rect.x = self.entity.rect.x + self.xOffset
-        self.rect.y = self.entity.rect.y - 14
+        self.rect.y = self.entity.rect.y - 12
 
         if self.entity.direction == 0:
             curImage = self.rimage
@@ -42,11 +47,12 @@ class Sword(Weapon):
 
         mx = self.entity.world.state.game.inputManager.x
         my = self.entity.world.state.game.inputManager.y
-        dx = mx - self.rect.x + self.rect.width/2
-        dy = my - self.rect.y + self.rect.height/2
+        dx = mx - self.rect.x
+        dy = my - self.rect.y
         if dx == 0:
             dx = 0.01
-        angle = -math.degrees(math.atan(dy / dx))
-        if self.rect.x - 1 <= mx <= self.entity.rect.x:
-            angle = -angle
+        if self.rect.x < mx < self.rect.x + self.rect.width and self.entity.direction == 1:
+            angle = math.degrees(math.atan(dy / dx))
+        else:
+            angle = -math.degrees(math.atan(dy / dx))
         self.image = assets.rot_center(curImage, angle)
