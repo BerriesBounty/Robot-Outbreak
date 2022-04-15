@@ -19,3 +19,4 @@ class Enemy(Creature):
 
     def die(self):
         pass
+

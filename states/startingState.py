@@ -15,6 +15,6 @@ class StartingState(State):
 
     def render(self, display):
         display.fill((0, 0, 0))
-        msg = assets.font.render("PRESS SPACE TO START", False, (255, 255, 255))
+        msg = assets.font36.render("PRESS SPACE TO START", False, (255, 255, 255))
         msg_rect = msg.get_rect(center=(self.game.get_width()/2, self.game.get_height()/2))
         display.blit(msg, msg_rect)

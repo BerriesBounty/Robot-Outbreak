@@ -1,7 +1,7 @@
 import pygame
 
 spriteSheet = cannon = bullet = target = leftCannon\
-    = rightCannon = font = playerSheet = gunSheet = hand = None
+    = rightCannon = font36 = playerSheet = gunSheet = hand = None
 
 assaultRifle = []
 sword = []
@@ -13,10 +13,10 @@ WIDTH = 36
 HEIGHT = 48
 
 #colors
-purple = (98,  22, 107)
+purple = (98,  22, 17)
 
 def init():
-    global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font, \
+    global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font36, \
         playerSheet, gunSheet, assaultRifle, hand, sword, playerIdleRight, playerIdleLeft
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
     gunSheet = loadImage("res/gunSheet.png", purple)
@@ -51,7 +51,7 @@ def init():
     hand = pygame.transform.scale(pygame.image.load("res/hand.png"), (8, 8))
     hand.set_colorkey((186, 200, 216))
 
-    font = pygame.font.Font("res/slkscr.ttf", 36)
+    font36 = pygame.font.Font("res/slkscr.ttf", 36)
 
 def rot_center(image, angle):
     """rotate an image while keeping its center and size"""

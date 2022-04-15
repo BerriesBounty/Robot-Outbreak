@@ -10,6 +10,8 @@ class AssaultRifle(Weapon):
         super().__init__(entity, enemies)
         self.attackSpeed = 0.25
         self.damage = 1
+        self.ammo = 50
+
         self.rimage = assets.assaultRifle[0]
         self.limage = assets.assaultRifle[1]
 
@@ -20,13 +22,16 @@ class AssaultRifle(Weapon):
         self.limage.blit(assets.hand, (self.rect.width / 2 - 7, self.rect.height / 2 - 2))
 
     def attack(self):
-        x = self.entity.world.state.game.inputManager.x
-        y = self.entity.world.state.game.inputManager.y
-        bullet = Bullet(self.enemies, x, y)
-        bullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - bullet.rect.width / 2,
-                        self.entity.rect.y + self.entity.rect.width / 2 - bullet.rect.height / 2)
-        self.entity.world.all_list.add(bullet)
-        self.entity.world.bullet_list.add(bullet)
+        if self.ammo == 0:
+            return
+        else:
+            x = self.entity.world.state.game.inputManager.x
+            y = self.entity.world.state.game.inputManager.y
+            bullet = Bullet(self.enemies, x, y)
+            bullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - bullet.rect.width / 2,
+                            self.entity.rect.y + self.entity.rect.width / 2 - bullet.rect.height / 2)
+            self.entity.world.bullet_list.add(bullet)
+            self.ammo -= 1
 
     def update(self):
         self.rect.x = self.entity.rect.x + self.xOffset
@@ -45,7 +50,11 @@ class AssaultRifle(Weapon):
         dy = my - self.rect.y
         if dx == 0:
             dx = 0.01
-        angle = -math.degrees(math.atan(dy/dx))
-        if self.rect.x - 1 <= mx <= self.entity.rect.x:
-            angle = -angle
+        if self.rect.x < mx < self.rect.x + self.rect.width and self.entity.direction == 1:
+            angle = math.degrees(math.atan(dy/dx))
+        else:
+            angle = -math.degrees(math.atan(dy/dx))
         self.image = assets.rot_center(curImage, angle)
+
+    def render(self, display):
+        display.blit(self.image, self.rect)

@@ -13,7 +13,12 @@ class Weapon(Sprite, ABC):
         self.rect = None
         self.enemies = enemies
         self.rimage = self.limage = None
+        self.ammo = 0
 
     @abstractmethod
     def update(self):
+        pass
+
+    @abstractmethod
+    def render(self, display):
         pass

@@ -11,8 +11,9 @@ class Player(Creature):
         super().__init__(world)
         self.left = assets.leftCannon
         self.right = assets.rightCannon
-        self.idleRight = Animation(0.2, assets.playerIdleRight)
-        self.idleLeft = Animation(0.2, assets.playerIdleLeft)
+        self.idleRight = Animation(0.15, assets.playerIdleRight)
+        self.idleLeft = Animation(0.15, assets.playerIdleLeft)
+        self.ismoving = False
 
         self.curAnimation = self.idleRight
         self.image = self.curAnimation.getCurrentFrame()
@@ -27,8 +28,10 @@ class Player(Creature):
         self.attackTimer = self.attackSpeed
         self.attacking = False
 
-        self.world.all_list.add(self)
-        self.world.all_list.add(self.weapon)
+        # self.world.all_list.add(self)
+        # self.world.all_list.add(self.weapon)
+        self.world.entityManager.add(self)
+        self.world.entityManager.add(self.weapon)
 
     def setxy(self):
         self.rect.x = self.world.state.game.width / 2 - self.rect.width / 2
@@ -41,7 +44,7 @@ class Player(Creature):
         self.getInput()
 
         mx = self.world.state.game.inputManager.x
-        if mx - self.rect.x + self.rect.width / 2 > 0:
+        if mx - self.rect.x - (self.rect.width / 2) > 0:
             self.direction = 0
             self.curAnimation = self.idleRight
         else:
@@ -50,6 +53,7 @@ class Player(Creature):
         self.checkAttack()
 
         self.image = self.getAnimationFrame()
+
 
     def die(self):
         pass
@@ -74,6 +78,10 @@ class Player(Creature):
             self.rect.x -= self.speed
             if not self.attacking:
                 self.direction = 1
+        if self.xmove != 0 or self.ymove != 0:
+            self.ismoving = True
+        else:
+            self.ismoving = False
 
     def checkAttack(self):
         self.attackTimer += time.perf_counter() - self.lastAttack
@@ -88,7 +96,14 @@ class Player(Creature):
             self.attacking = False
 
     def getAnimationFrame(self):
-        if self.direction == 0:
-            return self.idleRight.getCurrentFrame()
+        if not self.ismoving:
+            if self.direction == 0:
+                return self.idleRight.getCurrentFrame()
+            else:
+                return self.idleLeft.getCurrentFrame()
         else:
-            return self.idleLeft.getCurrentFrame()
+            if self.direction == 0:
+                return self.idleRight.getCurrentFrame()
+            else:
+                return self.idleLeft.getCurrentFrame()
+

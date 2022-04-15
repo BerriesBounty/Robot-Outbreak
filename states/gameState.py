@@ -1,6 +1,7 @@
 import world
 import pygame
 
+from gfx import assets
 from states.state import State
 
 

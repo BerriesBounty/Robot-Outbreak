@@ -3,6 +3,7 @@ import pygame
 
 from entities.creatures.enemy import Enemy
 from entities.creatures.player import Player
+from entities.entityManager import EntityManager
 
 
 class World:
@@ -15,21 +16,24 @@ class World:
         self.bullet_list = pygame.sprite.Group()
         self.target_list = pygame.sprite.Group()
         self.all_list = pygame.sprite.Group()
+        self.entityManager = pygame.sprite.Group()
 
         for i in range(20):
             target = Enemy(self)
             target.setxy(random.randint(0, self.state.game.width - target.rect.width),
                          random.randint(0, self.state.game.height / 2))
             self.target_list.add(target)
-            self.all_list.add(target)
+            self.entityManager.add(target)
 
         self.player = Player(self)
 
     def tick(self):
-        self.all_list.update()
+        self.bullet_list.update()
+        self.entityManager.update()
 
     def render(self, display):
-        self.all_list.draw(display)
+        self.bullet_list.draw(display)
+        self.entityManager.draw(display)
 
     def load_world(self, path):
         with open(path) as file:
