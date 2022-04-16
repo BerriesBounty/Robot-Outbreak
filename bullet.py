@@ -1,4 +1,5 @@
 import math
+import random
 
 import pygame
 
@@ -6,9 +7,10 @@ from gfx import assets
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, enemies, mx, my):
+    def __init__(self, enemies, mx, my, spread):
         super().__init__()
         self.enemies = enemies
+        self.spread = spread
         self.image = assets.bullet
         self.rect = self.image.get_rect()
         self.mx = mx
@@ -24,7 +26,7 @@ class Bullet(pygame.sprite.Sprite):
         if diffx == 0:
             angle = 0
         else:
-            angle = abs(math.atan(diffy/diffx))
+            angle = abs(math.atan(diffy/diffx)) + math.radians(random.randint(-self.spread * 10, self.spread * 10)/10)
         if diffx >= 0 and diffy <= 0:
             self.dx = 10.0 * math.cos(angle)
             self.dy = -10.0 * math.sin(angle)

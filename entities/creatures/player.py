@@ -47,6 +47,7 @@ class Player(Creature):
         self.walkingRight.tick()
 
         self.getInput()
+        self.health -= 0.01
 
         mx = self.world.state.game.inputManager.x
         if mx - self.rect.x - (self.rect.width / 2) > 0:

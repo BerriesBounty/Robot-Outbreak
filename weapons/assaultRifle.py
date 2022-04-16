@@ -4,18 +4,18 @@ import time
 from gfx import assets
 from bullet import Bullet
 from weapons.weapon import Weapon
-
+import random as rnd
 
 class AssaultRifle(Weapon):
     def __init__(self, entity, enemies):
         super().__init__(entity, enemies)
-        self.attackSpeed = 0.25
+        self.attackSpeed = 0.11
         self.damage = 1
-        self.ammo = 120
-        self.magSize = 20
-        self.curMag = 10
-        self.reloadSpeed = 3
-        self.reloading = False
+        self.spread = 4
+        self.ammo = 40
+        self.magSize = 30
+        self.curMag = 30
+        self.reloadSpeed = 0.5
         self.timer = 0
         self.lastTime = time.perf_counter()
 
@@ -28,13 +28,16 @@ class AssaultRifle(Weapon):
 
     def attack(self):
         if self.curMag == 0:
-            self.reloading = True
-            assets.arSound[1].play()
-            self.lastTime = time.perf_counter()
+            if self.ammo == 0:
+                return
+            else:
+                self.reloading = True
+                assets.arSound[1].play()
+                self.lastTime = time.perf_counter()
         else:
             x = self.entity.world.state.game.inputManager.x
             y = self.entity.world.state.game.inputManager.y
-            bullet = Bullet(self.enemies, x, y)
+            bullet = Bullet(self.enemies, x, y, self.spread)
             bullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - bullet.rect.width / 2,
                             self.entity.rect.y + self.entity.rect.width / 2 - bullet.rect.height / 2)
             self.entity.world.bullet_list.add(bullet)
@@ -69,8 +72,9 @@ class AssaultRifle(Weapon):
             self.timer += time.perf_counter() - self.lastTime
             self.lastTime = time.perf_counter()
             if self.timer >= self.reloadSpeed:
-                self.ammo -= self.magSize - self.curMag
-                self.curMag = self.magSize
+
+                self.ammo -= min(self.ammo, self.magSize - self.curMag)
+                self.curMag = min(self.magSize, self.ammo)
                 self.timer = 0
                 self.reloading = False
 

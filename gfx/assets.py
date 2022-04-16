@@ -1,7 +1,7 @@
 import pygame
 
 spriteSheet = cannon = bullet = target = leftCannon\
-    = rightCannon = font36 = hand = None
+    = rightCannon = font36 = hand = playerIcon = None
 
 assaultRifle = []
 sword = []
@@ -10,6 +10,8 @@ playerIdleRight = []
 playerIdleLeft = []
 playerWalkingRight = []
 playerWalkingLeft = []
+
+hudbar = []
 
 arSound = []
 
@@ -21,11 +23,14 @@ purple = (98,  22, 107)
 
 def init():
     global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font36,\
-        assaultRifle, hand, sword, playerIdleRight, playerIdleLeft, arSound
+        assaultRifle, hand, sword, playerIdleRight, playerIdleLeft, arSound, playerIcon, hudbar
+
+    #sprite sheets
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
     gunSheet = loadImage("res/gunSheet.png", purple)
     playerSheet = pygame.transform.scale(loadImage("res/oneHandSheet.png", (186, 200, 216)), (144, 208))
     playerWalkingSheet = pygame.transform.scale(loadImage("res/playerWalkingSheet.png", (186, 200, 216)), (212, 232))
+    hudSheet = pygame.image.load("res/hudSheet.png").convert_alpha()
 
     bullet = spriteSheet.subsurface((16, 32, 16, 16))
     target = spriteSheet.subsurface((0, 0, 32, 32))
@@ -66,9 +71,16 @@ def init():
     sword.append(baseSword)
     sword.append(pygame.transform.flip(sword[0], True, False))
 
-
     hand = pygame.transform.scale(pygame.image.load("res/hand.png"), (8, 8))
     hand.set_colorkey((186, 200, 216))
+
+    playerIcon = hudSheet.subsurface((0, 0, 84, 64))
+    graybar1 = hudSheet.subsurface((85, 5, 8, 15))
+    graybar2 = hudSheet.subsurface((94, 5, 8, 15))
+    hudbar.append([graybar1, graybar2])
+    redbar1 = hudSheet.subsurface((144, 5, 8, 15))
+    redbar2 = hudSheet.subsurface((153, 5, 8, 15))
+    hudbar.append([redbar1, redbar2])
 
     font36 = pygame.font.Font("res/slkscr.ttf", 36)
 

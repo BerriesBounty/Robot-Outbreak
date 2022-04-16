@@ -3,7 +3,7 @@ import pygame
 
 from entities.creatures.enemy import Enemy
 from entities.creatures.player import Player
-from entities.entityManager import EntityManager
+from ui.hudManager import HUDManager
 
 
 class World:
@@ -26,14 +26,17 @@ class World:
             self.entityManager.add(target)
 
         self.player = Player(self)
+        self.hud = HUDManager(self)
 
     def tick(self):
         self.bullet_list.update()
         self.entityManager.update()
+        self.hud.tick()
 
     def render(self, display):
         self.bullet_list.draw(display)
         self.entityManager.draw(display)
+        self.hud.render(display)
 
     def load_world(self, path):
         with open(path) as file:
