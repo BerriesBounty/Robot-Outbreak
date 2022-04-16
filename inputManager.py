@@ -2,7 +2,8 @@ import pygame
 
 
 class InputManager:
-    def __init__(self):
+    def __init__(self, game):
+        self.game = game
         self.keys = pygame.key.get_pressed()
         self.keyReleased = [False] * len(self.keys)
         self.mouse = [False, False]
@@ -10,6 +11,8 @@ class InputManager:
         self.justPressed = [False, False]
         self.x = 0
         self.y = 0
+        self.offsetX = 0
+        self.offsetY = 0
 
     def tick(self):
         for i in range(len(self.mouse)):
@@ -22,6 +25,12 @@ class InputManager:
                 self.justPressed[i] = True
         self.keys = pygame.key.get_pressed()
         self.keyReleased = [False] * len(self.keys)
+
+        mouse = pygame.mouse.get_pos()
+        self.x = mouse[0]
+        self.y = mouse[1]
+        self.offsetX = mouse[0] + self.game.gameCamera.xOffset
+        self.offsetY = mouse[1] + self.game.gameCamera.yOffset
 
     def keyUp(self, event):
         if event.key == pygame.K_SPACE:
@@ -38,11 +47,6 @@ class InputManager:
             self.mouse[0] = False
         elif not pygame.mouse.get_pressed()[1]:
             self.mouse[1] = False
-
-    def mouseMoved(self):
-        mouse = pygame.mouse.get_pos()
-        self.x = mouse[0]
-        self.y = mouse[1]
 
     def get_pressed(self, n):
         return self.mouse[n]

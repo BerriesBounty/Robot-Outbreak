@@ -17,6 +17,11 @@ class Enemy(Creature):
         if self.health <= 0:
             self.kill()
 
+    def render(self, display):
+        display.blit(self.image, (self.rect.x - self.world.state.game.gameCamera.xOffset,
+                                  self.rect.y - self.world.state.game.gameCamera.yOffset))
+
     def die(self):
         pass
+
 

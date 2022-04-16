@@ -13,6 +13,7 @@ class Weapon(Sprite, ABC):
         self.curMag = 0
         self.reloadSpeed = 0
         self.reloading = False
+        self.attacking = False
         self.spread = 0
 
         self.entity = entity
@@ -24,6 +25,10 @@ class Weapon(Sprite, ABC):
 
     @abstractmethod
     def update(self):
+        pass
+
+    @abstractmethod
+    def render(self, display):
         pass
 
     @abstractmethod

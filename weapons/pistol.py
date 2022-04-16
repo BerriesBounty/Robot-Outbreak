@@ -6,21 +6,21 @@ from bullet import Bullet
 from weapons.weapon import Weapon
 import random as rnd
 
-class AssaultRifle(Weapon):
+class Pistol(Weapon):
     def __init__(self, entity, enemies):
         super().__init__(entity, enemies)
-        self.attackSpeed = 0.11
-        self.damage = 1
-        self.spread = 4
-        self.ammo = 150
-        self.magSize = 30
-        self.curMag = 30
-        self.reloadSpeed = 0.5
+        self.attackSpeed = 0.15
+        self.damage = 2
+        self.spread = 7
+        self.ammo = 140
+        self.magSize = 6
+        self.curMag = self.magSize
+        self.reloadSpeed = 1
         self.timer = self.attackSpeed
         self.lastTime = time.perf_counter()
 
-        self.rimage = assets.assaultRifle[0]
-        self.limage = assets.assaultRifle[1]
+        self.rimage = assets.pistol[0]
+        self.limage = assets.pistol[1]
 
         self.image = self.rimage
         self.rect = self.image.get_rect()
@@ -37,7 +37,7 @@ class AssaultRifle(Weapon):
                 self.reloading = False
         elif self.timer < self.attackSpeed:
             return
-        elif self.entity.world.state.game.inputManager.get_pressed(0):
+        elif self.entity.world.state.game.inputManager.get_justPressed(0):
             self.attacking = True
             if self.curMag == 0:
                 if self.ammo == 0:

@@ -22,5 +22,9 @@ class Entity(ABC, pygame.sprite.Sprite):
     def die(self):
         pass
 
+    @abstractmethod
+    def render(self, display):
+        pass
+
     def hurt(self, n):
         self.health -= n

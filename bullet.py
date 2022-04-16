@@ -7,8 +7,9 @@ from gfx import assets
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, enemies, mx, my, spread):
+    def __init__(self, entity, enemies, mx, my, spread):
         super().__init__()
+        self.entity = entity
         self.enemies = enemies
         self.spread = spread
         self.image = assets.bullet
@@ -54,3 +55,7 @@ class Bullet(pygame.sprite.Sprite):
         for hit in hit_list:
             hit.hurt(self.damage)
             self.kill()
+
+    def render(self, display):
+        display.blit(self.image, (self.rect.x - self.entity.world.state.game.gameCamera.xOffset,
+                                  self.rect.y - self.entity.world.state.game.gameCamera.yOffset))

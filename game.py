@@ -6,6 +6,7 @@ from gfx import assets
 import inputManager as inputManager
 import states.gameState as gameState
 import states.state
+from gfx.gameCamera import GameCamera
 from states import startingState
 
 
@@ -17,7 +18,8 @@ class Game:
         self.height = height
         self.display = pygame.display.set_mode((self.width, self.height))
 
-        self.inputManager = inputManager.InputManager()  # taking in all inputs of keyboard & mouse
+        self.inputManager = inputManager.InputManager(self)  # taking in all inputs of keyboard & mouse
+        self.gameCamera = GameCamera(self, 0, 0)
         self.clock = pygame.time.Clock()
         assets.init()  # assets class stores all the images
 
@@ -76,8 +78,8 @@ class Game:
                 self.inputManager.mousePressed()
             if event.type == pygame.MOUSEBUTTONUP:
                 self.inputManager.mouseReleased()
-            if event.type == pygame.MOUSEMOTION:
-                self.inputManager.mouseMoved()
+            # if event.type == pygame.MOUSEMOTION:
+            #     self.inputManager.mouseMoved()
 
         pygame.display.set_caption(f"X: {self.inputManager.x} Y: {self.inputManager.y}")
 

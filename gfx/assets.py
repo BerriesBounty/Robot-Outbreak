@@ -1,9 +1,10 @@
 import pygame
 
 spriteSheet = cannon = bullet = target = leftCannon\
-    = rightCannon = font36 = hand = playerIcon = None
+    = rightCannon = font36 = hand = None
 
 assaultRifle = []
+pistol = []
 sword = []
 
 playerIdleRight = []
@@ -12,6 +13,7 @@ playerWalkingRight = []
 playerWalkingLeft = []
 
 hudbar = []
+hudAssets = []
 
 arSound = []
 
@@ -23,7 +25,7 @@ purple = (98,  22, 107)
 
 def init():
     global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font36,\
-        assaultRifle, hand, sword, playerIdleRight, playerIdleLeft, arSound, playerIcon, hudbar
+        assaultRifle, hand, sword, playerIdleRight, playerIdleLeft, arSound, hudAssets, hudbar, pistol
 
     #sprite sheets
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
@@ -63,7 +65,7 @@ def init():
     playerWalkingLeft.append(pygame.transform.flip(playerWalkingRight[4], True, False).convert_alpha())
     playerWalkingLeft.append(pygame.transform.flip(playerWalkingRight[5], True, False).convert_alpha())
 
-    baseRifle = pygame.transform.scale(gunSheet.subsurface((0, 0, 96, 96)), (48, 48))
+    baseRifle = pygame.transform.scale(pygame.image.load("res/ar.png").subsurface((0,0,32,32)), (64, 64))
     assaultRifle.append(baseRifle)
     assaultRifle.append(pygame.transform.flip(assaultRifle[0], True, False))
 
@@ -71,16 +73,28 @@ def init():
     sword.append(baseSword)
     sword.append(pygame.transform.flip(sword[0], True, False))
 
+    basePistol = pygame.transform.scale(pygame.image.load("res/ar.png").subsurface((32,0,32,32)), (64, 64))
+    pistol.append(basePistol)
+    pistol.append(pygame.transform.flip(pistol[0], True, False))
+
     hand = pygame.transform.scale(pygame.image.load("res/hand.png"), (8, 8))
     hand.set_colorkey((186, 200, 216))
 
-    playerIcon = hudSheet.subsurface((0, 0, 84, 64))
-    graybar1 = hudSheet.subsurface((85, 5, 8, 15))
-    graybar2 = hudSheet.subsurface((94, 5, 8, 15))
+    hudAssets.append(hudSheet.subsurface((0, 0, 84, 64)))
+    hudAssets.append(hudSheet.subsurface((103, 0, 32, 64)))
+    graybar1 = hudSheet.subsurface((85, 4, 8, 15))
+    graybar2 = hudSheet.subsurface((94, 4, 8, 15))
     hudbar.append([graybar1, graybar2])
-    redbar1 = hudSheet.subsurface((144, 5, 8, 15))
-    redbar2 = hudSheet.subsurface((153, 5, 8, 15))
+    redbar1 = hudSheet.subsurface((144, 4, 8, 15))
+    redbar2 = hudSheet.subsurface((153, 4, 8, 15))
     hudbar.append([redbar1, redbar2])
+    bluebar1 = hudSheet.subsurface((144, 24, 8, 15))
+    bluebar2 = hudSheet.subsurface((153, 24, 8, 15))
+    hudbar.append([bluebar1, bluebar2])
+    greenbar1 = hudSheet.subsurface((144, 44, 8, 15))
+    greenbar2 = hudSheet.subsurface((153, 44, 8, 15))
+    hudbar.append([greenbar1, greenbar2])
+
 
     font36 = pygame.font.Font("res/slkscr.ttf", 36)
 

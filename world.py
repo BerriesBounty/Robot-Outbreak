@@ -3,6 +3,7 @@ import pygame
 
 from entities.creatures.enemy import Enemy
 from entities.creatures.player import Player
+from entities.entityManager import EntityManager
 from ui.hudManager import HUDManager
 
 
@@ -13,10 +14,10 @@ class World:
         self.tiles = []
         # self.load_world(path)
 
-        self.bullet_list = pygame.sprite.Group()
+        self.bullet_list = EntityManager()
         self.target_list = pygame.sprite.Group()
         self.all_list = pygame.sprite.Group()
-        self.entityManager = pygame.sprite.Group()
+        self.entityManager = EntityManager()
 
         for i in range(20):
             target = Enemy(self)
