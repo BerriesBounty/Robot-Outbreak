@@ -9,7 +9,11 @@ class Creature(Entity, ABC):
     def __init__(self, world):
         super().__init__(world)
         self.speed = Creature.DEFAULT_SPEED
-        self.ymove = self.xmove = 0
+        self.ymove = 0
+        self.xmove = 0
 
     def move(self):
-        pass
+        if not self.checkCollision(self.xmove, 0):
+            self.rect.x += self.xmove
+        if not self.checkCollision(0, self.ymove):
+            self.rect.y += self.ymove

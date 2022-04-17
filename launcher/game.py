@@ -72,6 +72,7 @@ class Game:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
+                self.inputManager.keyDown(event)
             if event.type == pygame.KEYUP:
                 self.inputManager.keyUp(event)
             if event.type == pygame.MOUSEBUTTONDOWN:

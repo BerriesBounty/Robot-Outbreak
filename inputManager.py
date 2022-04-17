@@ -6,6 +6,8 @@ class InputManager:
         self.game = game
         self.keys = pygame.key.get_pressed()
         self.keyReleased = [False] * len(self.keys)
+        self.keyJustPressed = [False] * len(self.keys)
+
         self.mouse = [False, False]
         self.cantPress = [False, False]
         self.justPressed = [False, False]
@@ -15,16 +17,10 @@ class InputManager:
         self.offsetY = 0
 
     def tick(self):
-        for i in range(len(self.mouse)):
-            if self.cantPress[i] and not self.mouse[i]:
-                self.cantPress[i] = False
-            elif self.justPressed[i]:
-                self.cantPress[i] = True
-                self.justPressed[i] = False
-            if (not self.cantPress[i]) and self.mouse[i]:
-                self.justPressed[i] = True
+        self.justPressed = [False, False]
         self.keys = pygame.key.get_pressed()
         self.keyReleased = [False] * len(self.keys)
+        self.keyJustPressed = [False] * len(self.keys)
 
         mouse = pygame.mouse.get_pos()
         self.x = mouse[0]
@@ -36,11 +32,19 @@ class InputManager:
         if event.key == pygame.K_SPACE:
             self.keyReleased[pygame.K_SPACE] = True
 
+    def keyDown(self, event):
+        if event.key == pygame.K_SPACE:
+            self.keyJustPressed[pygame.K_SPACE] = True
+        if event.key == pygame.K_r:
+            self.keyJustPressed[pygame.K_r] = True
+
     def mousePressed(self):
         if pygame.mouse.get_pressed()[0]:
             self.mouse[0] = True
+            self.justPressed[0] = True
         elif pygame.mouse.get_pressed()[1]:
             self.mouse[1] = True
+            self.justPressed[1] = True
 
     def mouseReleased(self):
         if not pygame.mouse.get_pressed()[0]:

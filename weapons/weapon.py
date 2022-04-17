@@ -8,9 +8,10 @@ class Weapon(Sprite, ABC):
         super().__init__()
         self.attackSpeed = 1
         self.damage = 1
+        self.maxAmmo = 0
         self.ammo = 0
-        self.magSize = 0
-        self.curMag = 0
+        self.magSize = 10
+        self.curMag = 10
         self.reloadSpeed = 0
         self.reloading = False
         self.attacking = False

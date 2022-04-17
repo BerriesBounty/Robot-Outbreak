@@ -1,6 +1,8 @@
 import math
 import time
 
+import pygame
+
 from gfx import assets
 from bullet import Bullet
 from weapons.weapon import Weapon
@@ -12,6 +14,7 @@ class AssaultRifle(Weapon):
         self.attackSpeed = 0.11
         self.damage = 1
         self.spread = 4
+        self.maxAmmo = 150
         self.ammo = 150
         self.magSize = 30
         self.curMag = 30
@@ -48,7 +51,7 @@ class AssaultRifle(Weapon):
             else:
                 x = self.entity.world.state.game.inputManager.offsetX
                 y = self.entity.world.state.game.inputManager.offsetY
-                bullet = Bullet(self.entity, self.enemies, x, y, self.spread)
+                bullet = Bullet(self, self.enemies, x, y, self.spread)
                 bullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - bullet.rect.width / 2,
                              self.entity.rect.y + self.entity.rect.width / 2 - bullet.rect.height / 2)
                 self.entity.world.bullet_list.add(bullet)
@@ -81,6 +84,11 @@ class AssaultRifle(Weapon):
             angle = -math.degrees(math.atan(dy/dx))
         self.image = assets.rot_center(curImage, angle)
         self.image.blit(assets.hand, (self.rect.width / 2 - 4, self.rect.height / 2 - 4))
+
+        if self.entity.world.state.game.inputManager.keyJustPressed[pygame.K_r]:
+            self.reloading = True
+            assets.arSound[1].play()
+        self.attack()
 
     def render(self, display):
         display.blit(self.image, (self.rect.x - self.entity.world.state.game.gameCamera.xOffset,

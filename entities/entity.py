@@ -28,3 +28,13 @@ class Entity(ABC, pygame.sprite.Sprite):
 
     def hurt(self, n):
         self.health -= n
+
+    def checkCollision(self, dx, dy):
+        collisionRect = pygame.rect.Rect(self.rect.x + dx, self.rect.y + dy, self.rect.width, self.rect.height)
+        for e in self.world.entityManager:
+            if e == self:
+                continue
+            elif collisionRect.colliderect(e.rect):
+                return True
+        return False
+

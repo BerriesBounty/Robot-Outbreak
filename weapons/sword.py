@@ -55,8 +55,8 @@ class Sword(Weapon):
             curImage = self.limage
             self.xOffset = -40
 
-        mx = self.entity.world.state.game.inputManager.x
-        my = self.entity.world.state.game.inputManager.y
+        mx = self.entity.world.state.game.inputManager.offsetX
+        my = self.entity.world.state.game.inputManager.offsetY
         dx = mx - self.rect.x
         dy = my - self.rect.y
         if dx == 0:
@@ -66,6 +66,8 @@ class Sword(Weapon):
         else:
             angle = -math.degrees(math.atan(dy / dx))
         self.image = assets.rot_center(curImage, angle)
+
+        self.attack()
 
     def render(self, display):
         display.blit(self.image, (self.rect.x - self.entity.world.state.game.gameCamera.xOffset,

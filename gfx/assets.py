@@ -16,6 +16,7 @@ hudbar = []
 hudAssets = []
 
 arSound = []
+pistolSound = []
 
 WIDTH = 34
 HEIGHT = 48
@@ -101,6 +102,10 @@ def init():
     arSound.append(pygame.mixer.Sound("res/sfx/arShot.wav"))
     arSound[0].set_volume(0.05)
     arSound.append(pygame.mixer.Sound("res/sfx/arReload.wav"))
+
+    pistolSound.append(pygame.mixer.Sound("res/sfx/pistolShot.wav"))
+    pistolSound[0].set_volume(0.05)
+    pistolSound.append(pygame.mixer.Sound("res/sfx/pistolReload.wav"))
 
 
 def rot_center(image, angle):

@@ -32,7 +32,6 @@ class Player(Creature):
         self.equippedWeapon = self.weapons[0]
 
         self.world.entityManager.add(self)
-        self.world.entityManager.add(self.equippedWeapon)
 
     def setxy(self):
         self.rect.x = self.world.state.game.width / 2 - self.rect.width / 2
@@ -49,6 +48,7 @@ class Player(Creature):
             self.walkingRight.index = 0
 
         self.getInput()
+        self.move()
         self.world.state.game.gameCamera.centerOnPlayer(self)
 
         mx = self.world.state.game.inputManager.offsetX
@@ -58,7 +58,8 @@ class Player(Creature):
         else:
             self.direction = 1
             self.image = self.left
-        self.equippedWeapon.attack()
+
+        self.equippedWeapon.update()
 
 
     def die(self):
@@ -70,16 +71,12 @@ class Player(Creature):
         keys = self.world.state.game.inputManager.keys
         if keys[pygame.K_s]:
             self.ymove += self.speed
-            self.rect.y += self.speed
         if keys[pygame.K_w]:
             self.ymove -= self.speed
-            self.rect.y -= self.speed
         if keys[pygame.K_d]:
             self.xmove += self.speed
-            self.rect.x += self.speed
         if keys[pygame.K_a]:
             self.xmove -= self.speed
-            self.rect.x -= self.speed
 
         if self.xmove != 0 or self.ymove != 0:
             self.ismoving = True
@@ -88,18 +85,15 @@ class Player(Creature):
 
         if keys[pygame.K_1]:
             if self.equippedWeapon != self.weapons[0]:
-                self.world.entityManager.remove(self.equippedWeapon)
                 self.equippedWeapon = self.weapons[0]
-                self.world.entityManager.add(self.equippedWeapon)
         if keys[pygame.K_2]:
             if self.equippedWeapon != self.weapons[1]:
-                self.world.entityManager.remove(self.equippedWeapon)
                 self.equippedWeapon = self.weapons[1]
-                self.world.entityManager.add(self.equippedWeapon)
 
     def render(self, display):
         display.blit(self.getAnimationFrame(), (self.rect.x - self.world.state.game.gameCamera.xOffset,
                                                 self.rect.y - self.world.state.game.gameCamera.yOffset))
+        self.equippedWeapon.render(display)
 
     def getAnimationFrame(self):
         if not self.ismoving:
