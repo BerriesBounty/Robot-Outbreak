@@ -8,8 +8,8 @@ from weapons.weapon import Weapon
 
 
 class Sword(Weapon):
-    def __init__(self, entity, enemies):
-        super().__init__(entity, enemies)
+    def __init__(self, entity):
+        super().__init__(entity)
         self.attackSpeed = 1
         self.damage = 3
         self.rimage = assets.sword[0]

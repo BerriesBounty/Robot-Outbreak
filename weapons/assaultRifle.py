@@ -9,8 +9,8 @@ from weapons.weapon import Weapon
 import random as rnd
 
 class AssaultRifle(Weapon):
-    def __init__(self, entity, enemies):
-        super().__init__(entity, enemies)
+    def __init__(self, entity):
+        super().__init__(entity)
         self.attackSpeed = 0.11
         self.damage = 1
         self.spread = 4
@@ -51,7 +51,7 @@ class AssaultRifle(Weapon):
             else:
                 x = self.entity.world.state.game.inputManager.offsetX
                 y = self.entity.world.state.game.inputManager.offsetY
-                bullet = Bullet(self, self.enemies, x, y, self.spread)
+                bullet = Bullet(self, x, y)
                 bullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - bullet.rect.width / 2,
                              self.entity.rect.y + self.entity.rect.width / 2 - bullet.rect.height / 2)
                 self.entity.world.bullet_list.add(bullet)

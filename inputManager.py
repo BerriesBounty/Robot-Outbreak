@@ -37,6 +37,10 @@ class InputManager:
             self.keyJustPressed[pygame.K_SPACE] = True
         if event.key == pygame.K_r:
             self.keyJustPressed[pygame.K_r] = True
+        if event.key == pygame.K_TAB:
+            self.keyJustPressed[pygame.K_TAB] = True
+        if event.key == pygame.K_q:
+            self.keyJustPressed[pygame.K_q] = True
 
     def mousePressed(self):
         if pygame.mouse.get_pressed()[0]:
@@ -54,7 +58,3 @@ class InputManager:
 
     def get_pressed(self, n):
         return self.mouse[n]
-
-    def get_justPressed(self, n):
-        return self.justPressed[n]
-

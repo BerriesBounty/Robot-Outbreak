@@ -16,7 +16,6 @@ class World:
 
         self.bullet_list = EntityManager()
         self.target_list = pygame.sprite.Group()
-        self.all_list = pygame.sprite.Group()
         self.entityManager = EntityManager()
 
         for i in range(20):

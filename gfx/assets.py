@@ -14,6 +14,7 @@ playerWalkingLeft = []
 
 hudbar = []
 hudAssets = []
+uiAssets = []
 
 arSound = []
 pistolSound = []
@@ -26,7 +27,7 @@ purple = (98,  22, 107)
 
 def init():
     global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font36,\
-        assaultRifle, hand, sword, playerIdleRight, playerIdleLeft, arSound, hudAssets, hudbar, pistol
+        assaultRifle, hand, sword, playerIdleRight, playerIdleLeft, arSound, hudAssets, hudbar, pistol, uiAssets
 
     #sprite sheets
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
@@ -34,13 +35,10 @@ def init():
     playerSheet = pygame.transform.scale(loadImage("res/oneHandSheet.png", (186, 200, 216)), (144, 208))
     playerWalkingSheet = pygame.transform.scale(loadImage("res/playerWalkingSheet.png", (186, 200, 216)), (212, 232))
     hudSheet = pygame.image.load("res/hudSheet.png").convert_alpha()
+    # uiSheet = pygame.image.load("res/uiComplete.png").convert_alpha()
 
     bullet = spriteSheet.subsurface((16, 32, 16, 16))
     target = spriteSheet.subsurface((0, 0, 32, 32))
-
-    cannon = playerSheet.subsurface((0, 0, WIDTH, HEIGHT))
-    rightCannon = playerSheet.subsurface((0, HEIGHT, WIDTH, HEIGHT))
-    leftCannon = pygame.transform.flip(rightCannon, True, False)
 
     playerIdleRight.append(playerSheet.subsurface((0, HEIGHT, WIDTH, HEIGHT)))
     playerIdleRight.append(playerSheet.subsurface((WIDTH, HEIGHT, WIDTH, HEIGHT)))
@@ -95,6 +93,8 @@ def init():
     greenbar1 = hudSheet.subsurface((144, 44, 8, 15))
     greenbar2 = hudSheet.subsurface((153, 44, 8, 15))
     hudbar.append([greenbar1, greenbar2])
+
+    # uiAssets.append(uiSheet.subsurface((621, 32, 339, 416)))
 
 
     font36 = pygame.font.Font("res/slkscr.ttf", 36)

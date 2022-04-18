@@ -4,7 +4,7 @@ from pygame.sprite import Sprite
 
 
 class Weapon(Sprite, ABC):
-    def __init__(self, entity, enemies):
+    def __init__(self, entity):
         super().__init__()
         self.attackSpeed = 1
         self.damage = 1
@@ -20,7 +20,7 @@ class Weapon(Sprite, ABC):
         self.entity = entity
         self.image = None
         self.rect = None
-        self.enemies = enemies
+        self.enemies = self.entity.enemies
         self.rimage = self.limage = None
 
 

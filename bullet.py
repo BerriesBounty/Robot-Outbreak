@@ -7,11 +7,11 @@ from gfx import assets
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, weapon, enemies, mx, my, spread):
+    def __init__(self, weapon, mx, my):
         super().__init__()
         self.weapon = weapon
-        self.enemies = enemies
-        self.spread = spread
+        self.entity = self.weapon.entity
+        self.spread = self.weapon.spread
         self.image = assets.bullet
         self.rect = self.image.get_rect()
         self.mx = mx
@@ -52,9 +52,10 @@ class Bullet(pygame.sprite.Sprite):
         self.checkCollision()
 
     def checkCollision(self):
-        hit_list = pygame.sprite.spritecollide(self, self.enemies, False)
+        hit_list = pygame.sprite.spritecollide(self, self.entity.enemies, False)
         for hit in hit_list:
             hit.hurt(self.weapon.damage)
+            self.entity.energy = min(self.entity.energy + 5, 100)
             self.kill()
 
     def render(self, display):
