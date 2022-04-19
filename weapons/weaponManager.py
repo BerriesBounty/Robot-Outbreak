@@ -5,7 +5,7 @@ from weapons.sword import Sword
 
 class WeaponManager:
     weaponList = []
-    def init(self):
+    def init():
         WeaponManager.weaponList.append(AssaultRifle())
         WeaponManager.weaponList.append(Pistol())
         WeaponManager.weaponList.append(Sword())
