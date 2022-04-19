@@ -3,6 +3,7 @@ import pygame
 from gfx import assets
 from entities.creatures.creature import Creature
 from gfx.animation import Animation
+from ultimates.ultManager import UltManager
 from weapons.assaultRifle import AssaultRifle
 from weapons.pistol import Pistol
 from weapons.sword import Sword
@@ -26,12 +27,15 @@ class Player(Creature):
 
         self.enemies = self.world.target_list
         self.weapons = [None] * 2
-        self.weapons[0] = Pistol(self)
-        self.weapons[1] = AssaultRifle(self)
+        self.weapons[0] = AssaultRifle()
+        self.weapons[0].entity = self
+        self.weapons[1] = Pistol()
+        self.weapons[0].entity = self
         self.equippedWeapon = self.weapons[0]
 
         self.energy = 0
-        self.ultimate = self.world.state.ultimateList[0]
+        self.ultimate = UltManager.ultimateList[0]
+        self.ultimate.state = self.world.state
         self.ultimateOn = False
         self.visible = True
 
@@ -67,9 +71,10 @@ class Player(Creature):
         #update weapon related tasks
         self.equippedWeapon.update()
 
-        if self.world.state.game.inputManager.keyJustPressed[pygame.K_q] and self.energy == 100:
+        #update ultimate ability
+        if self.world.state.game.inputManager.keyJustPressed[pygame.K_q] and self.energy == 100 and self.ultimate != None:
             self.ultimateOn = True
-            self.ultimate.lastTime = time.perf_counter()
+            self.ultimate.activiate()
             print("turn on")
         if self.ultimateOn:
             self.ultimate.tick()

@@ -15,6 +15,8 @@ class Enemy(Creature):
 
     def update(self):
         if self.health <= 0:
+            if len(self.world.target_list) == 1:
+                self.world.waveCleared()
             self.kill()
 
     def render(self, display):

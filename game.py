@@ -19,7 +19,7 @@ class Game:
         self.display = pygame.display.set_mode((self.width, self.height))
 
         self.inputManager = inputManager.InputManager(self)  # taking in all inputs of keyboard & mouse
-        self.gameCamera = GameCamera(self, 0, 0)
+        self.gameCamera = GameCamera(self, 0, 0)  # manage what the screen can see
         self.clock = pygame.time.Clock()
         assets.init()  # assets class stores all the images
 
@@ -27,17 +27,17 @@ class Game:
         self.stateManager = states.state.StateManager()
         self.gameState = gameState.GameState(self)  # the actual gameplay
         self.startingState = startingState.StartingState(self)  # the stating menu
-        self.stateManager.set_state(self.gameState) #set the current state the game is in
+        self.stateManager.set_state(self.gameState)  #set the current state the game is in
 
-    def start(self):
+    def start(self):  # the main while loop of the game
 
-        fps = 60  # how many ticks per second
-        timesPerTick = 1000000000 / fps  # number of nanosecond between each tick
-        delta = 0
-        now = None
-        lastTime = time.perf_counter_ns()  # the last time it ticked
-        timer = 0
-        ticks = 0
+        # fps = 60  # how many ticks per second
+        # timesPerTick = 1000000000 / fps  # number of nanosecond between each tick
+        # delta = 0
+        # now = None
+        # lastTime = time.perf_counter_ns()  # the last time it ticked
+        # timer = 0
+        # ticks = 0
 
         while True:
 
@@ -56,14 +56,15 @@ class Game:
             #     print(f"fps: {ticks}")
             #     ticks = 0
             #     timer = 0
+
             self.tick()  # updating on the different classes
             self.render(self.display)  # drawing all the sprites
 
             pygame.display.update()
             self.clock.tick(60)
 
-    def tick(self):
-        self.inputManager.tick()
+    def tick(self):  # basically the same as update
+        self.inputManager.tick()  # manage what key and mouse button is hold down and the position of mouse
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -72,23 +73,23 @@ class Game:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
-                self.inputManager.keyDown(event)
-            if event.type == pygame.KEYUP:
+                self.inputManager.keyDown(event)  # let the inputManager to store what key is pressed
+            if event.type == pygame.KEYUP:  # if a key is released
                 self.inputManager.keyUp(event)
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN:  # if a mouse button is pressed down
                 self.inputManager.mousePressed()
             if event.type == pygame.MOUSEBUTTONUP:
-                self.inputManager.mouseReleased()
+                self.inputManager.mouseReleased()  # if a mouse button is released
             # if event.type == pygame.MOUSEMOTION:
             #     self.inputManager.mouseMoved()
 
         pygame.display.set_caption(f"X: {self.inputManager.x} Y: {self.inputManager.y}")
 
-        if self.stateManager.get_state() is not None:
-            self.stateManager.get_state().tick()
+        if self.stateManager.get_state() is not None:  # if there is a current state
+            self.stateManager.get_state().tick()  # update the state
 
-    def render(self, display):
+    def render(self, display):  # draws what is on screen every loop. Display is the screen to blit on
         display.fill((100, 100, 100))
 
         if self.stateManager.get_state() is not None:
-            self.stateManager.get_state().render(display)
+            self.stateManager.get_state().render(display)  # render the state

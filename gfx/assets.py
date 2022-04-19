@@ -35,7 +35,7 @@ def init():
     playerSheet = pygame.transform.scale(loadImage("res/oneHandSheet.png", (186, 200, 216)), (144, 208))
     playerWalkingSheet = pygame.transform.scale(loadImage("res/playerWalkingSheet.png", (186, 200, 216)), (212, 232))
     hudSheet = pygame.image.load("res/hudSheet.png").convert_alpha()
-    # uiSheet = pygame.image.load("res/uiComplete.png").convert_alpha()
+    uiSheet = pygame.image.load("res/itemShopSheet.png").convert_alpha()
 
     bullet = spriteSheet.subsurface((16, 32, 16, 16))
     target = spriteSheet.subsurface((0, 0, 32, 32))
@@ -94,7 +94,9 @@ def init():
     greenbar2 = hudSheet.subsurface((153, 44, 8, 15))
     hudbar.append([greenbar1, greenbar2])
 
-    # uiAssets.append(uiSheet.subsurface((621, 32, 339, 416)))
+    uiAssets.append(uiSheet.subsurface((0, 0, 32, 64)))
+    uiAssets.append(uiSheet.subsurface((32, 0, 32, 64)))
+    uiAssets.append(uiSheet.subsurface((64, 0, 32, 64)))
 
 
     font36 = pygame.font.Font("res/slkscr.ttf", 36)

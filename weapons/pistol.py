@@ -9,8 +9,8 @@ from weapons.weapon import Weapon
 import random as rnd
 
 class Pistol(Weapon):
-    def __init__(self, entity):
-        super().__init__(entity)
+    def __init__(self):
+        super().__init__()
         self.attackSpeed = 0.25
         self.damage = 2
         self.spread = 7
