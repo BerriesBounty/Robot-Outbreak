@@ -8,8 +8,9 @@ from weapons.weapon import Weapon
 
 
 class Sword(Weapon):
-    def __init__(self, entity):
-        super().__init__(entity)
+    def __init__(self):
+        super().__init__()
+        self.maxAmmo = -1
         self.attackSpeed = 1
         self.damage = 3
         self.rimage = assets.sword[0]
@@ -40,6 +41,7 @@ class Sword(Weapon):
                     hit_list.append(e)
             for hit in hit_list:
                 hit.hurt(self.damage)
+                self.entity.energy = min(self.entity.energy + 5, 100)
             self.timer = 0
         else:
             self.attacking = False

@@ -1,21 +1,16 @@
 import world
-import pygame
-
-from gfx import assets
 from states.state import State
-from ultimates.ult_invisible import Invisible
+from weapons.weaponManager import WeaponManager
 
 
 class GameState(State):
     def __init__(self, game):
         super().__init__(game)
-        self.ultimateList = []
-        self.ultimateList.append(Invisible(self, 5, 100))
-        self.world = world.World(self, "hello")
-
+        WeaponManager.init()
+        self.world1 = world.World(self, "hello")  # store a world that runs a level of the game
 
     def tick(self):
-        self.world.tick()
+        self.world1.tick()  # tick the current level
 
     def render(self, display):
-        self.world.render(display)
+        self.world1.render(display)  # render the current level

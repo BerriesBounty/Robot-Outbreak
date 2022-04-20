@@ -9,8 +9,8 @@ from weapons.weapon import Weapon
 import random as rnd
 
 class AssaultRifle(Weapon):
-    def __init__(self, entity):
-        super().__init__(entity)
+    def __init__(self):
+        super().__init__()
         self.attackSpeed = 0.11
         self.damage = 1
         self.spread = 4

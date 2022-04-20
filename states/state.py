@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 
 
-class State(ABC):
-    def __init__(self, game):
+class State(ABC):  # abstract class
+    def __init__(self, game):  # takes in the game class the state is running in
         self.game = game
 
+    # abstract methods are passed down to all its child classes
     @abstractmethod
     def tick(self):
         pass
@@ -14,6 +15,7 @@ class State(ABC):
         pass
 
 
+# manages which state the game is currently in
 class StateManager:
     def __init__(self):
         self.currentState = None

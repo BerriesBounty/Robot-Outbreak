@@ -58,5 +58,6 @@ class HUDManager():
                      (assets.hudAssets[0].get_width() + assets.hudbar[0][0].get_width() * 10 + 10, 10))
 
         #current weapon magazine
-        msg = assets.font36.render(f"{self.player.equippedWeapon.curMag}/{self.player.equippedWeapon.ammo}", False, (255, 0, 0))
-        display.blit(msg, (self.world.state.game.width - 150, self.world.state.game.height - 50))
+        if self.player.equippedWeapon.maxAmmo != -1:
+            msg = assets.font36.render(f"{self.player.equippedWeapon.curMag}/{self.player.equippedWeapon.ammo}", False, (255, 0, 0))
+            display.blit(msg, (self.world.state.game.width - 150, self.world.state.game.height - 50))
