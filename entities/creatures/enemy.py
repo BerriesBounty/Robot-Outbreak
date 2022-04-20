@@ -3,18 +3,18 @@ from entities.creatures.creature import Creature
 import random
 import time
 import pygame
-import
+from player import Player
+import math
 
 class RangedAttack():
-    def __init__(self,x,y,radius,facing,color):
+    def __init__(self,x,y,radius,velocity,image):
         self.x = x
         self.y = y
         self.radius = radius
-        self.facing = facing
-        self.color = color
-        self.vel = 8 * facing
+        self.image = image
+        self.vel = velocity
     def draw(self,win):
-        pygame.draw.circle(win, self.color, (self.x,self.y), self.radius)
+        pygame.draw.circle(win, (255,255,255), (self.x,self.y), self.radius)
 
 class MeleeEnemy(Creature):
     def __init__(self, world, health, x, y):
@@ -63,7 +63,14 @@ class RangedEnemy(Creature):
                 countdown += 1
                 time.sleep(1)
                 if countdown == 10: #counter will determine how frequently enemy shoots.
-
+                    dest_x = self.player.center_x
+                    dest_y = self.player.center_y
+                    start_x = self.rangedenemy.center_x
+                    start_y = self.rangedenemy.center_y
+                    x_diff = dest_x - start_x
+                    y_diff = dest_y - start_y
+                    angle = math.atan2(y_diff, x_diff) #trying to calculate the angle that the enemy projectile has to take
+                    projectiles.append(RangedAttack(round()))
         if difficulty == "medium":
             countdown = random.randint(0,6)
             while True:
