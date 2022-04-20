@@ -2,6 +2,19 @@ from gfx import assets
 from entities.creatures.creature import Creature
 import random
 import time
+import pygame
+import
+
+class RangedAttack():
+    def __init__(self,x,y,radius,facing,color):
+        self.x = x
+        self.y = y
+        self.radius = radius
+        self.facing = facing
+        self.color = color
+        self.vel = 8 * facing
+    def draw(self,win):
+        pygame.draw.circle(win, self.color, (self.x,self.y), self.radius)
 
 class MeleeEnemy(Creature):
     def __init__(self, world, health, x, y):
@@ -44,10 +57,11 @@ class RangedEnemy(Creature):
         if difficulty == "easy":
             countdown = random.randint(0,9)
             while True:
+                projectiles = []
                 countdown += 1
                 time.sleep(1)
                 if countdown == 10: #counter will determine how frequently enemy shoots.
-                    pass
+
         if difficulty == "medium":
             countdown = random.randint(0,6)
             while True:
