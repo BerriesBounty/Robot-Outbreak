@@ -1,7 +1,7 @@
 import random
 import pygame
 
-from entities.creatures.enemy import RangedEnemy
+from entities.creatures.enemy import RangedEnemy, MeleeEnemy
 from entities.creatures.player import Player
 from entities.entityManager import EntityManager
 from ui.hudManager import HUDManager
@@ -20,7 +20,7 @@ class World:
         self.entityManager = EntityManager()  # store all the entities, including enemies and player
 
         for i in range(5):
-            target = RangedEnemy(self, 3)
+            target = MeleeEnemy(self, 3)
             target.setxy(random.randint(0, self.state.game.width - target.rect.width),
                          random.randint(0, self.state.game.height / 2))
             self.target_list.add(target)

@@ -1,7 +1,7 @@
 import pygame
 
 spriteSheet = cannon = bullet = target = leftCannon\
-    = rightCannon = font36 = hand = None
+    = rightCannon = font36 = font18 = hand = None
 
 assaultRifle = []
 pistol = []
@@ -26,7 +26,7 @@ HEIGHT = 48
 purple = (98,  22, 107)
 
 def init():
-    global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font36,\
+    global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font36, font18,\
         assaultRifle, hand, sword, playerIdleRight, playerIdleLeft, arSound, hudAssets, hudbar, pistol, uiAssets
 
     #sprite sheets
@@ -94,12 +94,12 @@ def init():
     greenbar2 = hudSheet.subsurface((153, 44, 8, 15))
     hudbar.append([greenbar1, greenbar2])
 
-    uiAssets.append(uiSheet.subsurface((0, 0, 32, 64)))
-    uiAssets.append(uiSheet.subsurface((32, 0, 32, 64)))
-    uiAssets.append(uiSheet.subsurface((64, 0, 32, 64)))
-
+    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 0, 32 * 11, 260)), (528, 390)))
+    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 32 * 9, 32 * 6, 40)), (288, 60)))
+    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 6, 32 * 9, 32 * 6, 40)), (288, 60)))
 
     font36 = pygame.font.Font("res/slkscr.ttf", 36)
+    font18 = pygame.font.Font("res/slkscr.ttf", 18)
 
     arSound.append(pygame.mixer.Sound("res/sfx/arShot.wav"))
     arSound[0].set_volume(0.05)
@@ -121,6 +121,14 @@ def rot_center(image, angle):
     return rot_image
 
 def loadImage(path, key):
-    image = pygame.image.load(path)
+    image = pygame.image.load(path).convert_alpha()
     image.set_colorkey(key)
     return image
+
+def renderFont(display, string, color, bgcolor, centerX, centerY, font):
+    msg = font.render(string, False, bgcolor)
+    msg_rect = msg.get_rect(center=(centerX, centerY + 3))
+    display.blit(msg, msg_rect)
+    msg = font.render(string, False, color)
+    msg_rect = msg.get_rect(center=(centerX, centerY))
+    display.blit(msg, msg_rect)

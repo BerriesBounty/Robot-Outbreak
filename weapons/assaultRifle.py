@@ -11,6 +11,7 @@ import random as rnd
 class AssaultRifle(Weapon):
     def __init__(self):
         super().__init__()
+        self.name = "Assault rifle"
         self.attackSpeed = 0.11
         self.damage = 1
         self.spread = 4
@@ -85,7 +86,7 @@ class AssaultRifle(Weapon):
         self.image = assets.rot_center(curImage, angle)
         self.image.blit(assets.hand, (self.rect.width / 2 - 4, self.rect.height / 2 - 4))
 
-        if self.entity.world.state.game.inputManager.keyJustPressed[pygame.K_r]:
+        if self.entity.world.state.game.inputManager.keyJustPressed.get("r"):
             self.reloading = True
             assets.arSound[1].play()
         self.attack()

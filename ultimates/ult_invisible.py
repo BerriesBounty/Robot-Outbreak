@@ -5,6 +5,7 @@ from ultimates.ultimate import Ultimate
 class Invisible(Ultimate):
     def __init__(self, duration, energy, id):
         super().__init__(duration, energy, id)
+        self.name = "Invisibility"
 
     def tick(self):
         self.timer += time.perf_counter() - self.lastTime

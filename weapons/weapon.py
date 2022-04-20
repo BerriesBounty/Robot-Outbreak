@@ -6,6 +6,7 @@ from pygame.sprite import Sprite
 class Weapon(Sprite, ABC):
     def __init__(self):
         super().__init__()
+        self.name = ""
         self.attackSpeed = 1
         self.damage = 1
         self.maxAmmo = 0

@@ -6,6 +6,7 @@ class Ultimate(ABC):
 
     def __init__(self, duration, energy, id):
         self.gamestate = None
+        self.name = ""
         self.duration = duration
         self.energy = energy
         self.id = id

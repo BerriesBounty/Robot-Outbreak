@@ -10,6 +10,7 @@ from weapons.weapon import Weapon
 class Sword(Weapon):
     def __init__(self):
         super().__init__()
+        self.name = "Sword"
         self.maxAmmo = -1
         self.attackSpeed = 1
         self.damage = 3

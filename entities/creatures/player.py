@@ -30,7 +30,7 @@ class Player(Creature):
         self.weapons[0] = AssaultRifle()
         self.weapons[0].entity = self
         self.weapons[1] = Pistol()
-        self.weapons[0].entity = self
+        self.weapons[1].entity = self
         self.equippedWeapon = self.weapons[0]
 
         self.energy = 0
@@ -72,7 +72,7 @@ class Player(Creature):
         self.equippedWeapon.update()
 
         #update ultimate ability
-        if self.world.state.game.inputManager.keyJustPressed[pygame.K_q] and self.energy == 100 and self.ultimate != None:
+        if self.world.state.game.inputManager.keyJustPressed.get("q") and self.energy == 100 and self.ultimate != None:
             self.ultimateOn = True
             self.ultimate.activiate()
             print("turn on")

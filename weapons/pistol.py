@@ -11,6 +11,7 @@ import random as rnd
 class Pistol(Weapon):
     def __init__(self):
         super().__init__()
+        self.name = "Pistol"
         self.attackSpeed = 0.25
         self.damage = 2
         self.spread = 7
@@ -86,7 +87,7 @@ class Pistol(Weapon):
         self.image = assets.rot_center(curImage, angle)
         self.image.blit(assets.hand, (self.rect.width / 2 - 4, self.rect.height / 2 - 4))
 
-        if self.entity.world.state.game.inputManager.keyJustPressed[pygame.K_r]:
+        if self.entity.world.state.game.inputManager.keyJustPressed.get("r"):
             self.reloading = True
             self.timer = 0
             assets.pistolSound[1].play()

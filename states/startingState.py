@@ -10,11 +10,10 @@ class StartingState(State):
 
     def tick(self):
         pass
-        if self.game.get_inputManager().get_keyReleased()[pygame.K_SPACE]:
+        if self.game.get_inputManager().get_keyReleased()["space"]:
             self.game.get_stateManager().set_state(self.game.gameState)
 
     def render(self, display):
         display.fill((0, 0, 0))
-        msg = assets.font36.render("PRESS SPACE TO START", False, (255, 255, 255))
-        msg_rect = msg.get_rect(center=(self.game.get_width()/2, self.game.get_height()/2))
-        display.blit(msg, msg_rect)
+        assets.renderFont(display, "PRESS SPACE TO START", (229, 229, 242), (68, 68, 97), self.world.state.game.width / 2,
+                          self.world.state.game.height / 2)

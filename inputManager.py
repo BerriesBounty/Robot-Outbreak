@@ -4,9 +4,9 @@ import pygame
 class InputManager:
     def __init__(self, game):
         self.game = game
-        self.keys = pygame.key.get_pressed()  # what key is HOLD DOWN
-        self.keyReleased = [False] * len(self.keys)  # what key is JUST RELEASED
-        self.keyJustPressed = [False] * len(self.keys)  # what key is JUST PRESSED
+        self.keys = pygame.key.get_pressed()
+        self.keyReleased = {}
+        self.keyJustPressed = {}  # what key is JUST PRESSED
 
         self.mouse = [False, False]  # what mouse is pressed
         self.justPressed = [False, False]
@@ -16,10 +16,12 @@ class InputManager:
         self.offsetY = 0
 
     def tick(self):
-        self.justPressed = [False, False]  # set what keys and mouse is pressed this tick to false
-        self.keyReleased = [False] * len(self.keys)
-        self.keyJustPressed = [False] * len(self.keys)
         self.keys = pygame.key.get_pressed()  # get what key is held down
+        for i in self.keyReleased:
+            self.keyReleased[i] = False
+        for i in self.keyJustPressed:
+            self.keyJustPressed[i] = False
+        self.justPressed = [False, False]  # set what keys and mouse is pressed this tick to false
 
         mouse = pygame.mouse.get_pos()  # position of mouse
         self.x = mouse[0]
@@ -29,17 +31,21 @@ class InputManager:
 
     def keyUp(self, event):  # when a key is released
         if event.key == pygame.K_SPACE:
-            self.keyReleased[pygame.K_SPACE] = True  #set the keyReleased to true just for this tick
+            self.keyReleased["space"] = True  #set the keyReleased to true just for this tick
 
     def keyDown(self, event):  # when a key is pressed down
         if event.key == pygame.K_SPACE:
-            self.keyJustPressed[pygame.K_SPACE] = True
+            self.keyJustPressed["space"] = True
         if event.key == pygame.K_r:
-            self.keyJustPressed[pygame.K_r] = True
+            self.keyJustPressed["r"] = True
         if event.key == pygame.K_TAB:
-            self.keyJustPressed[pygame.K_TAB] = True
+            self.keyJustPressed["tab"] = True
         if event.key == pygame.K_q:
-            self.keyJustPressed[pygame.K_q] = True
+            self.keyJustPressed["q"] = True
+        if event.key == pygame.K_UP:
+            self.keyJustPressed["up"] = True
+        if event.key == pygame.K_DOWN:
+            self.keyJustPressed["down"] = True
 
     def mousePressed(self):  # when a mouse is pressed
         if pygame.mouse.get_pressed()[0]:
