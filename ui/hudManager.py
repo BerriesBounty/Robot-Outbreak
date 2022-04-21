@@ -12,7 +12,7 @@ class HUDManager():
         self.energyBar = 10
 
     def tick(self):
-        self.healthBar = math.ceil(self.player.health / 10)
+        self.healthBar = math.ceil(self.player.health / self.player.maxHealth * 10)
         self.ammoBar = math.ceil(((self.player.equippedWeapon.ammo + self.player.equippedWeapon.curMag)
                                   / (self.player.equippedWeapon.maxAmmo + self.player.equippedWeapon.magSize)) * 10)
         self.energyBar = math.ceil(self.player.energy / 10)

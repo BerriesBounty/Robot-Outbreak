@@ -4,6 +4,7 @@ import pygame
 from entities.creatures.enemy import RangedEnemy, MeleeEnemy
 from entities.creatures.player import Player
 from entities.entityManager import EntityManager
+from timer import Timer
 from ui.hudManager import HUDManager
 from ui.itemShop import ItemShop
 
@@ -20,7 +21,7 @@ class World:
         self.entityManager = EntityManager()  # store all the entities, including enemies and player
 
         for i in range(5):
-            target = MeleeEnemy(self, 3)
+            target = RangedEnemy(self, 3)
             target.setxy(random.randint(0, self.state.game.width - target.rect.width),
                          random.randint(0, self.state.game.height / 2))
             self.target_list.add(target)
@@ -30,6 +31,7 @@ class World:
         self.hud = HUDManager(self)  # create the heads-up display
         self.itemShop = None
         self.stage = 1
+        self.timer = None
 
     def tick(self):
         # update all the entities and the HUD
@@ -37,11 +39,14 @@ class World:
             self.bullet_list.update()
             self.entityManager.update()
             self.hud.tick()
+            if self.timer is not None and self.timer.update():
+                self.stage += 1
         else:
-            self.itemShop.tick()
+            if self.timer.update():
+                self.itemShop.tick()
 
     def render(self, display):
-        if self.itemShop is None:
+        if self.stage % 2 == 1:
             self.bullet_list.draw(display)
             self.entityManager.draw(display)
             self.hud.render(display)
@@ -49,8 +54,10 @@ class World:
             self.itemShop.render(display)
 
     def waveCleared(self):
-        self.stage += 1
+        self.player.ismoving = False
+        self.player.canMove = False
         self.itemShop = ItemShop(self)
+        self.timer = Timer(2)
 
     def load_world(self, path):
         with open(path) as file:

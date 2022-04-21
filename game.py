@@ -27,7 +27,8 @@ class Game:
         self.stateManager = states.state.StateManager()
         self.gameState = gameState.GameState(self)  # the actual gameplay
         self.startingState = startingState.StartingState(self)  # the stating menu
-        self.stateManager.set_state(self.gameState)  #set the current state the game is in
+        self.stateManager.set_state(self.startingState)  #set the current state the game is in
+        self.stop_input = pygame.USEREVENT + 0
 
     def start(self):  # the main while loop of the game
 
@@ -66,6 +67,8 @@ class Game:
     def tick(self):  # basically the same as update
         self.inputManager.tick()  # manage what key and mouse button is hold down and the position of mouse
         for event in pygame.event.get():
+            if event.type == self.stop_input:
+                break
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()

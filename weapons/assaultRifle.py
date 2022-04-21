@@ -1,12 +1,8 @@
 import math
-import time
-
-import pygame
-
 from gfx import assets
 from bullet import Bullet
+from timer import Timer
 from weapons.weapon import Weapon
-import random as rnd
 
 class AssaultRifle(Weapon):
     def __init__(self):
@@ -16,12 +12,11 @@ class AssaultRifle(Weapon):
         self.damage = 1
         self.spread = 4
         self.maxAmmo = 150
-        self.ammo = 150
+        self.ammo = 120
         self.magSize = 30
         self.curMag = 30
         self.reloadSpeed = 0.5
-        self.timer = self.attackSpeed
-        self.lastTime = time.perf_counter()
+        self.timer = Timer(self.attackSpeed)
 
         self.rimage = assets.assaultRifle[0]
         self.limage = assets.assaultRifle[1]
@@ -31,15 +26,14 @@ class AssaultRifle(Weapon):
         self.xOffset = 2
 
     def attack(self):
-        self.timer += time.perf_counter() - self.lastTime
-        self.lastTime = time.perf_counter()
+        self.timer.update()
         if self.reloading:
-            if self.timer >= self.reloadSpeed:
+            if self.timer.timer >= self.reloadSpeed:
                 self.ammo -= min(self.ammo, self.magSize - self.curMag)
                 self.curMag = min(self.magSize, self.ammo)
-                self.timer = self.attackSpeed
+                self.timer.timer = self.attackSpeed
                 self.reloading = False
-        elif self.timer < self.attackSpeed:
+        elif self.timer.timer < self.attackSpeed:  # instead of resetting timer to 0, we reset to the attack speed so it can be fired as soon as it finishes reloading
             return
         elif self.entity.world.state.game.inputManager.get_pressed(0):
             self.attacking = True
@@ -58,7 +52,7 @@ class AssaultRifle(Weapon):
                 self.entity.world.bullet_list.add(bullet)
                 self.curMag -= 1
                 assets.arSound[0].play()
-            self.timer = 0
+            self.timer.reset()
         else:
             self.attacking = False
 
@@ -88,6 +82,7 @@ class AssaultRifle(Weapon):
 
         if self.entity.world.state.game.inputManager.keyJustPressed.get("r"):
             self.reloading = True
+            self.timer.reset()
             assets.arSound[1].play()
         self.attack()
 

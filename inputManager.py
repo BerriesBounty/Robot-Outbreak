@@ -32,6 +32,8 @@ class InputManager:
     def keyUp(self, event):  # when a key is released
         if event.key == pygame.K_SPACE:
             self.keyReleased["space"] = True  #set the keyReleased to true just for this tick
+        if event.key == pygame.K_RETURN:
+            self.keyReleased["enter"] = True
 
     def keyDown(self, event):  # when a key is pressed down
         if event.key == pygame.K_SPACE:

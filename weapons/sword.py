@@ -4,6 +4,7 @@ import time
 import pygame.rect
 
 from gfx import assets
+from timer import Timer
 from weapons.weapon import Weapon
 
 
@@ -16,8 +17,7 @@ class Sword(Weapon):
         self.damage = 3
         self.rimage = assets.sword[0]
         self.limage = assets.sword[1]
-        self.timer = self.attackSpeed
-        self.lastTime = time.perf_counter()
+        self.timer = Timer(self.attackSpeed)
 
         self.image = self.rimage
         self.rect = self.image.get_rect()
@@ -26,9 +26,7 @@ class Sword(Weapon):
         self.limage.blit(assets.hand, (self.rect.width / 2 - 5, self.rect.height / 2 - 5))
 
     def attack(self):
-        self.timer += time.perf_counter() - self.lastTime
-        self.lastTime = time.perf_counter()
-        if self.timer < self.attackSpeed:
+        if self.timer.update():
             return
         elif self.entity.world.state.game.inputManager.get_pressed(0):
             if self.entity.direction == 0:
@@ -43,7 +41,7 @@ class Sword(Weapon):
             for hit in hit_list:
                 hit.hurt(self.damage)
                 self.entity.energy = min(self.entity.energy + 5, 100)
-            self.timer = 0
+            self.timer.reset()
         else:
             self.attacking = False
 

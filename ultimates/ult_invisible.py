@@ -1,34 +1,33 @@
 import time
 
+from timer import Timer
 from ultimates.ultimate import Ultimate
 
 class Invisible(Ultimate):
     def __init__(self, duration, energy, id):
         super().__init__(duration, energy, id)
         self.name = "Invisibility"
+        self.timer = None
 
     def tick(self):
-        self.timer += time.perf_counter() - self.lastTime
-        self.lastTime = time.perf_counter()
-        if self.timer >= self.duration:
+        if self.timer.update():
             self.deactivate()
             return
 
-        self.gamestate.world1.player.visible = False
-        newImage = self.gamestate.world1.player.image.copy()
+        newImage = self.player.image.copy()
         newImage.set_alpha(100)
-        self.gamestate.world1.player.image = newImage
-        newGunImage = self.gamestate.world1.player.equippedWeapon.image.copy()
+        self.player.image = newImage
+        newGunImage = self.player.equippedWeapon.image.copy()
         newGunImage.set_alpha(100)
-        self.gamestate.world1.player.equippedWeapon.image = newGunImage
+        self.player.equippedWeapon.image = newGunImage
 
     def activiate(self):
-        self.lastTime = time.perf_counter()
-        self.gamestate.world1.player.visible = False
-        self.gamestate.world1.player.equippedWeapon.attackSpeed /= 1.25
+        self.timer = Timer(self.duration)
+        self.player.visible = False
+        self.player.equippedWeapon.attackSpeed /= 1.25
 
     def deactivate(self):
-        self.gamestate.world1.player.ultimateOn = False
-        self.gamestate.world1.player.visible = False
-        self.gamestate.world1.player.equippedWeapon.attackSpeed *= 1.25
+        self.player.ultimateOn = False
+        self.player.visible = False
+        self.player.equippedWeapon.attackSpeed *= 1.25
         self.timer = 0

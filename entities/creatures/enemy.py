@@ -92,6 +92,7 @@ class RangedEnemy(Creature):
 
     def update(self):
         if self.health <= 0:
+            self.world.player.kills += 1
             if len(self.world.target_list) == 1:
                 self.world.waveCleared()
             self.kill()
