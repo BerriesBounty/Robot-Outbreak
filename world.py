@@ -20,12 +20,7 @@ class World:
         self.target_list = pygame.sprite.Group()  # store all the enemies in the world
         self.entityManager = EntityManager()  # store all the entities, including enemies and player
 
-        for i in range(5):
-            target = RangedEnemy(self, 3)
-            target.setxy(random.randint(0, self.state.game.width - target.rect.width),
-                         random.randint(0, self.state.game.height / 2))
-            self.target_list.add(target)
-            self.entityManager.add(target)
+        self.waveStart()
 
         self.player = Player(self)  # create the player
         self.hud = HUDManager(self)  # create the heads-up display
@@ -58,6 +53,14 @@ class World:
         self.player.canMove = False
         self.itemShop = ItemShop(self)
         self.timer = Timer(2)
+
+    def waveStart(self):
+        for i in range(5):
+            target = RangedEnemy(self, 3)
+            target.setxy(random.randint(0, self.state.game.width - target.rect.width),
+                         random.randint(0, self.state.game.height / 2))
+            self.target_list.add(target)
+            self.entityManager.add(target)
 
     def load_world(self, path):
         with open(path) as file:

@@ -67,8 +67,8 @@ class RangedEnemy(Creature):
                 countdown += 1
                 time.sleep(1)
                 if countdown == 10: #counter will determine how frequently enemy shoots.
-                    dest_x = self.player.center_x
-                    dest_y = self.player.center_y
+                    dest_x = self.world.player.rect.x
+                    dest_y = self.world.player.rect.y
                     start_x = self.rangedenemy.center_x
                     start_y = self.rangedenemy.center_y
                     x_diff = dest_x - start_x
@@ -91,6 +91,7 @@ class RangedEnemy(Creature):
                     pass
 
     def update(self):
+        # self.attack("easy")
         if self.health <= 0:
             self.world.player.kills += 1
             if len(self.world.target_list) == 1:

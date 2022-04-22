@@ -6,6 +6,7 @@ from gfx.animation import Animation
 from ultimates.ultManager import UltManager
 from ultimates.ult_rage import Rage
 from weapons.assaultRifle import AssaultRifle
+from weapons.sword import Sword
 
 
 class Player(Creature):
@@ -13,10 +14,10 @@ class Player(Creature):
         super().__init__(world)
         self.maxHealth = 100
         self.health = self.maxHealth - 40
-        self.idleRight = Animation(0.15, assets.playerIdleRight)
-        self.idleLeft = Animation(0.15, assets.playerIdleLeft)
-        self.walkingRight = Animation(0.15, assets.playerWalkingRight)
-        self.walkingLeft = Animation(0.15, assets.playerWalkingLeft)
+        self.idleRight = Animation(0.15, assets.playerIdleRight, 0)
+        self.idleLeft = Animation(0.15, assets.playerIdleLeft, 0)
+        self.walkingRight = Animation(0.15, assets.playerWalkingRight, 0)
+        self.walkingLeft = Animation(0.15, assets.playerWalkingLeft, 0)
         self.ismoving = False
         self.canMove = True
 
@@ -29,7 +30,7 @@ class Player(Creature):
 
         self.enemies = self.world.target_list
         self.weapons = []
-        self.weapons.append(AssaultRifle())
+        self.weapons.append(Sword())
         self.weapons[0].entity = self
         self.equippedWeapon = self.weapons[0]
 
@@ -54,8 +55,8 @@ class Player(Creature):
             self.walkingLeft.tick()
             self.walkingRight.tick()
         else:
-            self.walkingLeft.index = 0
-            self.walkingRight.index = 0
+            self.walkingLeft.reset()
+            self.walkingRight.reset()
 
         #movement & camera
         if self.canMove:
@@ -71,11 +72,9 @@ class Player(Creature):
                 self.direction = 1
 
         self.image = self.getAnimationFrame()
+        self.equippedWeapon.update()  # update weapon related tasks
 
         if self.canMove:
-            #update weapon related tasks
-            self.equippedWeapon.update()
-
             #update ultimate ability
             if self.world.state.game.inputManager.keyJustPressed.get("q") and self.energy == 100 and self.ultimate != None:
                 self.ultimateOn = True

@@ -36,28 +36,24 @@ class ItemShop:
                     self.index -= 1
             if self.world.state.game.inputManager.keyReleased.get("enter"):
                 self.stage += 1
-        else:
-            chosen = self.choices[self.index]
-            if chosen in WeaponManager.weaponList: #if the player bought a weapon
-                if len(self.world.player.weapons) < 2:
-                    chosen.entity = self.world.player
-                    self.world.player.weapons.append(chosen)
-                    self.world.timer = None
-                    self.world.player.canMove = True
-                    self.world.stage += 1
-            if chosen in UltManager.ultimateList:
-                if self.world.player.ultimate is None:
+                chosen = self.choices[self.index]
+                if chosen in WeaponManager.weaponList:  # if the player bought a weapon
+                    if len(self.world.player.weapons) < 2:
+                        chosen.entity = self.world.player
+                        self.world.player.weapons.append(chosen)
+                if chosen in UltManager.ultimateList:
+                    if self.world.player.ultimate is None:
+                        chosen.player = self.world.player
+                        self.world.player.ultimate = chosen
+                if chosen in UpgradeManager.upgradeList:
                     chosen.player = self.world.player
-                    self.world.player.ultimate = chosen
-                    self.world.timer = None
-                    self.world.player.canMove = True
-                    self.world.stage += 1
-            if chosen in UpgradeManager.upgradeList:
-                chosen.player = self.world.player
-                chosen.activate()
+                    chosen.activate()
+        else:
+            if self.world.state.game.inputManager.keyReleased.get("enter"):
                 self.world.timer = None
-                self.world.player.canMove = True
                 self.world.stage += 1
+                self.world.player.canMove = True
+                self.world.waveStart()
 
     def render(self, display):
         if self.stage == 0:
@@ -80,4 +76,7 @@ class ItemShop:
             assets.renderFont(display, "Item Shop", (229, 229, 242), (68, 68, 97), self.world.state.game.width / 2,
                               self.world.state.game.height / 2 - 150, assets.font36)
         else:
-            pass
+            textbox = assets.uiAssets[3].copy()
+            renderRect = textbox.get_rect(
+                center=(self.world.state.game.width / 2, self.world.state.game.height / 2))
+            display.blit(textbox, renderRect)

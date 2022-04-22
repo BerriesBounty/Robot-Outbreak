@@ -6,6 +6,7 @@ spriteSheet = cannon = bullet = target = leftCannon\
 assaultRifle = []
 pistol = []
 sword = []
+swordSlash = []
 
 playerIdleRight = []
 playerIdleLeft = []
@@ -18,6 +19,7 @@ uiAssets = []
 
 arSound = []
 pistolSound = []
+backgroundSound = []
 
 WIDTH = 34
 HEIGHT = 48
@@ -27,7 +29,8 @@ purple = (98,  22, 107)
 
 def init():
     global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font36, font18,\
-        assaultRifle, hand, sword, playerIdleRight, playerIdleLeft, arSound, hudAssets, hudbar, pistol, uiAssets
+        assaultRifle, hand, sword, playerIdleRight, playerIdleLeft, arSound, hudAssets, \
+        hudbar, pistol, uiAssets, backgroundSound, swordSlash
 
     #sprite sheets
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
@@ -36,6 +39,7 @@ def init():
     playerWalkingSheet = pygame.transform.scale(loadImage("res/playerWalkingSheet.png", (186, 200, 216)), (212, 232))
     hudSheet = pygame.image.load("res/hudSheet.png").convert_alpha()
     uiSheet = pygame.image.load("res/itemShopSheet.png").convert_alpha()
+    slashSheet = pygame.image.load("res/slash.png").convert_alpha()
 
     bullet = spriteSheet.subsurface((16, 32, 16, 16))
     target = spriteSheet.subsurface((0, 0, 32, 32))
@@ -72,6 +76,14 @@ def init():
     sword.append(baseSword)
     sword.append(pygame.transform.flip(sword[0], True, False))
 
+    swordSlash.append(slashSheet.subsurface((0, 0, 64, 64)))
+    swordSlash.append(slashSheet.subsurface((64, 0, 64, 64)))
+    swordSlash.append(slashSheet.subsurface((2 * 64, 0, 64, 64)))
+    swordSlash.append(slashSheet.subsurface((3 * 64, 0, 64, 64)))
+    swordSlash.append(slashSheet.subsurface((4 * 64, 0, 64, 64)))
+    swordSlash.append(slashSheet.subsurface((0, 64, 64, 64)))
+    swordSlash.append(slashSheet.subsurface((64, 64, 64, 64)))
+
     basePistol = pygame.transform.scale(pygame.image.load("res/ar.png").subsurface((32,0,32,32)), (64, 64))
     pistol.append(basePistol)
     pistol.append(pygame.transform.flip(pistol[0], True, False))
@@ -97,17 +109,21 @@ def init():
     uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 0, 32 * 11, 260)), (528, 390)))
     uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 32 * 9, 32 * 6, 40)), (288, 60)))
     uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 6, 32 * 9, 32 * 6, 40)), (288, 60)))
+    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 15, 0, 32 * 3, 32 * 3)), (144, 144)))
 
     font36 = pygame.font.Font("res/slkscr.ttf", 36)
     font18 = pygame.font.Font("res/slkscr.ttf", 18)
 
     arSound.append(pygame.mixer.Sound("res/sfx/arShot.wav"))
-    arSound[0].set_volume(0.05)
+    arSound[0].set_volume(0.01)
     arSound.append(pygame.mixer.Sound("res/sfx/arReload.wav"))
+    arSound[1].set_volume(0.05)
 
     pistolSound.append(pygame.mixer.Sound("res/sfx/pistolShot.wav"))
-    pistolSound[0].set_volume(0.05)
+    pistolSound[0].set_volume(0.1)
     pistolSound.append(pygame.mixer.Sound("res/sfx/pistolReload.wav"))
+
+    backgroundSound.append(pygame.mixer.Sound("res/sfx/background.mp3"))
 
 
 def rot_center(image, angle):

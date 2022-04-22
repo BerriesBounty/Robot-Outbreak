@@ -25,5 +25,5 @@ class AmmoPack(Upgrade):
 
     def activate(self):
         self.player.equippedWeapon.ammo = round(min(self.player.equippedWeapon.maxAmmo,
-                                                    self.player.equippedWeapon.ammo + self.player.equippedWeapon.curMag + (
-                                                            self.player.equippedWeapon.maxAmmo * 0.25)))
+                                                    self.player.equippedWeapon.ammo + self.player.equippedWeapon.curMag
+                                                    + (self.player.equippedWeapon.maxAmmo * 0.25)))
