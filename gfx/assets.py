@@ -39,8 +39,8 @@ def init():
     #sprite sheets
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
     gunSheet = loadImage("res/gunSheet.png", purple)
-    playerSheet = pygame.transform.scale(loadImage("res/oneHandSheet.png", (186, 200, 216)), (144, 208))
-    playerWalkingSheet = pygame.transform.scale(loadImage("res/playerWalkingSheet.png", (186, 200, 216)), (212, 232))
+    playerSheet = pygame.transform.scale(loadImage("res/oneHandSheet.png", (186, 20, 216)), (144, 208))
+    playerWalkingSheet = pygame.transform.scale(loadImage("res/playerWalkingSheet.png", (186, 20, 216)), (212, 232))
     hudSheet = pygame.image.load("res/hudSheet.png").convert_alpha()
     uiSheet = pygame.image.load("res/itemShopSheet.png").convert_alpha()
     slashSheet = pygame.image.load("res/slash.png").convert_alpha()

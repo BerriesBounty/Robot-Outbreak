@@ -14,16 +14,17 @@ class Player(Creature):
         super().__init__(world)
         self.maxHealth = 100
         self.health = self.maxHealth - 40
-        self.idleRight = Animation(0.15, assets.playerIdleRight, 0)
+        self.idleRight = Animation(0.15, assets.playerIdleRight, 0)  # the animations for different actions
         self.idleLeft = Animation(0.15, assets.playerIdleLeft, 0)
         self.walkingRight = Animation(0.15, assets.playerWalkingRight, 0)
         self.walkingLeft = Animation(0.15, assets.playerWalkingLeft, 0)
         self.ismoving = False
-        self.canMove = True
+        self.canMove = True  # does the game allow the player to take action
 
         self.curAnimation = self.idleRight
         self.image = self.curAnimation.getCurrentFrame()
         self.rect = self.image.get_rect()
+        self.collisionRect = pygame.rect.Rect(9, 30, 16, 18)
 
         self.setxy()
         self.direction = 0  # direction of clock
@@ -43,10 +44,9 @@ class Player(Creature):
         self.kills = 0
 
         self.world.entityManager.add(self)
-
     def setxy(self):
         self.rect.x = self.world.state.game.width / 2 - self.rect.width / 2
-        self.rect.y = self.world.state.game.height - self.rect.height
+        self.rect.y = self.world.state.game.height - self.rect.height - 100
 
     def update(self):
         self.idleRight.tick()

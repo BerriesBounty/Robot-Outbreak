@@ -82,10 +82,12 @@ class ItemShop:
                     self.chosen.entity = self.world.player
                     self.world.player.weapons[0] = self.chosen
                     self.world.player.equippedWeapon = self.world.player.weapons[0]
+                    self.stage = 3
                 if self.world.state.game.inputManager.keyReleased.get("2"):
                     self.chosen.entity = self.world.player
                     self.world.player.weapons[1] = self.chosen
                     self.world.player.equippedWeapon = self.world.player.weapons[1]
+                    self.stage = 3
 
             elif self.stage == 2:
                 if self.world.state.game.inputManager.keyReleased["enter"]:
