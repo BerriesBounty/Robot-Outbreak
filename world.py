@@ -10,11 +10,10 @@ from ui.itemShop import ItemShop
 
 
 class World:
-    def __init__(self, state, path):
+    def __init__(self, state):
         self.state = state  # the state the world is in
         self.width = self.height = self.spawnX = self.spawnY = None
         self.tiles = []
-        # self.load_world(path)
 
         self.bullet_list = EntityManager()  # store all the bullets in the world
         self.target_list = pygame.sprite.Group()  # store all the enemies in the world
@@ -61,16 +60,3 @@ class World:
                          random.randint(0, self.state.game.height / 2))
             self.target_list.add(target)
             self.entityManager.add(target)
-
-    def load_world(self, path):
-        with open(path) as file:
-            content = file.read().split()
-        self.width = int(content[0])
-        self.height = int(content[1])
-        self.spawnX = int(content[2])
-        self.spawnY = int(content[3])
-
-        for x in range(self.width):
-            self.tiles.append([])
-            for y in range(self.height):
-                self.tiles[x].append(int(content[(x * self.height + y) + 4]))

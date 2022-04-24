@@ -9,7 +9,8 @@ class InputManager:
         self.keyJustPressed = {}  # what key is JUST PRESSED
 
         self.mouse = [False, False]  # what mouse is pressed
-        self.justPressed = [False, False]
+        self.mouseJustPressed = [False, False]
+        self.mouseJustReleased = [False, False]
         self.x = 0  # x and y position of the mouse
         self.y = 0
         self.offsetX = 0  # x and y position of the mouse relative to where the camera moved to
@@ -21,7 +22,8 @@ class InputManager:
             self.keyReleased[i] = False
         for i in self.keyJustPressed:
             self.keyJustPressed[i] = False
-        self.justPressed = [False, False]  # set what keys and mouse is pressed this tick to false
+        self.mouseJustPressed = [False, False]  # set what keys and mouse is pressed this tick to false
+        self.mouseJustReleased = [False, False]
 
         mouse = pygame.mouse.get_pos()  # position of mouse
         self.x = mouse[0]
@@ -34,6 +36,10 @@ class InputManager:
             self.keyReleased["space"] = True  #set the keyReleased to true just for this tick
         if event.key == pygame.K_RETURN:
             self.keyReleased["enter"] = True
+        if event.key == pygame.K_1:
+            self.keyReleased["1"] = True
+        if event.key == pygame.K_2:
+            self.keyReleased["2"] = True
 
     def keyDown(self, event):  # when a key is pressed down
         if event.key == pygame.K_SPACE:
@@ -52,16 +58,18 @@ class InputManager:
     def mousePressed(self):  # when a mouse is pressed
         if pygame.mouse.get_pressed()[0]:
             self.mouse[0] = True
-            self.justPressed[0] = True
+            self.mouseJustPressed[0] = True
         elif pygame.mouse.get_pressed()[1]:
             self.mouse[1] = True
-            self.justPressed[1] = True
+            self.mouseJustPressed[1] = True
 
     def mouseReleased(self):  # when a mouse is released
         if not pygame.mouse.get_pressed()[0]:
             self.mouse[0] = False
+            self.mouseJustReleased[0] = True
         elif not pygame.mouse.get_pressed()[1]:
             self.mouse[1] = False
+            self.mouseJustPressed[1] = True
 
     def get_pressed(self, n):  # return if a mouse button is prssed down
         return self.mouse[n]

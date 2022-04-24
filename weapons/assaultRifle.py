@@ -57,9 +57,6 @@ class AssaultRifle(Weapon):
             self.attacking = False
 
     def update(self):
-        self.rect.x = self.entity.rect.x + self.xOffset
-        self.rect.y = self.entity.rect.y + 6
-
         if self.entity.direction == 0:
             curImage = self.rimage
             self.xOffset = -5
@@ -67,24 +64,28 @@ class AssaultRifle(Weapon):
             curImage = self.limage
             self.xOffset = -25
 
-        mx = self.entity.world.state.game.inputManager.offsetX
-        my = self.entity.world.state.game.inputManager.offsetY
-        dx = mx - self.rect.x
-        dy = my - self.rect.y
-        if dx == 0:
-            dx = 0.01
-        if self.rect.x < mx < self.rect.x + self.rect.width and self.entity.direction == 1:
-            angle = math.degrees(math.atan(dy/dx))
-        else:
-            angle = -math.degrees(math.atan(dy/dx))
-        self.image = assets.rot_center(curImage, angle)
-        self.image.blit(assets.hand, (self.rect.width / 2 - 4, self.rect.height / 2 - 4))
+        if self.entity.canMove:
+            self.rect.x = self.entity.rect.x + self.xOffset
+            self.rect.y = self.entity.rect.y + 6
 
-        if self.entity.world.state.game.inputManager.keyJustPressed.get("r"):
-            self.reloading = True
-            self.timer.reset()
-            assets.arSound[1].play()
-        self.attack()
+            mx = self.entity.world.state.game.inputManager.offsetX
+            my = self.entity.world.state.game.inputManager.offsetY
+            dx = mx - self.rect.x
+            dy = my - self.rect.y
+            if dx == 0:
+                dx = 0.01
+            if self.rect.x < mx < self.rect.x + self.rect.width and self.entity.direction == 1:
+                angle = math.degrees(math.atan(dy/dx))
+            else:
+                angle = -math.degrees(math.atan(dy/dx))
+            self.image = assets.rot_center(curImage, angle)
+            self.image.blit(assets.hand, (self.rect.width / 2 - 4, self.rect.height / 2 - 4))
+
+            if self.entity.world.state.game.inputManager.keyJustPressed.get("r"):
+                self.reloading = True
+                self.timer.reset()
+                assets.arSound[1].play()
+            self.attack()
 
     def render(self, display):
         display.blit(self.image, (self.rect.x - self.entity.world.state.game.gameCamera.xOffset,

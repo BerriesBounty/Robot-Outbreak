@@ -30,7 +30,7 @@ class Player(Creature):
 
         self.enemies = self.world.target_list
         self.weapons = []
-        self.weapons.append(Sword())
+        self.weapons.append(AssaultRifle())
         self.weapons[0].entity = self
         self.equippedWeapon = self.weapons[0]
 

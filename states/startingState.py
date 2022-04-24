@@ -20,4 +20,4 @@ class StartingState(State):
         display.fill((0, 0, 0))
         if self.curStage == 0:
             assets.renderFont(display, "PRESS SPACE TO START", (229, 229, 242), (68, 68, 97), self.game.width / 2,
-                        self.game.height / 2, assets.font36)
+                        self.game.height / 2, assets.fonts[2])

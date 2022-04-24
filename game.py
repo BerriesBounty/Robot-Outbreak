@@ -90,7 +90,7 @@ class Game:
             self.stateManager.get_state().tick()  # update the state
 
     def render(self, display):  # draws what is on screen every loop. Display is the screen to blit on
-        display.fill((100, 100, 100))
+        display.fill((119, 166, 115))
 
         if self.stateManager.get_state() is not None:
             self.stateManager.get_state().render(display)  # render the state

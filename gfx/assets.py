@@ -1,5 +1,7 @@
 import pygame
 
+pygame.mixer.init()
+
 spriteSheet = cannon = bullet = target = leftCannon\
     = rightCannon = font36 = font18 = hand = None
 
@@ -16,6 +18,8 @@ playerWalkingLeft = []
 hudbar = []
 hudAssets = []
 uiAssets = []
+buttons = []
+fonts = []
 
 arSound = []
 pistolSound = []
@@ -28,9 +32,9 @@ HEIGHT = 48
 purple = (98,  22, 107)
 
 def init():
-    global spriteSheet, bullet, cannon, target, leftCannon, rightCannon, font36, font18,\
+    global spriteSheet, bullet, cannon, target, leftCannon, rightCannon,\
         assaultRifle, hand, sword, playerIdleRight, playerIdleLeft, arSound, hudAssets, \
-        hudbar, pistol, uiAssets, backgroundSound, swordSlash
+        hudbar, pistol, uiAssets, backgroundSound, swordSlash, fonts, buttons
 
     #sprite sheets
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
@@ -109,10 +113,16 @@ def init():
     uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 0, 32 * 11, 260)), (528, 390)))
     uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 32 * 9, 32 * 6, 40)), (288, 60)))
     uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 6, 32 * 9, 32 * 6, 40)), (288, 60)))
-    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 15, 0, 32 * 3, 32 * 3)), (144, 144)))
+    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 15, 0, 32 * 5, 32 * 4)), (32 * 5 * (3/2), 32 * 4 * (3/2))))
+    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 15, 32 * 3, 32 * 6, 106)), (32 * 6 * (3/2), 106 * (3/2))))
 
-    font36 = pygame.font.Font("res/slkscr.ttf", 36)
-    font18 = pygame.font.Font("res/slkscr.ttf", 18)
+    buttons.append(pygame.transform.scale(uiSheet.subsurface((32 * 20, 0, 32, 32)), (48, 48)))
+    buttons.append(pygame.transform.scale(uiSheet.subsurface((32 * 21, 0, 32, 32)), (48, 48)))
+    buttons.append(pygame.transform.scale(uiSheet.subsurface((32 * 22, 0, 32, 32)), (48, 48)))
+
+    fonts.append(pygame.font.Font("res/slkscr.ttf", 16))
+    fonts.append(pygame.font.Font("res/slkscr.ttf", 18))
+    fonts.append(pygame.font.Font("res/slkscr.ttf", 36))
 
     arSound.append(pygame.mixer.Sound("res/sfx/arShot.wav"))
     arSound[0].set_volume(0.01)
@@ -120,10 +130,12 @@ def init():
     arSound[1].set_volume(0.05)
 
     pistolSound.append(pygame.mixer.Sound("res/sfx/pistolShot.wav"))
-    pistolSound[0].set_volume(0.1)
+    pistolSound[0].set_volume(0.01)
     pistolSound.append(pygame.mixer.Sound("res/sfx/pistolReload.wav"))
+    pistolSound[1].set_volume(0.05)
 
     backgroundSound.append(pygame.mixer.Sound("res/sfx/background.mp3"))
+    backgroundSound[0].set_volume(0.5)
 
 
 def rot_center(image, angle):
@@ -144,7 +156,46 @@ def loadImage(path, key):
 def renderFont(display, string, color, bgcolor, centerX, centerY, font):
     msg = font.render(string, False, bgcolor)
     msg_rect = msg.get_rect(center=(centerX, centerY + 3))
-    display.blit(msg, msg_rect)
+    drawText(display, string, bgcolor, msg_rect, font)
     msg = font.render(string, False, color)
     msg_rect = msg.get_rect(center=(centerX, centerY))
-    display.blit(msg, msg_rect)
+    # display.blit(msg, msg_rect)
+    drawText(display, string, color, msg_rect, font)
+
+def drawText(surface, text, color, rect, font, aa=False, bkg=None):
+    rect = pygame.Rect(rect)
+    y = rect.top
+    lineSpacing = -2
+
+    # get the height of the font
+    fontHeight = font.size("Tg")[1]
+
+    while text:
+        i = 1
+
+        # determine if the row of text will be outside our area
+        if y + fontHeight > rect.bottom:
+            break
+
+        # determine maximum width of line
+        while font.size(text[:i])[0] < rect.width and i < len(text):
+            i += 1
+
+        # if we've wrapped the text, then adjust the wrap to the last word
+        if i < len(text):
+            i = text.rfind(" ", 0, i) + 1
+
+        # render the line and blit it to the surface
+        if bkg:
+            image = font.render(text[:i], 1, color, bkg)
+            image.set_colorkey(bkg)
+        else:
+            image = font.render(text[:i], aa, color)
+
+        surface.blit(image, (rect.left, y))
+        y += fontHeight + lineSpacing
+
+        # remove the text we just blitted
+        text = text[i:]
+
+    return text
