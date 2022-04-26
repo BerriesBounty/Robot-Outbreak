@@ -7,14 +7,17 @@ from states.state import State
 class StartingState(State):
     def __init__(self, game):
         super().__init__(game)
+        self.curStage = 0
 
     def tick(self):
         pass
-        if self.game.get_inputManager().get_keyReleased()[pygame.K_SPACE]:
-            self.game.get_stateManager().set_state(self.game.gameState)
+        if self.curStage == 0:
+            if self.game.inputManager.keyReleased.get("space"):
+                self.curStage = 1
+                self.game.stateManager.set_state(self.game.gameState)
 
     def render(self, display):
         display.fill((0, 0, 0))
-        msg = assets.font36.render("PRESS SPACE TO START", False, (255, 255, 255))
-        msg_rect = msg.get_rect(center=(self.game.get_width()/2, self.game.get_height()/2))
-        display.blit(msg, msg_rect)
+        if self.curStage == 0:
+            assets.renderFont(display, "PRESS SPACE TO START", (229, 229, 242), (68, 68, 97), self.game.width / 2,
+                        self.game.height / 2, assets.fonts[2])

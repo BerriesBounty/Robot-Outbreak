@@ -5,7 +5,8 @@ from abc import ABC, abstractmethod
 class Ultimate(ABC):
 
     def __init__(self, duration, energy, id):
-        self.gamestate = None
+        self.player = None
+        self.name = ""
         self.duration = duration
         self.energy = energy
         self.id = id

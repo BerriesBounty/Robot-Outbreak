@@ -27,41 +27,42 @@ class Game:
         self.stateManager = states.state.StateManager()
         self.gameState = gameState.GameState(self)  # the actual gameplay
         self.startingState = startingState.StartingState(self)  # the stating menu
-        self.stateManager.set_state(self.gameState)  #set the current state the game is in
+        self.stateManager.set_state(self.startingState)  #set the current state the game is in
+        assets.backgroundSound[0].play()
 
     def start(self):  # the main while loop of the game
 
-        # fps = 60  # how many ticks per second
-        # timesPerTick = 1000000000 / fps  # number of nanosecond between each tick
-        # delta = 0
-        # now = None
-        # lastTime = time.perf_counter_ns()  # the last time it ticked
-        # timer = 0
-        # ticks = 0
+        fps = 60  # how many ticks per second
+        timesPerTick = 1000000000 / fps  # number of nanosecond between each tick
+        delta = 0
+        now = None
+        lastTime = time.perf_counter_ns()  # the last time it ticked
+        timer = 0
+        ticks = 0
 
         while True:
 
-            # now = time.perf_counter_ns() #time of the current loop
-            # delta += (now - lastTime) / timesPerTick #how many ticks can be performed in the
-            # timer += now - lastTime #amount of time past
-            # lastTime = now
-            #
-            # if delta >= 1:
-            #     self.tick()
-            #     self.render()
-            #     ticks += 1
-            #     delta -= 1
-            #
-            # if timer >= 1000000000:#if it has been a second
-            #     print(f"fps: {ticks}")
-            #     ticks = 0
-            #     timer = 0
+            now = time.perf_counter_ns() #time of the current loop
+            delta += (now - lastTime) / timesPerTick #how many ticks can be performed in the
+            timer += now - lastTime #amount of time past
+            lastTime = now
 
-            self.tick()  # updating on the different classes
-            self.render(self.display)  # drawing all the sprites
+            if delta >= 1:
+                self.tick()
+                self.render(self.display)
+                ticks += 1
+                delta -= 1
+
+            if timer >= 1000000000:#if it has been a second
+                print(f"fps: {ticks}")
+                ticks = 0
+                timer = 0
+
+            # self.tick()  # updating on the different classes
+            # self.render(self.display)  # drawing all the sprites
 
             pygame.display.update()
-            self.clock.tick(60)
+            # self.clock.tick(60)
 
     def tick(self):  # basically the same as update
         self.inputManager.tick()  # manage what key and mouse button is hold down and the position of mouse
@@ -89,7 +90,7 @@ class Game:
             self.stateManager.get_state().tick()  # update the state
 
     def render(self, display):  # draws what is on screen every loop. Display is the screen to blit on
-        display.fill((100, 100, 100))
+        display.fill((119, 166, 115))
 
         if self.stateManager.get_state() is not None:
             self.stateManager.get_state().render(display)  # render the state

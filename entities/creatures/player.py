@@ -4,46 +4,49 @@ from gfx import assets
 from entities.creatures.creature import Creature
 from gfx.animation import Animation
 from ultimates.ultManager import UltManager
+from ultimates.ult_rage import Rage
 from weapons.assaultRifle import AssaultRifle
-from weapons.pistol import Pistol
 from weapons.sword import Sword
 
 
 class Player(Creature):
     def __init__(self, world):
         super().__init__(world)
-        self.idleRight = Animation(0.15, assets.playerIdleRight)
-        self.idleLeft = Animation(0.15, assets.playerIdleLeft)
-        self.walkingRight = Animation(0.15, assets.playerWalkingRight)
-        self.walkingLeft = Animation(0.15, assets.playerWalkingLeft)
+        self.maxHealth = 100
+        self.health = self.maxHealth - 40
+        self.idleRight = Animation(0.15, assets.playerIdleRight, 0)  # the animations for different actions
+        self.idleLeft = Animation(0.15, assets.playerIdleLeft, 0)
+        self.walkingRight = Animation(0.15, assets.playerWalkingRight, 0)
+        self.walkingLeft = Animation(0.15, assets.playerWalkingLeft, 0)
         self.ismoving = False
+        self.canMove = True  # does the game allow the player to take action
 
         self.curAnimation = self.idleRight
         self.image = self.curAnimation.getCurrentFrame()
         self.rect = self.image.get_rect()
+        self.collisionRect = pygame.rect.Rect(9, 30, 16, 18)
 
         self.setxy()
         self.direction = 0  # direction of clock
 
         self.enemies = self.world.target_list
-        self.weapons = [None] * 2
-        self.weapons[0] = AssaultRifle()
-        self.weapons[0].entity = self
-        self.weapons[1] = Pistol()
+        self.weapons = []
+        self.weapons.append(AssaultRifle())
         self.weapons[0].entity = self
         self.equippedWeapon = self.weapons[0]
 
-        self.energy = 0
-        self.ultimate = UltManager.ultimateList[0]
-        self.ultimate.state = self.world.state
+        self.energy = 100
+        self.ultimate = UltManager.ultimateList[1]
+        self.ultimate.player = self
         self.ultimateOn = False
         self.visible = True
 
-        self.world.entityManager.add(self)
+        self.kills = 0
 
+        self.world.entityManager.add(self)
     def setxy(self):
         self.rect.x = self.world.state.game.width / 2 - self.rect.width / 2
-        self.rect.y = self.world.state.game.height - self.rect.height
+        self.rect.y = self.world.state.game.height - self.rect.height - 100
 
     def update(self):
         self.idleRight.tick()
@@ -52,32 +55,33 @@ class Player(Creature):
             self.walkingLeft.tick()
             self.walkingRight.tick()
         else:
-            self.walkingLeft.index = 0
-            self.walkingRight.index = 0
+            self.walkingLeft.reset()
+            self.walkingRight.reset()
 
         #movement & camera
-        self.getInput()
-        self.move()
-        self.world.state.game.gameCamera.centerOnPlayer(self)
+        if self.canMove:
+            self.getInput()
+            self.move()
+            self.world.state.game.gameCamera.centerOnPlayer(self)
 
-        #the direction the player should face
-        mx = self.world.state.game.inputManager.offsetX
-        if mx - self.rect.x - (self.rect.width / 2) > 0:
-            self.direction = 0
-        else:
-            self.direction = 1
+            #the direction the player should face
+            mx = self.world.state.game.inputManager.offsetX
+            if mx - self.rect.x - (self.rect.width / 2) > 0:
+                self.direction = 0
+            else:
+                self.direction = 1
+
         self.image = self.getAnimationFrame()
+        self.equippedWeapon.update()  # update weapon related tasks
 
-        #update weapon related tasks
-        self.equippedWeapon.update()
-
-        #update ultimate ability
-        if self.world.state.game.inputManager.keyJustPressed[pygame.K_q] and self.energy == 100 and self.ultimate != None:
-            self.ultimateOn = True
-            self.ultimate.activiate()
-            print("turn on")
-        if self.ultimateOn:
-            self.ultimate.tick()
+        if self.canMove:
+            #update ultimate ability
+            if self.world.state.game.inputManager.keyJustPressed.get("q") and self.energy == 100 and self.ultimate != None:
+                self.ultimateOn = True
+                self.ultimate.activiate()
+                self.energy = 0
+            if self.ultimateOn:
+                self.ultimate.tick()
 
     def die(self):
         pass
@@ -104,8 +108,9 @@ class Player(Creature):
             if self.equippedWeapon != self.weapons[0]:
                 self.equippedWeapon = self.weapons[0]
         if keys[pygame.K_2]:
-            if self.equippedWeapon != self.weapons[1]:
-                self.equippedWeapon = self.weapons[1]
+            if len(self.weapons) == 2:
+                if self.equippedWeapon != self.weapons[1]:
+                    self.equippedWeapon = self.weapons[1]
 
     def render(self, display):
         display.blit(self.image, (self.rect.x - self.world.state.game.gameCamera.xOffset,

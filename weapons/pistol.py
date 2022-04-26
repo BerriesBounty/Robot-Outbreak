@@ -5,22 +5,23 @@ import pygame
 
 from gfx import assets
 from bullet import Bullet
+from timer import Timer
 from weapons.weapon import Weapon
 import random as rnd
 
 class Pistol(Weapon):
     def __init__(self):
         super().__init__()
+        self.name = "Pistol"
         self.attackSpeed = 0.25
         self.damage = 2
         self.spread = 7
         self.maxAmmo = 140
-        self.ammo = 140
+        self.ammo = 130
         self.magSize = 10
         self.curMag = self.magSize
         self.reloadSpeed = 1.2
-        self.timer = self.attackSpeed
-        self.lastTime = time.perf_counter()
+        self.timer = Timer(self.attackSpeed)
 
         self.rimage = assets.pistol[0]
         self.limage = assets.pistol[1]
@@ -30,16 +31,15 @@ class Pistol(Weapon):
         self.xOffset = 2
 
     def attack(self):
-        self.timer += time.perf_counter() - self.lastTime
-        self.lastTime = time.perf_counter()
+        self.timer.update()
         if self.reloading:
-            if self.timer >= self.reloadSpeed:
+            if self.timer.timer >= self.reloadSpeed:
                 self.ammo -= min(self.ammo, self.magSize - self.curMag)
                 self.curMag = min(self.magSize, self.ammo)
-                self.timer = self.attackSpeed
+                self.timer.timer = self.attackSpeed
                 self.reloading = False
 
-        elif self.timer < self.attackSpeed:
+        elif self.timer.timer < self.attackSpeed:
             return
         elif self.entity.world.state.game.inputManager.get_pressed(0):
             self.attacking = True
@@ -58,7 +58,7 @@ class Pistol(Weapon):
                 self.entity.world.bullet_list.add(bullet)
                 self.curMag -= 1
                 assets.pistolSound[0].play()
-            self.timer = 0
+            self.timer.reset()
         else:
             self.attacking = False
 
@@ -73,24 +73,25 @@ class Pistol(Weapon):
             curImage = self.limage
             self.xOffset = -25
 
-        mx = self.entity.world.state.game.inputManager.offsetX
-        my = self.entity.world.state.game.inputManager.offsetY
-        dx = mx - self.rect.x
-        dy = my - self.rect.y
-        if dx == 0:
-            dx = 0.01
-        if self.rect.x < mx < self.rect.x + self.rect.width and self.entity.direction == 1:
-            angle = math.degrees(math.atan(dy/dx))
-        else:
-            angle = -math.degrees(math.atan(dy/dx))
-        self.image = assets.rot_center(curImage, angle)
-        self.image.blit(assets.hand, (self.rect.width / 2 - 4, self.rect.height / 2 - 4))
+        if self.entity.canMove:
+            mx = self.entity.world.state.game.inputManager.offsetX
+            my = self.entity.world.state.game.inputManager.offsetY
+            dx = mx - self.rect.x
+            dy = my - self.rect.y
+            if dx == 0:
+                dx = 0.01
+            if self.rect.x < mx < self.rect.x + self.rect.width and self.entity.direction == 1:
+                angle = math.degrees(math.atan(dy/dx))
+            else:
+                angle = -math.degrees(math.atan(dy/dx))
+            self.image = assets.rot_center(curImage, angle)
+            self.image.blit(assets.hand, (self.rect.width / 2 - 4, self.rect.height / 2 - 4))
 
-        if self.entity.world.state.game.inputManager.keyJustPressed[pygame.K_r]:
-            self.reloading = True
-            self.timer = 0
-            assets.pistolSound[1].play()
-        self.attack()
+            if self.entity.world.state.game.inputManager.keyJustPressed.get("r"):
+                self.reloading = True
+                self.timer.reset()
+                assets.pistolSound[1].play()
+            self.attack()
 
     def render(self, display):
         display.blit(self.image, (self.rect.x - self.entity.world.state.game.gameCamera.xOffset,
