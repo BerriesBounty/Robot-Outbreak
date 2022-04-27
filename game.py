@@ -28,11 +28,12 @@ class Game:
         self.gameState = gameState.GameState(self)  # the actual gameplay
         self.startingState = startingState.StartingState(self)  # the stating menu
         self.stateManager.set_state(self.startingState)  #set the current state the game is in
+        self.background = pygame.transform.scale(pygame.image.load("res/menuBg.jpg"), (800, 600))
         assets.backgroundSound[0].play()
 
     def start(self):  # the main while loop of the game
 
-        fps = 60  # how many ticks per second
+        fps = 30  # how many ticks per second
         timesPerTick = 1000000000 / fps  # number of nanosecond between each tick
         delta = 0
         now = None
@@ -90,7 +91,7 @@ class Game:
             self.stateManager.get_state().tick()  # update the state
 
     def render(self, display):  # draws what is on screen every loop. Display is the screen to blit on
-        display.fill((119, 166, 115))
-
+        display.fill((0,0,0))
+        display.blit(self.background, (0, 0))
         if self.stateManager.get_state() is not None:
             self.stateManager.get_state().render(display)  # render the state

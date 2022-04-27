@@ -8,7 +8,9 @@ spriteSheet = cannon = bullet = target = leftCannon\
 assaultRifle = []
 pistol = []
 sword = []
+coolSword = []
 swordSlash = []
+slashBullet = []
 
 playerIdleRight = []
 playerIdleLeft = []
@@ -28,19 +30,19 @@ backgroundSound = []
 WIDTH = 34
 HEIGHT = 48
 
-#colors
+# colors
 purple = (98,  22, 107)
 
 def init():
     global spriteSheet, bullet, cannon, target, leftCannon, rightCannon,\
-        assaultRifle, hand, sword, playerIdleRight, playerIdleLeft, arSound, hudAssets, \
-        hudbar, pistol, uiAssets, backgroundSound, swordSlash, fonts, buttons
+        assaultRifle, hand, sword, coolSword, playerIdleRight, playerIdleLeft, arSound, hudAssets, \
+        hudbar, pistol, uiAssets, backgroundSound, swordSlash, fonts, buttons, slashBullet
 
-    #sprite sheets
+    # sprite sheets
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
     gunSheet = loadImage("res/gunSheet.png", purple)
-    playerSheet = pygame.transform.scale(loadImage("res/oneHandSheet.png", (186, 20, 216)), (144, 208))
-    playerWalkingSheet = pygame.transform.scale(loadImage("res/playerWalkingSheet.png", (186, 20, 216)), (212, 232))
+    playerSheet = pygame.transform.scale(loadImage("res/oneHandSheet.png", (186, 200, 216)), (144, 208))
+    playerWalkingSheet = pygame.transform.scale(loadImage("res/playerWalkingSheet.png", (186, 200, 216)), (212, 232))
     hudSheet = pygame.image.load("res/hudSheet.png").convert_alpha()
     uiSheet = pygame.image.load("res/itemShopSheet.png").convert_alpha()
     slashSheet = pygame.image.load("res/slash.png").convert_alpha()
@@ -72,13 +74,17 @@ def init():
     playerWalkingLeft.append(pygame.transform.flip(playerWalkingRight[4], True, False).convert_alpha())
     playerWalkingLeft.append(pygame.transform.flip(playerWalkingRight[5], True, False).convert_alpha())
 
-    baseRifle = pygame.transform.scale(pygame.image.load("res/ar.png").subsurface((0,0,32,32)), (64, 64))
+    baseRifle = pygame.transform.scale(pygame.image.load("res/ar.png").subsurface((0, 0, 32, 32)), (64, 64))
     assaultRifle.append(baseRifle)
     assaultRifle.append(pygame.transform.flip(assaultRifle[0], True, False))
 
     baseSword = gunSheet.subsurface((96 * 3, 0, 96, 96))
     sword.append(baseSword)
     sword.append(pygame.transform.flip(sword[0], True, False))
+
+    baseCoolSword = gunSheet.subsurface((96 * 4, 0, 96, 96))
+    coolSword.append(baseCoolSword)
+    coolSword.append(pygame.transform.flip(coolSword[0], True, False))
 
     swordSlash.append(slashSheet.subsurface((0, 0, 64, 64)))
     swordSlash.append(slashSheet.subsurface((64, 0, 64, 64)))
@@ -87,6 +93,10 @@ def init():
     swordSlash.append(slashSheet.subsurface((4 * 64, 0, 64, 64)))
     swordSlash.append(slashSheet.subsurface((0, 64, 64, 64)))
     swordSlash.append(slashSheet.subsurface((64, 64, 64, 64)))
+
+    baseSB = pygame.image.load("res/slashProjectile.png")
+    slashBullet.append(baseSB)
+    slashBullet.append(pygame.transform.flip(slashBullet[0], True, False))
 
     basePistol = pygame.transform.scale(pygame.image.load("res/ar.png").subsurface((32,0,32,32)), (64, 64))
     pistol.append(basePistol)
@@ -113,8 +123,16 @@ def init():
     uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 0, 32 * 11, 260)), (528, 390)))
     uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 32 * 9, 32 * 6, 40)), (288, 60)))
     uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 6, 32 * 9, 32 * 6, 40)), (288, 60)))
-    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 15, 0, 32 * 5, 32 * 4)), (32 * 5 * (3/2), 32 * 4 * (3/2))))
-    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 15, 32 * 3, 32 * 6, 106)), (32 * 6 * (3/2), 106 * (3/2))))
+    uiAssets.append(
+        pygame.transform.scale(uiSheet.subsurface((32 * 15, 0, 32 * 5, 32 * 4)), (32 * 5 * (3/2), 32 * 4 * (3/2))))
+    uiAssets.append(
+        pygame.transform.scale(uiSheet.subsurface((32 * 15, 32 * 3, 32 * 6, 106)), (32 * 6 * (3/2), 106 * (3/2))))
+    uiAssets.append(
+        pygame.transform.scale(uiSheet.subsurface((32 * 15, 32 * 4, 32 * 6, 228)), (32 * 6 * (3/2), 228 * (3/2))))
+    uiAssets.append(
+        pygame.transform.scale(uiSheet.subsurface((32 * 14, 32 * 12, 32 * 6, 40)), (32 * 6 * (3 / 2), 40 * (3 / 2))))
+    uiAssets.append(
+        pygame.transform.scale(uiSheet.subsurface((32 * 20, 32 * 12, 32 * 6, 40)), (32 * 6 * (3 / 2), 40 * (3 / 2))))
 
     buttons.append(pygame.transform.scale(uiSheet.subsurface((32 * 20, 0, 32, 32)), (48, 48)))
     buttons.append(pygame.transform.scale(uiSheet.subsurface((32 * 21, 0, 32, 32)), (48, 48)))
@@ -148,10 +166,12 @@ def rot_center(image, angle):
     rot_image = rot_image.subsurface(rot_rect).copy()
     return rot_image
 
+
 def loadImage(path, key):
     image = pygame.image.load(path).convert_alpha()
     image.set_colorkey(key)
     return image
+
 
 def renderFont(display, string, color, bgcolor, centerX, centerY, font):
     msg = font.render(string, False, bgcolor)
@@ -162,10 +182,11 @@ def renderFont(display, string, color, bgcolor, centerX, centerY, font):
     # display.blit(msg, msg_rect)
     drawText(display, string, color, msg_rect, font)
 
+
 def drawText(surface, text, color, rect, font, aa=False, bkg=None):
     rect = pygame.Rect(rect)
     y = rect.top
-    lineSpacing = -2
+    lineSpacing = 1
 
     # get the height of the font
     fontHeight = font.size("Tg")[1]

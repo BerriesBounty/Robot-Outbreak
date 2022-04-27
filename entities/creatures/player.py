@@ -6,6 +6,7 @@ from gfx.animation import Animation
 from ultimates.ultManager import UltManager
 from ultimates.ult_rage import Rage
 from weapons.assaultRifle import AssaultRifle
+from weapons.coolSword import CoolSword
 from weapons.sword import Sword
 
 
@@ -31,7 +32,7 @@ class Player(Creature):
 
         self.enemies = self.world.target_list
         self.weapons = []
-        self.weapons.append(AssaultRifle())
+        self.weapons.append(CoolSword())
         self.weapons[0].entity = self
         self.equippedWeapon = self.weapons[0]
 

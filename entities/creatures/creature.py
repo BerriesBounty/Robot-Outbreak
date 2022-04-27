@@ -5,7 +5,7 @@ from gfx.tiles import Tile
 
 
 class Creature(Entity, ABC):
-    DEFAULT_SPEED = 3.0
+    DEFAULT_SPEED = 6.0
 
     def __init__(self, world):
         super().__init__(world)
@@ -36,7 +36,6 @@ class Creature(Entity, ABC):
                 self.rect.x += self.xmove
             else:
                 self.rect.x = dx * Tile.WIDTH + Tile.WIDTH - self.collisionrect.x
-                print(self.rect.x)
 
     def moveY(self):
         if self.ymove > 0:
@@ -50,7 +49,6 @@ class Creature(Entity, ABC):
         elif self.ymove < 0:
             dy = int(self.rect.y + self.ymove + self.collisionrect.y) // Tile.HEIGHT
             dx = int(self.rect.x + self.collisionrect.x) // Tile.WIDTH
-            print(self.rect.x, self.collisionrect.x)
             if not self.world.getTile(dx, dy).isSolid and not self.world.getTile(dx + self.collisionrect.width //
                                                                                  Tile.WIDTH, dy).isSolid:
                 self.rect.y += self.ymove

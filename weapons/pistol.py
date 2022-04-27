@@ -13,6 +13,8 @@ class Pistol(Weapon):
     def __init__(self):
         super().__init__()
         self.name = "Pistol"
+        self.description = "It's a gun and it works. It might not be the best, but what other choice do you have?" \
+                           " (hint: the other three options)"
         self.attackSpeed = 0.25
         self.damage = 2
         self.spread = 7

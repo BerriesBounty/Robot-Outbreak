@@ -1,10 +1,12 @@
 import random
 
+import numpy.random
 import pygame
 
 from gfx import assets
 from ultimates.ultManager import UltManager
 from upgrades.upgradeManager import UpgradeManager
+from weapons.fake import Fake
 from weapons.weapon import Weapon
 from weapons.weaponManager import WeaponManager
 
@@ -14,14 +16,16 @@ class ItemShop:
         self.world = world
         self.choices = []  # the four items the player can buy
         self.chosen = None  # what item the play bought
-        itemType = [random.randint(1, 3), random.randint(1, 3), random.randint(1, 2), random.randint(1, 2)]
+        itemType = [20, random.randint(1, 75), random.randint(1, 100), random.randint(1, 100)]
         for item in itemType:
-            if item == 3:
-                self.choices.append(random.choice(UltManager.ultimateList))
-            elif item == 2:
-                self.choices.append(random.choice(WeaponManager.weaponList))
-            elif item == 1:
-                self.choices.append(random.choice(UpgradeManager.upgradeList))
+            if item <= 30:
+                self.choices.append(numpy.random.choice(UpgradeManager.upgradeList, p=[0.5, 0.5]))
+            elif item <= 60:
+                self.choices.append(numpy.random.choice(WeaponManager.weaponList, p=[0.3, 0.4, 0.25, 0.05]))
+            elif item <= 80:
+                self.choices.append(numpy.random.choice(UltManager.ultimateList, p=[0.6, 0.4]))
+            else:
+                self.choices.append(Fake())
         self.index = 1
         self.stage = 0
         # 0 - choosing what to buy, 1 - bought weapon and need to replace one
@@ -36,6 +40,8 @@ class ItemShop:
         # the rect of the button is smaller than the image bcs only part of the image is the actual button
         self.buttonRect = pygame.Rect(self.boxRect.x + (32 * 4 + 8) * (3 / 2), self.boxRect.y + 6 * (3 / 2),
                                       14 * (3 / 2), 14 * (3 / 2))
+        self.descriptionRect = pygame.Rect(240 * (3 / 2), 110 * (3 / 2),
+                                      95 * (3 / 2), 135 * (3 / 2))
 
     def tick(self):
         if self.stage == 0: # if the player is still choosing
@@ -61,7 +67,7 @@ class ItemShop:
                         self.msg = f"Choose a weapon to replace: press 1 - {self.world.player.weapons[0].name}, 2 - {self.world.player.weapons[1].name}, or close the window"
                         self.stage = 1
 
-                if self.chosen in UltManager.ultimateList:  # if the player chose an ultimate
+                elif self.chosen in UltManager.ultimateList:  # if the player chose an ultimate
                     if self.world.player.ultimate is None:  # if the plaer did not have a ultimate
                         self.chosen.player = self.world.player
                         self.world.player.ultimate = self.chosen
@@ -71,10 +77,14 @@ class ItemShop:
                         self.msg = f"{self.chosen.name} will replace {self.world.player.ultimate.name}, press enter to commit. If not, close the window"
                         self.stage = 2
 
-                if self.chosen in UpgradeManager.upgradeList:  # if they choose an upgrade
+                elif self.chosen in UpgradeManager.upgradeList:  # if they choose an upgrade
                     self.chosen.player = self.world.player
                     self.chosen.activate()  #activate the upgrade
                     self.successfulPurchase()
+
+                else:
+                    self.msg = "Ha! You just got scammed!"
+                    self.stage = 3
 
         else:
             if self.stage == 1:
@@ -94,15 +104,6 @@ class ItemShop:
                     self.chosen.player = self.world.player
                     self.world.player.ultimate = self.chosen
                     self.stage = 3
-                if self.buttonRect.collidepoint(self.world.state.game.inputManager.x, self.world.state.game.inputManager.y):
-                    self.button = assets.buttons[1]
-                    if self.world.state.game.inputManager.mouse[0]:
-                        self.button = assets.buttons[2]
-                    if self.world.state.game.inputManager.mouseJustReleased[0]:
-                        self.world.timer = None
-                        self.world.stage += 1
-                        self.world.player.canMove = True
-                        self.world.waveStart()
 
             if self.buttonRect.collidepoint(self.world.state.game.inputManager.x, self.world.state.game.inputManager.y):
                 self.button = assets.buttons[1]
@@ -113,17 +114,18 @@ class ItemShop:
                     self.world.stage += 1
                     self.world.player.canMove = True
                     self.world.waveStart()
+            else:
+                self.button = assets.buttons[0]
+
             if self.world.state.game.inputManager.keyReleased.get("enter"):
                 self.world.timer = None
                 self.world.stage += 1
                 self.world.player.canMove = True
                 self.world.waveStart()
-            else:
-                self.button = assets.buttons[0]
 
     def render(self, display):
         if self.stage == 0:
-            image = assets.uiAssets[0]
+            image = assets.uiAssets[0].copy()
 
             # the four rectangle boxes
             for i in range(4):
@@ -135,9 +137,11 @@ class ItemShop:
                                   textbox.get_height()/2, assets.fonts[1])
                 image.blit(textbox, (0, 120 + 60 * i + 3 * i))
 
-            renderRect = assets.uiAssets[0].get_rect(
+            assets.drawText(image, self.choices[self.index].description, (229, 229, 242), self.descriptionRect, assets.fonts[0])
+
+            renderRect = image.get_rect(
                 center=(self.world.state.game.width / 2, self.world.state.game.height / 2))
-            display.blit(assets.uiAssets[0], renderRect)
+            display.blit(image, renderRect)
 
             assets.renderFont(display, "Item Shop", (229, 229, 242), (68, 68, 97), self.world.state.game.width / 2,
                               self.world.state.game.height / 2 - 150, assets.fonts[2])

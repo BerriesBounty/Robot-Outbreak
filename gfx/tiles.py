@@ -14,7 +14,9 @@ class Tile:
         self.isSolid = False
         if c[1] == 0:
             self.image = pygame.surface.Surface((32, 32))
-            self.image.fill((119, 166, 115))
+            self.image.fill((119, 166, 115, 0))
+        elif c[1] == 1:
+            self.image = None
         elif c[1] == 50:
             self.image = Tile.wallSheet.subsurface((32 * 1, 32 * 3, 32, 32)).copy()
         elif c[1] == 150:
@@ -30,7 +32,7 @@ class Tile:
             self.image = Tile.grassSheet.subsurface((x, y, 32, 32)).copy()
         else:
             self.image = pygame.surface.Surface((32, 32))
-            self.image.fill((119, 166, 115))
+            self.image.fill((119, 166, 115, 255))
 
         if c[0] == 10:
             self.image.blit(Tile.wallSheet.subsurface((0, 0, 32, 32)), (0, 0))

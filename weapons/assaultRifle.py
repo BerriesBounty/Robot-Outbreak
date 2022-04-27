@@ -8,6 +8,7 @@ class AssaultRifle(Weapon):
     def __init__(self):
         super().__init__()
         self.name = "Assault rifle"
+        self.description = "Pew pew... pew pew pew... pewpewpew pewpewpew"
         self.attackSpeed = 0.11
         self.damage = 1
         self.spread = 4

@@ -22,6 +22,7 @@ class World:
         self.target_list = pygame.sprite.Group()  # store all the enemies in the world
         self.entityManager = EntityManager()  # store all the entities, including enemies and player
 
+        self.wave = 1
         self.waveStart()
 
         self.player = Player(self)  # create the player
@@ -51,7 +52,8 @@ class World:
                    (self.state.game.gameCamera.yOffset + self.state.game.height) // Tile.HEIGHT) + 1)
         for y in range(yStart, yEnd):
             for x in range(xStart, xEnd):
-                display.blit(self.getTile(x, y).image, (int(x * Tile.WIDTH - self.state.game.gameCamera.xOffset),
+                if self.getTile(x, y).image is not None:
+                    display.blit(self.getTile(x, y).image, (int(x * Tile.WIDTH - self.state.game.gameCamera.xOffset),
                              int(y * Tile.HEIGHT - self.state.game.gameCamera.yOffset)))
 
         if self.stage % 2 == 1:
@@ -67,11 +69,31 @@ class World:
         self.itemShop = ItemShop(self)
         self.timer = Timer(2)
 
+
+
     def waveStart(self):
-        for i in range(5):
+        x = random.randint(1,5)
+        y = random.randint(1,3)
+        self.wave += 1
+        x = x + self.wave%3*2
+        for i in range(x):
             target = RangedEnemy(self, 3)
-            target.setxy(random.randint(0, self.state.game.width - target.rect.width),
-                         random.randint(0, self.state.game.height / 2))
+            while True:
+                posX = random.randint(0, self.mapImg.get_width())
+                posY = random.randint(0, self.mapImg.get_height())
+                if self.getTile(posX,posY).color != (0, 1, 0, 255) and not self.getTile(posX, posY).isSolid:
+                    break
+            target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
+            self.target_list.add(target)
+            self.entityManager.add(target)
+        for i in range(y):
+            target = MeleeEnemy(self, 3)
+            while True:
+                posX = random.randint(0, self.mapImg.get_width())
+                posY = random.randint(0, self.mapImg.get_height())
+                if self.getTile(posX, posY).color != (0, 1, 0, 255) and not self.getTile(posX, posY).isSolid:
+                    break
+            target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
             self.target_list.add(target)
             self.entityManager.add(target)
 
@@ -82,7 +104,6 @@ class World:
             for y in range(self.mapImg.get_height()):
                 tile = Tile(self.mapImg.get_at((x, y)))
                 row.append(tile)
-                print(tile.color)
             self.tiles.append(row)
 
     def getTile(self, x, y):

@@ -7,6 +7,7 @@ class Weapon(Sprite, ABC):
     def __init__(self):
         super().__init__()
         self.name = ""
+        self.description = ""
         self.attackSpeed = 1
         self.damage = 1
         self.maxAmmo = 0

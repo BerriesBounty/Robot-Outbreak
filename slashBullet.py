@@ -6,12 +6,14 @@ import pygame
 from gfx import assets
 
 
-class Bullet(pygame.sprite.Sprite):
+class SlashBullet(pygame.sprite.Sprite):
     def __init__(self, weapon, mx, my):
         super().__init__()
         self.weapon = weapon
         self.entity = self.weapon.entity
         self.spread = self.weapon.spread
+        self.rImage = assets.slashBullet[0]
+        self.lImage = assets.slashBullet[1]
         self.image = assets.bullet
         self.rect = self.image.get_rect()
         self.mx = mx
@@ -23,6 +25,10 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.y = y
         diffx = self.mx - self.rect.x
         diffy = self.my - self.rect.y
+        if diffx < 0 :
+            curImage = self.lImage
+        else:
+            curImage = self.rImage
 
         if diffx == 0:
             angle = 0
@@ -40,6 +46,16 @@ class Bullet(pygame.sprite.Sprite):
         elif diffx < 0 and diffy > 0:
             self.dx = -20.0 * math.cos(angle)
             self.dy = 20.0 * math.sin(angle)
+
+        dx = self.mx - self.rect.x
+        dy = self.my - self.rect.y
+        if dx == 0:
+            dx = 0.01
+        if self.rect.x < self.mx < self.rect.x + self.rect.width and self.entity.direction == 1:
+            angle = math.degrees(math.atan(dy / dx))
+        else:
+            angle = -math.degrees(math.atan(dy / dx))
+        self.image = pygame.transform.rotate(curImage, angle)
 
 
     def update(self):

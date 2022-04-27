@@ -3,22 +3,24 @@ import time
 
 import pygame.rect
 
+from bullet import Bullet
 from gfx import assets
 from gfx.animation import Animation
+from slashBullet import SlashBullet
 from timer import Timer
 from weapons.weapon import Weapon
 
 
-class Sword(Weapon):
+class CoolSword(Weapon):
     def __init__(self):
         super().__init__()
-        self.name = "sword"
-        self.description = "Your starting weapon will come back to haunt you forever until you buy it!"
+        self.name = "Cooler Sword"
+        self.description = "Hey, this sword is all shiny and stuff, that must mean it's good, right?"
         self.maxAmmo = -1
-        self.attackSpeed = 1
+        self.attackSpeed = 0.25
         self.damage = 3
-        self.rimage = assets.sword[0]
-        self.limage = assets.sword[1]
+        self.rimage = assets.coolSword[0]
+        self.limage = assets.coolSword[1]
         self.timer = Timer(self.attackSpeed)
 
         self.image = self.rimage
@@ -26,7 +28,7 @@ class Sword(Weapon):
         self.xOffset = 2
         self.rimage.blit(assets.hand, (self.rect.width / 2 - 5, self.rect.height / 2 - 5))
         self.limage.blit(assets.hand, (self.rect.width / 2 - 5, self.rect.height / 2 - 5))
-        self.slash = Animation(0.05, assets.swordSlash, 1)
+        self.slash = Animation(0.035, assets.swordSlash, 1)
 
     def attack(self):
         if not self.timer.update():
@@ -47,6 +49,14 @@ class Sword(Weapon):
             for hit in hit_list:
                 hit.hurt(self.damage)
                 self.entity.energy = min(self.entity.energy + 5, 100)
+
+            x = self.entity.world.state.game.inputManager.offsetX - 32
+            y = self.entity.world.state.game.inputManager.offsetY - 32
+            bullet = SlashBullet(self, x, y)
+            bullet.setxy(self.entity.rect.x - 30,
+                         self.entity.rect.y - 16)
+            self.entity.world.bullet_list.add(bullet)
+            assets.pistolSound[0].play()
 
             self.timer.reset()
         else:
