@@ -1,6 +1,6 @@
 import math
 from gfx import assets
-from bullet import Bullet
+from bullets.bullet import Bullet
 from timer import Timer
 from weapons.weapon import Weapon
 
@@ -40,7 +40,7 @@ class AssaultRifle(Weapon):
             self.attacking = True
             if self.curMag == 0:
                 if self.ammo == 0:
-                    return
+                    self.entity.removeWeapon()
                 else:
                     self.reloading = True
                     assets.arSound[1].play()

@@ -20,7 +20,7 @@ class World:
 
         self.entityManager = EntityManager()  # store all the entities, including enemies and player
         self.player = Player(self)  # create the player
-        
+
         self.bullet_list = EntityManager()  # store all the bullets in the world
         self.target_list = pygame.sprite.Group()  # store all the enemies in the world
 
@@ -70,8 +70,7 @@ class World:
         self.player.canMove = False
         self.itemShop = ItemShop(self)
         self.timer = Timer(2)
-
-
+        self.player.reset()
 
     def waveStart(self):
         x = random.randint(1,5)
@@ -79,7 +78,7 @@ class World:
         self.wave += 1
         x = x + self.wave%3*2
         for i in range(x):
-            target = RangedEnemy(self, 3)
+            target = RangedEnemy(self, "easy")
             while True:
                 posX = random.randint(0, self.mapImg.get_width())
                 posY = random.randint(0, self.mapImg.get_height())

@@ -1,21 +1,15 @@
-import math
-import time
+import random
 
-import pygame
 from gfx import assets
-from enemyBullet import EnemyBullet
-from bullet import Bullet
-from timer import Timer
+from bullets.enemyBullet import EnemyBullet
 from weapons.weapon import Weapon
-import random as rnd
+
 
 class EnemyAttack(Weapon):
     def __init__(self):
         super().__init__()
-        self.attackSpeed = 0.25
-        self.damage = 2
+        self.damage = 10
         self.spread = 7
-        self.timer = Timer(self.attackSpeed)
         self.rimage = assets.pistol[0]
         self.limage = assets.pistol[1]
         self.image = self.rimage
@@ -23,12 +17,16 @@ class EnemyAttack(Weapon):
         self.xOffset = 2
 
     def attack(self):
-        x = self.world.player.rect.x
-        y = self.world.player.rect.y
-        bullet = EnemyBullet(self, x, y)
-        bullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - bullet.rect.width / 2,
-                             self.entity.rect.y + self.entity.rect.width / 2 - bullet.rect.height / 2)
-        self.entity.world.bullet_list.add(bullet)
+        if self.entity.enemies[0].visible:
+            x = self.entity.enemies[0].rect.x
+            y = self.entity.enemies[0].rect.y
+        else:
+            x = random.randint(0, self.entity.world.state.game.width)
+            y = random.randint(0, self.entity.world.state.game.height)
+        eBullet = EnemyBullet(self, x, y)
+        eBullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - eBullet.rect.width / 2,
+                             self.entity.rect.y + self.entity.rect.width / 2 - eBullet.rect.height / 2)
+        self.entity.world.bullet_list.add(eBullet)
         assets.pistolSound[0].play()
 
     def update(self):

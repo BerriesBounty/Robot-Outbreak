@@ -1,9 +1,7 @@
 import math
-import time
 
 import pygame.rect
 
-from bullet import Bullet
 from gfx import assets
 from gfx.animation import Animation
 from slashBullet import SlashBullet

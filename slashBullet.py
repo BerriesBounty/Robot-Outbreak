@@ -14,7 +14,7 @@ class SlashBullet(pygame.sprite.Sprite):
         self.spread = self.weapon.spread
         self.rImage = assets.slashBullet[0]
         self.lImage = assets.slashBullet[1]
-        self.image = assets.bullet
+        self.image = assets.slashBullet[0]
         self.rect = self.image.get_rect()
         self.mx = mx
         self.my = my

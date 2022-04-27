@@ -7,6 +7,7 @@ from ultimates.ultManager import UltManager
 from ultimates.ult_rage import Rage
 from weapons.assaultRifle import AssaultRifle
 from weapons.coolSword import CoolSword
+from weapons.pistol import Pistol
 from weapons.sword import Sword
 
 
@@ -31,7 +32,7 @@ class Player(Creature):
         self.direction = 0  # direction of clock
 
         self.weapons = []
-        self.weapons.append(CoolSword())
+        self.weapons.append(Pistol())
         self.weapons[0].entity = self
         self.equippedWeapon = self.weapons[0]
 
@@ -47,6 +48,24 @@ class Player(Creature):
     def setxy(self):
         self.rect.x = self.world.state.game.width / 2 - self.rect.width / 2
         self.rect.y = self.world.state.game.height - self.rect.height - 100
+
+    def reset(self):
+        self.ultimateOn = False
+        self.ultimate.deactivate()
+
+    def removeWeapon(self):
+        if len(self.weapons) == 2:
+            if self.equippedWeapon == self.weapons[0]:
+                self.weapons[0] = self.weapons[1]
+                self.equippedWeapon = self.weapons[0]
+                self.weapons[1] = None
+            if self.equippedWeapon == self.weapons[1]:
+                self.equippedWeapon = self.weapons[0]
+                self.weapons[1] = None
+        else:
+            self.weapons[0] = Sword()
+            self.weapons[0].entity = self
+            self.equippedWeapon = self.weapons[0]
 
     def update(self):
         self.idleRight.tick()
@@ -84,7 +103,7 @@ class Player(Creature):
                 self.ultimate.tick()
 
     def die(self):
-        pass
+        self.canMove = False
 
     def getInput(self):
         self.xmove = 0

@@ -1,13 +1,10 @@
 import math
-import time
-
-import pygame
 
 from gfx import assets
-from bullet import Bullet
+from bullets.bullet import Bullet
 from timer import Timer
 from weapons.weapon import Weapon
-import random as rnd
+
 
 class Pistol(Weapon):
     def __init__(self):
@@ -18,8 +15,8 @@ class Pistol(Weapon):
         self.attackSpeed = 0.25
         self.damage = 2
         self.spread = 7
-        self.maxAmmo = 140
-        self.ammo = 130
+        self.maxAmmo = 20
+        self.ammo = 20
         self.magSize = 10
         self.curMag = self.magSize
         self.reloadSpeed = 1.2
@@ -36,8 +33,9 @@ class Pistol(Weapon):
         self.timer.update()
         if self.reloading:
             if self.timer.timer >= self.reloadSpeed:
-                self.ammo -= min(self.ammo, self.magSize - self.curMag)
-                self.curMag = min(self.magSize, self.ammo)
+                reloadAmmo = min(self.ammo, self.magSize - self.curMag)
+                self.ammo -= reloadAmmo
+                self.curMag = reloadAmmo
                 self.timer.timer = self.attackSpeed
                 self.reloading = False
 
@@ -47,7 +45,7 @@ class Pistol(Weapon):
             self.attacking = True
             if self.curMag == 0:
                 if self.ammo == 0:
-                    return
+                    self.entity.removeWeapon()
                 else:
                     self.reloading = True
                     assets.pistolSound[1].play()

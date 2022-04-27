@@ -16,7 +16,15 @@ class EnemyBullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.mx = mx
         self.my = my
-        self.damage = 1
+        self.damage = 5
+
+    def checkdiff(self):
+        if self.entity.difficulty == "easy":
+            self.damage = 5
+        elif self.entity.difficulty == "medium":
+            self.damage = 7.5
+        elif self.entity.difficulty == "hard":
+            self.damage = 10
 
     def setxy(self, x, y):
         self.rect.x = x
@@ -29,17 +37,17 @@ class EnemyBullet(pygame.sprite.Sprite):
         else:
             angle = abs(math.atan(diffy/diffx)) + math.radians(random.randint(-self.spread * 10, self.spread * 10)/10)
         if diffx >= 0 and diffy <= 0:
-            self.dx = 10.0 * math.cos(angle)
-            self.dy = -10.0 * math.sin(angle)
+            self.dx = 7.5 * math.cos(angle)
+            self.dy = -7.5 * math.sin(angle)
         elif diffx < 0 and diffy <= 0:
-            self.dx = -5.0 * math.cos(angle)
-            self.dy = -5.0 * math.sin(angle)
+            self.dx = -7.5 * math.cos(angle)
+            self.dy = -7.5 * math.sin(angle)
         elif diffx >= 0 and diffy > 0:
-            self.dx = 5.0 * math.cos(angle)
-            self.dy = 5.0 * math.sin(angle)
+            self.dx = 7.5 * math.cos(angle)
+            self.dy = 7.5 * math.sin(angle)
         elif diffx < 0 and diffy > 0:
-            self.dx = -5.0 * math.cos(angle)
-            self.dy = 5.0 * math.sin(angle)
+            self.dx = -7.5 * math.cos(angle)
+            self.dy = 7.5 * math.sin(angle)
 
 
     def update(self):
