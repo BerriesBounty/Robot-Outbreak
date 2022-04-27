@@ -9,15 +9,7 @@ import math
 from timer import Timer
 
 
-class RangedAttack():
-    def __init__(self,x,y,radius,velocity,image):
-        self.x = x
-        self.y = y
-        self.radius = radius
-        self.image = image
-        self.vel = velocity
-    def draw(self,win):
-        pygame.draw.circle(win, (255,255,255), (self.x,self.y), self.radius)
+
 
 class MeleeEnemy(Creature):
     def __init__(self, world, health):

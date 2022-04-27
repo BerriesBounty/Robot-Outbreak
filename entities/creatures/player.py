@@ -30,7 +30,6 @@ class Player(Creature):
         self.setxy()
         self.direction = 0  # direction of clock
 
-        self.enemies = self.world.target_list
         self.weapons = []
         self.weapons.append(CoolSword())
         self.weapons[0].entity = self

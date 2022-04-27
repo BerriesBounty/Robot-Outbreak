@@ -1,7 +1,7 @@
 import random
 import pygame
 
-from entities.creatures.enemy import RangedEnemy, MeleeEnemy
+from entities.creatures.rangedEnemy import RangedEnemy
 from entities.creatures.player import Player
 from entities.entityManager import EntityManager
 from gfx.tiles import Tile
@@ -18,14 +18,16 @@ class World:
         self.mapImg = pygame.image.load("res/map.png")
         self.loadMap()
 
+        self.entityManager = EntityManager()  # store all the entities, including enemies and player
+        self.player = Player(self)  # create the player
+        
         self.bullet_list = EntityManager()  # store all the bullets in the world
         self.target_list = pygame.sprite.Group()  # store all the enemies in the world
-        self.entityManager = EntityManager()  # store all the entities, including enemies and player
 
         self.wave = 1
         self.waveStart()
 
-        self.player = Player(self)  # create the player
+        self.player.enemies = self.target_list
         self.hud = HUDManager(self)  # create the heads-up display
         self.itemShop = None
         self.stage = 1
@@ -86,16 +88,16 @@ class World:
             target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
             self.target_list.add(target)
             self.entityManager.add(target)
-        for i in range(y):
-            target = MeleeEnemy(self, 3)
-            while True:
-                posX = random.randint(0, self.mapImg.get_width())
-                posY = random.randint(0, self.mapImg.get_height())
-                if self.getTile(posX, posY).color != (0, 1, 0, 255) and not self.getTile(posX, posY).isSolid:
-                    break
-            target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
-            self.target_list.add(target)
-            self.entityManager.add(target)
+        # for i in range(y):
+        #     target = MeleeEnemy(self, 3)
+        #     while True:
+        #         posX = random.randint(0, self.mapImg.get_width())
+        #         posY = random.randint(0, self.mapImg.get_height())
+        #         if self.getTile(posX, posY).color != (0, 1, 0, 255) and not self.getTile(posX, posY).isSolid:
+        #             break
+        #     target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
+        #     self.target_list.add(target)
+        #     self.entityManager.add(target)
 
     def loadMap(self):
         print(self.mapImg.get_width(), self.mapImg.get_height())
