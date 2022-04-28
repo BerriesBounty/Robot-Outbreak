@@ -29,6 +29,6 @@ class Invisible(Ultimate):
 
     def deactivate(self):
         self.player.ultimateOn = False
-        self.player.visible = False
+        self.player.visible = True
         self.player.equippedWeapon.attackSpeed *= 1.25
         self.timer = 0

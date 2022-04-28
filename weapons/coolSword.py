@@ -4,7 +4,7 @@ import pygame.rect
 
 from gfx import assets
 from gfx.animation import Animation
-from slashBullet import SlashBullet
+from bullets.slashBullet import SlashBullet
 from timer import Timer
 from weapons.weapon import Weapon
 
@@ -51,8 +51,8 @@ class CoolSword(Weapon):
             x = self.entity.world.state.game.inputManager.offsetX - 32
             y = self.entity.world.state.game.inputManager.offsetY - 32
             bullet = SlashBullet(self, x, y)
-            bullet.setxy(self.entity.rect.x - 30,
-                         self.entity.rect.y - 16)
+            bullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - bullet.rect.width / 2,
+                         self.entity.rect.y + self.entity.rect.width / 2 - bullet.rect.height / 2)
             self.entity.world.bullet_list.add(bullet)
             assets.pistolSound[0].play()
 

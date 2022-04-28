@@ -50,8 +50,8 @@ class Pistol(Weapon):
                     self.reloading = True
                     assets.pistolSound[1].play()
             else:
-                x = self.entity.world.state.game.inputManager.offsetX
-                y = self.entity.world.state.game.inputManager.offsetY
+                x = self.entity.world.state.game.inputManager.offsetX - 22
+                y = self.entity.world.state.game.inputManager.offsetY - 17
                 bullet = Bullet(self, x, y)
                 bullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - bullet.rect.width / 2,
                              self.entity.rect.y + self.entity.rect.width / 2 - bullet.rect.height / 2)

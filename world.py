@@ -4,6 +4,7 @@ import pygame
 from entities.creatures.rangedEnemy import RangedEnemy
 from entities.creatures.player import Player
 from entities.entityManager import EntityManager
+from gfx import assets
 from gfx.tiles import Tile
 from timer import Timer
 from ui.hudManager import HUDManager
@@ -33,6 +34,13 @@ class World:
         self.stage = 1
         self.timer = None
 
+        self.gameOver = False
+        self.endingMessage = ""
+        self.endBox = pygame.surface.Surface((175, 50))
+        self.endBox.fill((136, 206, 242))
+        self.endBox.set_alpha(25)
+        self.endRect = self.endBox.get_rect(center=(self.state.game.width / 2,self.state.game.height / 2 + 100))
+
     def tick(self):
         # update all the entities and the HUD
         if self.stage % 2 == 1:
@@ -44,6 +52,13 @@ class World:
         else:
             if self.timer.update():
                 self.itemShop.tick()
+        if self.gameOver:
+            if self.endRect.collidepoint(self.state.game.inputManager.x, self.state.game.inputManager.y):
+                self.endBox.set_alpha(50)
+                if self.state.game.inputManager.mouseJustReleased[0]:
+                    self.state.restart()
+            else:
+                self.endBox.set_alpha(25)
 
     def render(self, display):
         xStart = int(max(0, self.state.game.gameCamera.xOffset // Tile.WIDTH))
@@ -65,18 +80,31 @@ class World:
         else:
             self.itemShop.render(display)
 
+        if self.gameOver:
+            assets.renderFont(display, self.endingMessage, (186, 200, 216), (32, 51, 67), self.state.game.width/2,
+                              150, assets.fonts[2])
+            display.blit(self.endBox, self.endRect)
+            assets.renderFont(display, "Restart", (186, 200, 216), (32, 51, 67), self.state.game.width / 2,
+                              self.state.game.height / 2 + 100, assets.fonts[2])
+
     def waveCleared(self):
-        self.player.ismoving = False
-        self.player.canMove = False
-        self.itemShop = ItemShop(self)
-        self.timer = Timer(2)
-        self.player.reset()
+        if self.stage == 3:
+            self.gameOver = True
+            self.player.ismoving = False
+            self.player.canMove = False
+            self.endingMessage = "You win! Now do it again."
+        else:
+            self.player.ismoving = False
+            self.player.canMove = False
+            self.itemShop = ItemShop(self)
+            self.timer = Timer(2)
+            self.player.reset()
 
     def waveStart(self):
         x = random.randint(1,5)
         y = random.randint(1,3)
         self.wave += 1
-        x = x + self.wave%3*2
+        x = x + self.wave//3*2
         for i in range(x):
             target = RangedEnemy(self, "easy")
             while True:

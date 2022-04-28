@@ -35,3 +35,12 @@ class AmmoPack(Upgrade):
         self.player.equippedWeapon.ammo = round(min(self.player.equippedWeapon.maxAmmo,
                                                     self.player.equippedWeapon.ammo + self.player.equippedWeapon.curMag
                                                     + (self.player.equippedWeapon.maxAmmo * 0.25)))
+
+class MaxHealthUp(Upgrade):
+    def __init__(self):
+        self.name = "Apple"
+        self.description = "An Apple a day keeps the doctors away (Increase max health by 20)"
+
+    def activate(self):
+        self.player.maxHealth += 20
+

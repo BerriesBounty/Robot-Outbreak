@@ -14,3 +14,11 @@ class GameState(State):
 
     def render(self, display):
         self.world1.render(display)  # render the current level
+
+    def start(self): # reset the enemies attack timer so they don't attack right as the game starts
+        for i in self.world1.target_list:
+            i.timer.reset()
+
+    def restart(self):
+        self.world1 = world.World(self)
+

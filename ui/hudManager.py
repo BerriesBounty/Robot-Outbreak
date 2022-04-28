@@ -13,9 +13,12 @@ class HUDManager():
 
     def tick(self):
         self.healthBar = math.ceil(self.player.health / self.player.maxHealth * 10)
-        self.ammoBar = math.ceil(((self.player.equippedWeapon.ammo + self.player.equippedWeapon.curMag)
+        if self.player.equippedWeapon is not None:
+            self.ammoBar = math.ceil(((self.player.equippedWeapon.ammo + self.player.equippedWeapon.curMag)
                                   / (self.player.equippedWeapon.maxAmmo + self.player.equippedWeapon.magSize)) * 10)
-        self.energyBar = math.ceil(self.player.energy / 10)
+        else:
+            self.ammoBar = 10
+        self.energyBar = math.ceil((self.player.energy / self.player.maxEnergy) * 10)
 
     def render(self, display):
         display.blit(assets.hudAssets[0], (10, 10))
@@ -58,7 +61,7 @@ class HUDManager():
                      (assets.hudAssets[0].get_width() + assets.hudbar[0][0].get_width() * 10 + 10, 10))
 
         #current weapon magazine
-        if self.player.equippedWeapon.maxAmmo != -1:
+        if self.player.equippedWeapon is not None and self.player.equippedWeapon.maxAmmo != -1:
             assets.renderFont(display, f"{self.player.equippedWeapon.curMag}/{self.player.equippedWeapon.ammo}"
                               , (255, 0, 0), (172, 50, 50),
                               self.world.state.game.width - 100, self.world.state.game.height - 50, assets.fonts[2])

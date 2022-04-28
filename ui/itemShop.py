@@ -19,11 +19,11 @@ class ItemShop:
         itemType = [20, random.randint(1, 75), random.randint(1, 100), random.randint(1, 100)]
         for item in itemType:
             if item <= 30:
-                self.choices.append(numpy.random.choice(UpgradeManager.upgradeList, p=[0.5, 0.5]))
+                self.choices.append(numpy.random.choice(UpgradeManager.upgradeList, p=[0.4, 0.4, 0.2]))
             elif item <= 60:
-                self.choices.append(numpy.random.choice(WeaponManager.weaponList, p=[0.3, 0.4, 0.25, 0.05]))
+                self.choices.append(numpy.random.choice(WeaponManager.weaponList, p=[0.3, 0.3, 0.3, 0.05, 0.05]))
             elif item <= 80:
-                self.choices.append(numpy.random.choice(UltManager.ultimateList, p=[0.6, 0.4]))
+                self.choices.append(numpy.random.choice(UltManager.ultimateList, p=[0.4, 0.3, 0.3]))
             else:
                 self.choices.append(Fake())
         self.index = 1
@@ -71,6 +71,8 @@ class ItemShop:
                     if self.world.player.ultimate is None:  # if the plaer did not have a ultimate
                         self.chosen.player = self.world.player
                         self.world.player.ultimate = self.chosen
+                        self.world.player.maxEnergy = self.chosen.energy
+                        self.world.player.energy = min(self.world.player.energy, self.world.player.maxEnergy)
                         self.successfulPurchase()
                     else:
                         # let them choose to keep the one they had or to replace it

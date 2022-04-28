@@ -41,6 +41,7 @@ class StartingState(State):
                 else:
                     self.curStage = 4
         elif self.curStage == 2:  # if player chooses to start game
+            self.game.gameState.start()
             self.game.stateManager.set_state(self.game.gameState)
         elif self.curStage == 3:
             if self.exitRect.collidepoint(self.game.inputManager.x, self.game.inputManager.y):

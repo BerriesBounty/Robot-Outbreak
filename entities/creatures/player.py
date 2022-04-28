@@ -7,6 +7,7 @@ from ultimates.ultManager import UltManager
 from ultimates.ult_rage import Rage
 from weapons.assaultRifle import AssaultRifle
 from weapons.coolSword import CoolSword
+from weapons.lazerBeam import PiercingGun
 from weapons.pistol import Pistol
 from weapons.sword import Sword
 
@@ -20,7 +21,9 @@ class Player(Creature):
         self.idleLeft = Animation(0.15, assets.playerIdleLeft, 0)
         self.walkingRight = Animation(0.15, assets.playerWalkingRight, 0)
         self.walkingLeft = Animation(0.15, assets.playerWalkingLeft, 0)
-        self.ismoving = False
+        self.dying = Animation(0.15, assets.playerDeath, 1)
+
+        self.ismoving = False  # is the player currently moving
         self.canMove = True  # does the game allow the player to take action
 
         self.curAnimation = self.idleRight
@@ -32,15 +35,17 @@ class Player(Creature):
         self.direction = 0  # direction of clock
 
         self.weapons = []
-        self.weapons.append(Pistol())
+        self.weapons.append(PiercingGun())
         self.weapons[0].entity = self
         self.equippedWeapon = self.weapons[0]
 
-        self.energy = 100
-        self.ultimate = UltManager.ultimateList[1]
+        self.ultimate = UltManager.ultimateList[2]
         self.ultimate.player = self
+        self.maxEnergy = self.ultimate.energy
+        self.energy = self.ultimate.energy
         self.ultimateOn = False
         self.visible = True
+        self.dead = False
 
         self.kills = 0
 
@@ -58,10 +63,10 @@ class Player(Creature):
             if self.equippedWeapon == self.weapons[0]:
                 self.weapons[0] = self.weapons[1]
                 self.equippedWeapon = self.weapons[0]
-                self.weapons[1] = None
+                self.weapons = [self.weapons[0]]
             if self.equippedWeapon == self.weapons[1]:
                 self.equippedWeapon = self.weapons[0]
-                self.weapons[1] = None
+                self.weapons = [self.weapons[0]]
         else:
             self.weapons[0] = Sword()
             self.weapons[0].entity = self
@@ -76,6 +81,15 @@ class Player(Creature):
         else:
             self.walkingLeft.reset()
             self.walkingRight.reset()
+        if self.dead:
+            self.dying.tick()
+        else:
+            self.dying.reset()
+
+        if self.health <= 0:
+            self.die()
+            self.world.gameOver = True
+            self.world.endingMessage = "I'm not mad, just disappointed"
 
         #movement & camera
         if self.canMove:
@@ -91,11 +105,13 @@ class Player(Creature):
                 self.direction = 1
 
         self.image = self.getAnimationFrame()
-        self.equippedWeapon.update()  # update weapon related tasks
+        if self.equippedWeapon is not None:
+            self.equippedWeapon.update()  # update weapon related tasks
 
         if self.canMove:
             #update ultimate ability
-            if self.world.state.game.inputManager.keyJustPressed.get("q") and self.energy == 100 and self.ultimate != None:
+            if self.world.state.game.inputManager.keyJustPressed.get("q") and self.energy == self.maxEnergy\
+                    and self.ultimate != None:
                 self.ultimateOn = True
                 self.ultimate.activiate()
                 self.energy = 0
@@ -104,6 +120,9 @@ class Player(Creature):
 
     def die(self):
         self.canMove = False
+        self.equippedWeapon = None
+        self.dead = True
+
 
     def getInput(self):
         self.xmove = 0
@@ -134,9 +153,15 @@ class Player(Creature):
     def render(self, display):
         display.blit(self.image, (self.rect.x - self.world.state.game.gameCamera.xOffset,
                                                 self.rect.y - self.world.state.game.gameCamera.yOffset))
-        self.equippedWeapon.render(display)
+        if self.equippedWeapon is not None:
+            self.equippedWeapon.render(display)
 
     def getAnimationFrame(self):
+        if self.dead:
+            if self.dying.loops != 0:
+                return self.dying.getCurrentFrame()
+            else:
+                return self.dying.frames[7]
         if not self.ismoving:
             if self.direction == 0:
                 return self.idleRight.getCurrentFrame()
@@ -147,5 +172,6 @@ class Player(Creature):
                 return self.walkingRight.getCurrentFrame()
             else:
                 return self.walkingLeft.getCurrentFrame()
+
 
 

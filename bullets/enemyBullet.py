@@ -3,20 +3,19 @@ import random
 
 import pygame
 
+from bullets.projectile import Projectile
 from gfx import assets
 
 
-class EnemyBullet(pygame.sprite.Sprite):
+class EnemyBullet(Projectile):
     def __init__(self, weapon, mx, my):
-        super().__init__()
-        self.weapon = weapon
-        self.entity = self.weapon.entity
-        self.spread = self.weapon.spread
-        self.image = assets.bullet
+        super().__init__(weapon, mx, my)
+        self.rImage = assets.bullet[2]
+        self.lImage = assets.bullet[3]
+        self.image = assets.bullet[2]
         self.rect = self.image.get_rect()
-        self.mx = mx
-        self.my = my
         self.damage = 5
+        self.bulletSpeed = 7.5
 
     def checkdiff(self):
         if self.entity.difficulty == "easy":
@@ -25,39 +24,6 @@ class EnemyBullet(pygame.sprite.Sprite):
             self.damage = 7.5
         elif self.entity.difficulty == "hard":
             self.damage = 10
-
-    def setxy(self, x, y):
-        self.rect.x = x
-        self.rect.y = y
-        diffx = self.mx - self.rect.x
-        diffy = self.my - self.rect.y
-
-        if diffx == 0:
-            angle = 0
-        else:
-            angle = abs(math.atan(diffy/diffx)) + math.radians(random.randint(-self.spread * 10, self.spread * 10)/10)
-        if diffx >= 0 and diffy <= 0:
-            self.dx = 7.5 * math.cos(angle)
-            self.dy = -7.5 * math.sin(angle)
-        elif diffx < 0 and diffy <= 0:
-            self.dx = -7.5 * math.cos(angle)
-            self.dy = -7.5 * math.sin(angle)
-        elif diffx >= 0 and diffy > 0:
-            self.dx = 7.5 * math.cos(angle)
-            self.dy = 7.5 * math.sin(angle)
-        elif diffx < 0 and diffy > 0:
-            self.dx = -7.5 * math.cos(angle)
-            self.dy = 7.5 * math.sin(angle)
-
-
-    def update(self):
-        self.rect.y += self.dy
-        self.rect.x += self.dx
-
-        if self.rect.y + self.rect.height - self.weapon.entity.world.state.game.gameCamera.yOffset < 0 \
-                or self.rect.x - self.rect.width - self.weapon.entity.world.state.game.gameCamera.xOffset < 0 or self.rect.x > 1600:
-            self.kill()
-        self.checkCollision()
 
     def checkCollision(self):
         hit_list = pygame.sprite.spritecollide(self, self.entity.enemies, False)

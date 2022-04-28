@@ -3,60 +3,46 @@ import random
 
 import pygame
 
+from bullets.projectile import Projectile
 from gfx import assets
 
 
-class Bullet(pygame.sprite.Sprite):
+class Bullet(Projectile):
     def __init__(self, weapon, mx, my):
-        super().__init__()
-        self.weapon = weapon
-        self.entity = self.weapon.entity
-        self.spread = self.weapon.spread
-        self.image = assets.bullet
+        super().__init__(weapon, mx, my)
+        self.rImage = assets.bullet[0]
+        self.lImage = assets.bullet[1]
+        self.image = assets.bullet[0]
         self.rect = self.image.get_rect()
-        self.mx = mx
-        self.my = my
         self.damage = 1
-
-    def setxy(self, x, y):
-        self.rect.x = x
-        self.rect.y = y
-        diffx = self.mx - self.rect.x
-        diffy = self.my - self.rect.y
-
-        if diffx == 0:
-            angle = 0
-        else:
-            angle = abs(math.atan(diffy/diffx)) + math.radians(random.randint(-self.spread * 10, self.spread * 10)/10)
-        if diffx >= 0 and diffy <= 0:
-            self.dx = 20.0 * math.cos(angle)
-            self.dy = -20.0 * math.sin(angle)
-        elif diffx < 0 and diffy <= 0:
-            self.dx = -20.0 * math.cos(angle)
-            self.dy = -20.0 * math.sin(angle)
-        elif diffx >= 0 and diffy > 0:
-            self.dx = 20.0 * math.cos(angle)
-            self.dy = 20.0 * math.sin(angle)
-        elif diffx < 0 and diffy > 0:
-            self.dx = -20.0 * math.cos(angle)
-            self.dy = 20.0 * math.sin(angle)
-
-
-    def update(self):
-        self.rect.y += self.dy
-        self.rect.x += self.dx
-
-        if self.rect.y + self.rect.height - self.weapon.entity.world.state.game.gameCamera.yOffset < 0 \
-                or self.rect.x - self.rect.width - self.weapon.entity.world.state.game.gameCamera.xOffset < 0 or self.rect.x > 1600:
-            self.kill()
-        self.checkCollision()
+        self.bulletSpeed = 20
 
     def checkCollision(self):
         hit_list = pygame.sprite.spritecollide(self, self.entity.enemies, False)
         for hit in hit_list:
             hit.hurt(self.weapon.damage)
-            self.entity.energy = min(self.entity.energy + 5, 100)
+            self.entity.energy = min(self.entity.energy + 5, self.entity.maxEnergy)
             self.kill()
+
+    def render(self, display):
+        display.blit(self.image, (self.rect.x - self.weapon.entity.world.state.game.gameCamera.xOffset,
+                                  self.rect.y - self.weapon.entity.world.state.game.gameCamera.yOffset))
+
+class PierceBullet(Projectile):
+    def __init__(self, weapon, mx, my):
+        super().__init__(weapon, mx, my)
+        self.rImage = assets.bullet[4]
+        self.lImage = assets.bullet[5]
+        self.image = assets.bullet[4]
+        self.rect = self.image.get_rect()
+        self.damage = 1
+        self.bulletSpeed = 40
+
+    def checkCollision(self):
+        hit_list = pygame.sprite.spritecollide(self, self.entity.enemies, False)
+        for hit in hit_list:
+            hit.hurt(self.weapon.damage)
+            self.entity.energy = min(self.entity.energy + 5, self.entity.maxEnergy)
 
     def render(self, display):
         display.blit(self.image, (self.rect.x - self.weapon.entity.world.state.game.gameCamera.xOffset,
