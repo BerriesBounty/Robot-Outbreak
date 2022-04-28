@@ -1,22 +1,20 @@
 import math
+import time
 
 import pygame.rect
 
 from gfx import assets
 from gfx.animation import Animation
-from bullets.slashBullet import SlashBullet
 from timer import Timer
 from weapons.weapon import Weapon
 
 
-class CoolSword(Weapon):
+class Sword(Weapon):
     def __init__(self):
         super().__init__()
-        self.name = "Cooler Sword"
-        self.description = "Hey, this sword is all shiny and stuff, that must mean it's good, right?"
-        self.maxAmmo = -1
-        self.attackSpeed = 0.25
-        self.damage = 3
+        self.name = "sword"
+        self.attackSpeed = 1
+        self.damage = 5
         self.rimage = assets.sword[0]
         self.limage = assets.sword[1]
         self.timer = Timer(self.attackSpeed)
@@ -26,7 +24,7 @@ class CoolSword(Weapon):
         self.xOffset = 2
         self.rimage.blit(assets.hand, (self.rect.width / 2 - 5, self.rect.height / 2 - 5))
         self.limage.blit(assets.hand, (self.rect.width / 2 - 5, self.rect.height / 2 - 5))
-        self.slash = Animation(0.035, assets.swordSlash, 1)
+        self.slash = Animation(0.05, assets.swordSlash, 1)
 
     def attack(self):
         if not self.timer.update():
@@ -47,14 +45,6 @@ class CoolSword(Weapon):
             for hit in hit_list:
                 hit.hurt(self.damage)
                 self.entity.energy = min(self.entity.energy + 5, 100)
-
-            x = self.entity.world.state.game.inputManager.offsetX - 32
-            y = self.entity.world.state.game.inputManager.offsetY - 32
-            bullet = SlashBullet(self, x, y)
-            bullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - bullet.rect.width / 2,
-                         self.entity.rect.y + self.entity.rect.width / 2 - bullet.rect.height / 2)
-            self.entity.world.bullet_list.add(bullet)
-            assets.pistolSound[0].play()
 
             self.timer.reset()
         else:

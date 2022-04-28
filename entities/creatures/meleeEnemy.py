@@ -8,7 +8,7 @@ from weapons.enemyWeapon import  EnemyAttack
 import math
 from timer import Timer
 
-class RangedEnemy(Creature):
+class MeleeEnemy(Creature):
     def __init__(self, world, difficulty):
         super().__init__(world)
         self.image = assets.target
@@ -18,8 +18,8 @@ class RangedEnemy(Creature):
         self.checkdiff()
         self.animation_count = 0
         self.reset_offset = 0
-        self.offset_x = random.randrange(-450, 450)
-        self.offset_y = random.randrange(-450, 450) #the goal of the enemy is to attack the player and as such it will move towards the player, to add variety we have added the offset value so that for example if the player is at 0,0 -> the offset will cause the enemy to move towards a random point in that range - we will reset the offset randomly to offer that variability.
+        self.offset_x = random.randrange(-150, 150)
+        self.offset_y = random.randrange(-150, 150) #the goal of the enemy is to attack the player and as such it will move towards the player, to add variety we have added the offset value so that for example if the player is at 0,0 -> the offset will cause the enemy to move towards a random point in that range - we will reset the offset randomly to offer that variability.
         self.timer = Timer(random.randint(1, 7))
         self.weapon = EnemyAttack()
         self.weapon.entity = self
