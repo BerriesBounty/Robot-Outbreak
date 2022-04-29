@@ -9,16 +9,15 @@ from timer import Timer
 from weapons.weapon import Weapon
 
 
-class Sword(Weapon):
+class EnemySword(Weapon):
     def __init__(self):
         super().__init__()
         self.name = "sword"
         self.attackSpeed = 1
-        self.damage = 5
+        self.damage = 20
         self.rimage = assets.sword[0]
         self.limage = assets.sword[1]
         self.timer = Timer(self.attackSpeed)
-
         self.image = self.rimage
         self.rect = self.image.get_rect()
         self.xOffset = 2
@@ -29,7 +28,7 @@ class Sword(Weapon):
     def attack(self):
         if not self.timer.update():
             return
-        elif self.entity.world.state.game.inputManager.get_pressed(0):
+        elif True:
             self.attacking = True
             self.slash.reset()
 
@@ -44,7 +43,6 @@ class Sword(Weapon):
                     hit_list.append(e)
             for hit in hit_list:
                 hit.hurt(self.damage)
-                self.entity.energy = min(self.entity.energy + 5, 100)
 
             self.timer.reset()
         else:
@@ -69,19 +67,18 @@ class Sword(Weapon):
         self.rect.x = self.entity.rect.x + self.xOffset
         self.rect.y = self.entity.rect.y - 12
 
-        if self.entity.canMove:
-            mx = self.entity.world.state.game.inputManager.offsetX
-            my = self.entity.world.state.game.inputManager.offsetY
-            dx = mx - self.rect.x
-            dy = my - self.rect.y
-            if dx == 0:
-                dx = 0.01
+        mx = self.rect.x
+        my = self.rect.y
+        dx = mx - self.rect.x
+        dy = my - self.rect.y
+        if dx == 0:
+            dx = 0.01
             if self.rect.x < mx < self.rect.x + self.rect.width and self.entity.direction == 1:
                 angle = math.degrees(math.atan(dy / dx))
             else:
                 angle = -math.degrees(math.atan(dy / dx))
-            self.image = assets.rot_center(curImage, angle)
-            self.attack()
+        self.image = assets.rot_center(curImage, angle)
+        self.attack()
 
     def render(self, display):
         display.blit(self.getAnimationFrame(), (self.rect.x - self.entity.world.state.game.gameCamera.xOffset,

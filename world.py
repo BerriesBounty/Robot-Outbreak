@@ -2,6 +2,7 @@ import random
 import pygame
 
 from entities.creatures.rangedEnemy import RangedEnemy
+from entities.creatures.meleeEnemy import MeleeEnemy
 from entities.creatures.player import Player
 from entities.entityManager import EntityManager
 from gfx import assets
@@ -33,7 +34,6 @@ class World:
         self.itemShop = None
         self.stage = 1
         self.timer = None
-
         self.gameOver = False
         self.endingMessage = ""
         self.endBox = pygame.surface.Surface((175, 50))
@@ -115,16 +115,16 @@ class World:
             target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
             self.target_list.add(target)
             self.entityManager.add(target)
-        # for i in range(y):
-        #     target = MeleeEnemy(self, 3)
-        #     while True:
-        #         posX = random.randint(0, self.mapImg.get_width())
-        #         posY = random.randint(0, self.mapImg.get_height())
-        #         if self.getTile(posX, posY).color != (0, 1, 0, 255) and not self.getTile(posX, posY).isSolid:
-        #             break
-        #     target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
-        #     self.target_list.add(target)
-        #     self.entityManager.add(target)
+        for i in range(y):
+             target = MeleeEnemy(self, "easy")
+             while True:
+                 posX = random.randint(0, self.mapImg.get_width())
+                 posY = random.randint(0, self.mapImg.get_height())
+                 if self.getTile(posX, posY).color != (0, 1, 0, 255) and not self.getTile(posX, posY).isSolid:
+                     break
+             target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
+             self.target_list.add(target)
+             self.entityManager.add(target)
 
     def loadMap(self):
         print(self.mapImg.get_width(), self.mapImg.get_height())
