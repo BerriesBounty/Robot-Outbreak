@@ -2,6 +2,8 @@ from gfx import assets
 from entities.creatures.creature import Creature
 import random
 from entities.resources.healthpot import HealthDrop
+from entities.resources.money import MoneyDrop
+from entities.resources.ammo import AmmoDrop
 from weapons.enemySword import EnemySword
 from timer import Timer
 
@@ -48,11 +50,10 @@ class MeleeEnemy(Creature):
             resource = random.randint(1, 100)
             if resource == range(1, 25):
                 HealthDrop(self.rect.x,self.rect.y)
-                HealthDrop.main()
             elif resource == range(25, 50):
-                pass
+                MoneyDrop(self.rect.x,self.rect.y)
             elif resource == range(51, 75):
-                pass
+                AmmoDrop(self.rect.x,self.rect.y)
             else:
                 pass
 
@@ -64,15 +65,15 @@ class MeleeEnemy(Creature):
             self.xmove = 0
             self.ymove = 0
             if self.world.player.rect.x + self.offset_x > self.rect.x:
-                self.xmove += 1
+                self.xmove += 3
                 self.direction = 0
             elif self.world.player.rect.x + self.offset_x < self.rect.x:
-                self.xmove -= 1
+                self.xmove -= 3
                 self.direction = 1
             if self.world.player.rect.y + self.offset_y > self.rect.y:
-                self.ymove += 1
+                self.ymove += 3
             elif self.world.player.rect.y + self.offset_y < self.rect.y:
-                self.ymove -= 1
+                self.ymove -= 3
             self.move()
         self.weapon.update()
 
