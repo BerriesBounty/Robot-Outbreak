@@ -1,37 +1,34 @@
 import math
+import time
 
 import pygame.rect
 
 from gfx import assets
 from gfx.animation import Animation
-from bullets.slashBullet import SlashBullet
 from timer import Timer
 from weapons.weapon import Weapon
 
 
-class CoolSword(Weapon):
+class EnemySword(Weapon):
     def __init__(self):
         super().__init__()
-        self.name = "Cooler Sword"
-        self.description = "Hey, this sword is all shiny and stuff, that must mean it's good, right?"
-        self.maxAmmo = -1
-        self.attackSpeed = 0.25
-        self.damage = 3
+        self.name = "sword"
+        self.attackSpeed = 1
+        self.damage = 20
         self.rimage = assets.sword[0]
         self.limage = assets.sword[1]
         self.timer = Timer(self.attackSpeed)
-
         self.image = self.rimage
         self.rect = self.image.get_rect()
         self.xOffset = 2
         self.rimage.blit(assets.hand, (self.rect.width / 2 - 5, self.rect.height / 2 - 5))
         self.limage.blit(assets.hand, (self.rect.width / 2 - 5, self.rect.height / 2 - 5))
-        self.slash = Animation(0.035, assets.swordSlash, 1)
+        self.slash = Animation(0.05, assets.swordSlash, 1)
 
     def attack(self):
         if not self.timer.update():
             return
-        elif self.entity.world.state.game.inputManager.get_pressed(0):
+        elif True:
             self.attacking = True
             self.slash.reset()
 
@@ -46,15 +43,6 @@ class CoolSword(Weapon):
                     hit_list.append(e)
             for hit in hit_list:
                 hit.hurt(self.damage)
-                self.entity.energy = min(self.entity.energy + 5, 100)
-
-            x = self.entity.world.state.game.inputManager.offsetX - 32
-            y = self.entity.world.state.game.inputManager.offsetY - 32
-            bullet = SlashBullet(self, x, y)
-            bullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - bullet.rect.width / 2,
-                         self.entity.rect.y + self.entity.rect.width / 2 - bullet.rect.height / 2)
-            self.entity.world.bullet_list.add(bullet)
-            assets.pistolSound[0].play()
 
             self.timer.reset()
         else:
@@ -79,19 +67,18 @@ class CoolSword(Weapon):
         self.rect.x = self.entity.rect.x + self.xOffset
         self.rect.y = self.entity.rect.y - 12
 
-        if self.entity.canMove:
-            mx = self.entity.world.state.game.inputManager.offsetX
-            my = self.entity.world.state.game.inputManager.offsetY
-            dx = mx - self.rect.x
-            dy = my - self.rect.y
-            if dx == 0:
-                dx = 0.01
+        mx = self.rect.x
+        my = self.rect.y
+        dx = mx - self.rect.x
+        dy = my - self.rect.y
+        if dx == 0:
+            dx = 0.01
             if self.rect.x < mx < self.rect.x + self.rect.width and self.entity.direction == 1:
                 angle = math.degrees(math.atan(dy / dx))
             else:
                 angle = -math.degrees(math.atan(dy / dx))
-            self.image = assets.rot_center(curImage, angle)
-            self.attack()
+        self.image = assets.rot_center(curImage, angle)
+        self.attack()
 
     def render(self, display):
         display.blit(self.getAnimationFrame(), (self.rect.x - self.entity.world.state.game.gameCamera.xOffset,

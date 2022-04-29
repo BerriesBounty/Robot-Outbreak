@@ -6,10 +6,15 @@ import pygame
 from entities.creatures.player import Player
 import math
 
-from timer import Timer
-
-
-
+class RangedAttack():
+    def __init__(self,x,y,radius,velocity,image):
+        self.x = x
+        self.y = y
+        self.radius = radius
+        self.image = image
+        self.vel = velocity
+    def draw(self,win):
+        pygame.draw.circle(win, (255,255,255), (self.x,self.y), self.radius)
 
 class MeleeEnemy(Creature):
     def __init__(self, world, health):
@@ -49,7 +54,6 @@ class RangedEnemy(Creature):
         self.reset_offset = 0
         self.offset_x = random.randrange(-150, 150)
         self.offset_y = random.randrange(-150, 150) #the goal of the enemy is to attack the player and as such it will move towards the player, to add variety we have added the offset value so that for example if the player is at 0,0 -> the offset will cause the enemy to move towards a random point in that range - we will reset the offset randomly to offer that variability.
-        self.timer = Timer(random.randint(1, 10))
 
     def setxy(self, x, y):
         self.rect.x = x
@@ -57,19 +61,20 @@ class RangedEnemy(Creature):
 
     def attack(self, difficulty):
         if difficulty == "easy":
-            # countdown = random.randint(0, 9)
-            projectiles = []
-            # countdown += 1
-            # time.sleep(1)
-            if self.timer.update(): #counter will determine how frequently enemy shoots.
-                dest_x = self.world.player.rect.centerx
-                dest_y = self.world.player.rect.centery
-                start_x = self.rect.centerx
-                start_y = self.rect.centery
-                x_diff = dest_x - start_x
-                y_diff = dest_y - start_y
-                angle = math.atan2(y_diff, x_diff) #trying to calculate the angle that the enemy projectile has to take
-                # projectiles.append(RangedAttack(round()))
+            countdown = random.randint(0,9)
+            while True:
+                projectiles = []
+                countdown += 1
+                time.sleep(1)
+                if countdown == 10: #counter will determine how frequently enemy shoots.
+                    dest_x = self.world.player.rect.x
+                    dest_y = self.world.player.rect.y
+                    start_x = self.rangedenemy.center_x
+                    start_y = self.rangedenemy.center_y
+                    x_diff = dest_x - start_x
+                    y_diff = dest_y - start_y
+                    angle = math.atan2(y_diff, x_diff) #trying to calculate the angle that the enemy projectile has to take
+                    projectiles.append(RangedAttack(round()))
         if difficulty == "medium":
             countdown = random.randint(0,6)
             while True:
@@ -86,7 +91,7 @@ class RangedEnemy(Creature):
                     pass
 
     def update(self):
-        self.attack("easy")
+        # self.attack("easy")
         if self.health <= 0:
             self.world.player.kills += 1
             if len(self.world.target_list) == 1:

@@ -1,14 +1,13 @@
 from gfx import assets
 from entities.creatures.creature import Creature
 import random
-import time
-import pygame
-from entities.creatures.player import Player
-from weapons.enemyWeapon import  EnemyAttack
-import math
+from entities.resources.healthpot import HealthDrop
+from entities.resources.money import MoneyDrop
+from entities.resources.ammo import AmmoDrop
+from weapons.enemySword import EnemySword
 from timer import Timer
 
-class RangedEnemy(Creature):
+class MeleeEnemy(Creature):
     def __init__(self, world, difficulty):
         super().__init__(world)
         self.image = assets.target
@@ -18,10 +17,10 @@ class RangedEnemy(Creature):
         self.checkdiff()
         self.animation_count = 0
         self.reset_offset = 0
-        self.offset_x = random.randrange(-450, 450)
-        self.offset_y = random.randrange(-450, 450) #the goal of the enemy is to attack the player and as such it will move towards the player, to add variety we have added the offset value so that for example if the player is at 0,0 -> the offset will cause the enemy to move towards a random point in that range - we will reset the offset randomly to offer that variability.
+        self.offset_x = random.randrange(-150, 150)
+        self.offset_y = random.randrange(-150, 150) #the goal of the enemy is to attack the player and as such it will move towards the player, to add variety we have added the offset value so that for example if the player is at 0,0 -> the offset will cause the enemy to move towards a random point in that range - we will reset the offset randomly to offer that variability.
         self.timer = Timer(random.randint(1, 7))
-        self.weapon = EnemyAttack()
+        self.weapon = EnemySword()
         self.weapon.entity = self
         self.direction = 0
         self.enemies = [self.world.player]
@@ -39,16 +38,25 @@ class RangedEnemy(Creature):
         self.rect.y = y
 
     def update(self):
-        if self.timer.update() is True:
-            self.timer = Timer(random.randint(1, 7))
+        if self.world.player.rect.x - self.rect.x == 50:
             self.weapon.attack()
 
         reset_offset = random.randint(0,20)
         if reset_offset == 15:
-            self.offset_x = random.randrange(-450, 450)
-            self.offset_y = random.randrange(-450, 450)
+            self.offset_x = random.randrange(-150, 150)
+            self.offset_y = random.randrange(-150, 150)
 
         if self.health <= 0:
+            resource = random.randint(1, 100)
+            if resource == range(1, 25):
+                HealthDrop(self.rect.x,self.rect.y)
+            elif resource == range(25, 50):
+                MoneyDrop(self.rect.x,self.rect.y)
+            elif resource == range(51, 75):
+                AmmoDrop(self.rect.x,self.rect.y)
+            else:
+                pass
+
             self.world.player.kills += 1
             if len(self.world.target_list) == 1:
                 self.world.waveCleared()
@@ -57,15 +65,15 @@ class RangedEnemy(Creature):
             self.xmove = 0
             self.ymove = 0
             if self.world.player.rect.x + self.offset_x > self.rect.x:
-                self.xmove += 1
+                self.xmove += 3
                 self.direction = 0
             elif self.world.player.rect.x + self.offset_x < self.rect.x:
-                self.xmove -= 1
+                self.xmove -= 3
                 self.direction = 1
             if self.world.player.rect.y + self.offset_y > self.rect.y:
-                self.ymove += 1
+                self.ymove += 3
             elif self.world.player.rect.y + self.offset_y < self.rect.y:
-                self.ymove -= 1
+                self.ymove -= 3
             self.move()
         self.weapon.update()
 
@@ -75,13 +83,6 @@ class RangedEnemy(Creature):
         self.weapon.render(display)
 
     def die(self):
-        resource = random.randint(1,100)
-        if resource == range(1,50):
-            pass
-        elif resource == range(51,90):
-            pass
-        else:
-            pass
 
         pass
 
