@@ -34,15 +34,19 @@ class PierceBullet(Projectile):
         self.rImage = assets.bullet[4]
         self.lImage = assets.bullet[5]
         self.image = assets.bullet[4]
-        self.rect = self.image.get_rect()
+        self.rect = self.rImage.get_rect()
         self.damage = 1
-        self.bulletSpeed = 40
+        self.bulletSpeed = 30
+        self.alreadyHit = []
 
     def checkCollision(self):
         hit_list = pygame.sprite.spritecollide(self, self.entity.enemies, False)
         for hit in hit_list:
-            hit.hurt(self.weapon.damage)
-            self.entity.energy = min(self.entity.energy + 5, self.entity.maxEnergy)
+            if hit not in self.alreadyHit:
+                hit.hurt(self.weapon.damage)
+                self.alreadyHit.append(hit)
+                self.entity.energy = min(self.entity.energy + 5, self.entity.maxEnergy)
+
 
     def render(self, display):
         display.blit(self.image, (self.rect.x - self.weapon.entity.world.state.game.gameCamera.xOffset,

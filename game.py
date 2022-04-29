@@ -29,7 +29,7 @@ class Game:
         self.startingState = startingState.StartingState(self)  # the stating menu
         self.stateManager.set_state(self.startingState)  #set the current state the game is in
         self.background = pygame.transform.scale(pygame.image.load("res/menuBg.jpg"), (800, 600))
-        # assets.backgroundSound[0].play()
+        assets.backgroundSound[0].play()
 
     def start(self):  # the main while loop of the game
 

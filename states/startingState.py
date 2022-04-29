@@ -64,7 +64,7 @@ class StartingState(State):
             assets.renderFont(display, "PRESS ENTER TO START", (229, 229, 242), (68, 68, 97), self.game.width / 2,
                         self.game.height / 2, assets.fonts[2])
         elif self.curStage == 1:
-            image = assets.uiAssets[5]
+            image = assets.uiAssets[5].copy()
 
             for i in range(3):
                 if i == self.index:
@@ -75,9 +75,9 @@ class StartingState(State):
                                   textbox.get_height()/2, assets.fonts[1])
                 image.blit(textbox, (0, 120 + 60 * i + 5 * i))
 
-            renderRect = assets.uiAssets[5].get_rect(
+            renderRect = image.get_rect(
                 center=(self.game.width / 2, self.game.height / 2))
-            display.blit(assets.uiAssets[5], renderRect)
+            display.blit(image, renderRect)
 
             assets.renderFont(display, "SUS", (229, 229, 242), (68, 68, 97), self.game.width / 2,
                               self.game.height / 2 - 120, assets.fonts[2])
@@ -97,3 +97,11 @@ class StartingState(State):
             msgRect = msg.get_rect(center=self.exitRect.center)
             display.blit(msg, msgRect)
 
+            image = assets.uiAssets[5].copy()
+            assets.drawText(image, "WASD to move. Right click to attack. Q to use special ability. "
+                                   "1 and 2 to switch weapon", (229, 229, 242), (15, 120, 172 * (3/2), 136 * (3/2)), assets.fonts[0])
+            renderRect = image.get_rect(
+                center=(self.game.width / 2, self.game.height / 2))
+            display.blit(image, renderRect)
+            assets.renderFont(display, "Tutorial", (229, 229, 242), (68, 68, 97), self.game.width / 2,
+                             self.game.height / 2 - 120, assets.fonts[2])

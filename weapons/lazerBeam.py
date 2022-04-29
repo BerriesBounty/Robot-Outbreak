@@ -3,7 +3,7 @@ import math
 import pygame
 
 from gfx import assets
-from bullets.bullet import Bullet, PierceBullet
+from bullets.bullet import PierceBullet
 from timer import Timer
 from weapons.weapon import Weapon
 
@@ -11,19 +11,19 @@ class PiercingGun(Weapon):
     def __init__(self):
         super().__init__()
         self.name = "Piercing Gun"
-        self.description = "Pew pew... pew pew pew... pewpewpew pewpewpew"
-        self.attackSpeed = 1
+        self.description = "Nothing can stop this gun!"
+        self.attackSpeed = 0.2
         self.damage = 1
-        self.spread = 4
-        self.maxAmmo = 30
-        self.ammo = 30
-        self.magSize = 1
-        self.curMag = 1
-        self.reloadSpeed = 0.25
+        self.spread = 3
+        self.maxAmmo = 100
+        self.ammo = 100
+        self.magSize = 20
+        self.curMag = 20
+        self.reloadSpeed = 0.5
         self.timer = Timer(self.attackSpeed)
 
-        self.rimage = assets.beam[0]
-        self.limage = assets.beam[1]
+        self.rimage = assets.pierceGun[0]
+        self.limage = assets.pierceGun[1]
 
         self.image = self.rimage
         self.rect = self.image.get_rect()
@@ -44,15 +44,15 @@ class PiercingGun(Weapon):
             if self.curMag == 0 and self.ammo == 0:
                 self.entity.removeWeapon()
             else:
-                x = self.entity.world.state.game.inputManager.offsetX - 90
-                y = self.entity.world.state.game.inputManager.offsetY - 33
+                x = self.entity.world.state.game.inputManager.offsetX - 50
+                y = self.entity.world.state.game.inputManager.offsetY - 50
 
                 bullet = PierceBullet(self, x, y)
                 bullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - bullet.rect.width / 2,
                              self.entity.rect.y + self.entity.rect.width / 2 - bullet.rect.height / 2)
                 self.entity.world.bullet_list.add(bullet)
                 self.curMag -= 1
-                assets.arSound[0].play()
+                assets.pierceSound[0].play()
                 if self.curMag == 0:
                     self.reloading = True
                     assets.arSound[1].play()

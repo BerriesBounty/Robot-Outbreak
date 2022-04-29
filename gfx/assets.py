@@ -7,7 +7,7 @@ spriteSheet = cannon = target = leftCannon\
 
 assaultRifle = []
 pistol = []
-beam = []
+pierceGun = []
 sword = []
 coolSword = []
 swordSlash = []
@@ -29,6 +29,7 @@ fonts = []
 arSound = []
 pistolSound = []
 backgroundSound = []
+pierceSound = []
 
 WIDTH = 34
 HEIGHT = 48
@@ -40,7 +41,8 @@ bluegray = (186, 200, 216)
 def init():
     global spriteSheet, bullet, cannon, target, leftCannon, rightCannon,\
         assaultRifle, hand, sword, coolSword, playerIdleRight, playerIdleLeft, arSound, hudAssets, \
-        hudbar, pistol, uiAssets, backgroundSound, swordSlash, fonts, buttons, slashBullet, playerDeath, beam
+        hudbar, pistol, uiAssets, backgroundSound, swordSlash, fonts, buttons, slashBullet, playerDeath, pierceGun, \
+        pierceSound
 
     # sprite sheets
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
@@ -56,7 +58,7 @@ def init():
     bullet.append(pygame.transform.flip(bullet[0], True, False))
     bullet.append(pygame.image.load("res/enemyBullet.png").subsurface((40, 46, 45, 34)))
     bullet.append(pygame.transform.flip(bullet[2], True, False))
-    bullet.append(pygame.image.load("res/pierceBullet.png").subsurface((28, 38, 180, 66)))
+    bullet.append(pygame.transform.scale(pygame.image.load("res/pierceBullet.png"), (100, 100)))
     bullet.append(pygame.transform.flip(bullet[4], True, False))
     target = spriteSheet.subsurface((0, 0, 32, 32))
 
@@ -97,9 +99,9 @@ def init():
     assaultRifle.append(baseRifle)
     assaultRifle.append(pygame.transform.flip(assaultRifle[0], True, False))
 
-    baseBeam = gunSheet.subsurface((0, 0, 96, 96))
-    beam.append(baseBeam)
-    beam.append(pygame.transform.flip(beam[0], True, False))
+    basePierceGun = gunSheet.subsurface((0, 0, 96, 96))
+    pierceGun.append(basePierceGun)
+    pierceGun.append(pygame.transform.flip(pierceGun[0], True, False))
 
     baseSword = gunSheet.subsurface((96 * 3, 0, 96, 96))
     sword.append(baseSword)
@@ -175,8 +177,11 @@ def init():
     pistolSound.append(pygame.mixer.Sound("res/sfx/pistolReload.wav"))
     pistolSound[1].set_volume(0.05)
 
-    # backgroundSound.append(pygame.mixer.Sound("res/sfx/bg.mp3"))
-    # backgroundSound[0].set_volume(0.5)
+    pierceSound.append(pygame.mixer.Sound("res/sfx/pierceShot.wav"))
+    pierceSound[0].set_volume(0.05)
+
+    backgroundSound.append(pygame.mixer.Sound("res/sfx/bg.mp3"))
+    backgroundSound[0].set_volume(0.02)
 
 
 def rot_center(image, angle):
