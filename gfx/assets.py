@@ -12,6 +12,7 @@ coolSword = []
 swordSlash = []
 slashBullet = []
 bullet = []
+bossWeapon = []
 
 playerIdleRight = []
 playerIdleLeft = []
@@ -33,6 +34,7 @@ pistolSound = []
 backgroundSound = []
 pierceSound = []
 resourceSound = []
+bossSound = []
 
 WIDTH = 34
 HEIGHT = 48
@@ -47,7 +49,7 @@ def init():
     global spriteSheet, bullet, cannon, target, leftCannon, rightCannon,\
         assaultRifle, hand, sword, coolSword, playerIdleRight, playerIdleLeft, arSound, hudAssets, \
         hudbar, pistol, uiAssets, backgroundSound, swordSlash, fonts, buttons, slashBullet, playerDeath, pierceGun, \
-        pierceSound, resourceSound, meleeEnemyWalkingRight, meleeEnemyWalkingLeft
+        pierceSound, resourceSound, meleeEnemyWalkingRight, meleeEnemyWalkingLeft, boss, bossWeapon, bossSound
 
     # sprite sheets
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
@@ -147,8 +149,15 @@ def init():
     pistol.append(basePistol)
     pistol.append(pygame.transform.flip(pistol[0], True, False))
 
+    bossWeaponBase = pygame.image.load("res/bossWeapon.png")
+    bossWeapon.append(bossWeaponBase)
+    bossWeapon.append(pygame.transform.flip(bossWeapon[0], True, False))
+
+
     hand = pygame.transform.scale(pygame.image.load("res/hand.png"), (8, 8))
     hand.set_colorkey((186, 200, 216))
+
+    boss = pygame.image.load("res/boss.png")
 
     hudAssets.append(hudSheet.subsurface((0, 0, 84, 64)))
     hudAssets.append(hudSheet.subsurface((103, 0, 32, 64)))
@@ -205,6 +214,8 @@ def init():
     backgroundSound.append(pygame.mixer.Sound("res/sfx/bg.mp3"))
     backgroundSound[0].set_volume(0.02)
     backgroundSound.append(pygame.mixer.Sound("res/sfx/waveClear.wav"))
+
+    bossSound.append(pygame.mixer.Sound("res/sfx/bossSpawn.wav"))
 
     resourceSound.append(pygame.mixer.Sound("res/sfx/cashSound.mp3"))
     resourceSound.append(pygame.mixer.Sound("res/sfx/healthSound.wav"))

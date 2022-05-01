@@ -3,6 +3,7 @@ import pygame
 
 from entities.creatures.rangedEnemy import RangedEnemy
 from entities.creatures.meleeEnemy import MeleeEnemy
+from entities.creatures.boss import FinalBoss
 from entities.creatures.player import Player
 from entities.entityManager import EntityManager
 from gfx import assets
@@ -92,7 +93,7 @@ class World:
                               self.state.game.height / 2 + 100, assets.fonts[2])
 
     def waveCleared(self):
-        if self.stage == 5:
+        if self.wave == 5:
             self.gameOver = True
             self.endingMessage = "You win! Now do it again."
         else:
@@ -126,6 +127,19 @@ class World:
              target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
              self.target_list.add(target)
              self.entityManager.add(target)
+        if self.wave == 5:
+            assets.bossSound[0].play()
+            boss = FinalBoss(self)
+            while True:
+                posX = random.randint(0, self.mapImg.get_width())
+                posY = random.randint(0, self.mapImg.get_height())
+                if self.getTile(posX, posY).color != (0, 1, 0, 255) and not self.getTile(posX, posY).isSolid:
+                    break
+            boss.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
+            self.target_list.add(boss)
+            self.entityManager.add(boss)
+
+
 
     def loadMap(self):
         print(self.mapImg.get_width(), self.mapImg.get_height())
