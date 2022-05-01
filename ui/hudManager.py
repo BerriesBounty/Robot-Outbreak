@@ -64,7 +64,7 @@ class HUDManager():
         if self.player.equippedWeapon is not None and self.player.equippedWeapon.maxAmmo != -1:
             assets.renderFont(display, f"{self.player.equippedWeapon.curMag}/{self.player.equippedWeapon.ammo}"
                               , (255, 0, 0), (172, 50, 50),
-                              self.world.state.game.width - 100, self.world.state.game.height - 50, assets.fonts[2])
+                              self.world.state.game.width - 100, self.world.state.game.height - 100, assets.fonts[2])
 
         assets.renderFont(display, f"wave number {self.world.wave}", (200, 0, 0), (172, 50, 50),
                           self.world.state.game.width - 200,

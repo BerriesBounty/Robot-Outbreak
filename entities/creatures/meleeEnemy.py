@@ -8,6 +8,7 @@ from gfx.animation import Animation
 from weapons.enemySword import EnemySword
 from timer import Timer
 
+
 class MeleeEnemy(Creature):
     def __init__(self, world, difficulty):
         super().__init__(world)
@@ -21,7 +22,8 @@ class MeleeEnemy(Creature):
         self.animation_count = 0
         self.reset_offset = 0
         self.offset_x = random.randrange(-150, 150)
-        self.offset_y = random.randrange(-150, 150) #the goal of the enemy is to attack the player and as such it will move towards the player, to add variety we have added the offset value so that for example if the player is at 0,0 -> the offset will cause the enemy to move towards a random point in that range - we will reset the offset randomly to offer that variability.
+        self.offset_y = random.randrange(-150,
+                                         150)  # the goal of the enemy is to attack the player and as such it will move towards the player, to add variety we have added the offset value so that for example if the player is at 0,0 -> the offset will cause the enemy to move towards a random point in that range - we will reset the offset randomly to offer that variability.
         self.timer = Timer(random.randint(1, 7))
         self.weapon = EnemySword()
         self.weapon.entity = self
@@ -47,7 +49,7 @@ class MeleeEnemy(Creature):
         if self.enemies[0].rect.x - self.rect.x == 50:
             self.weapon.attack()
 
-        reset_offset = random.randint(0,20)
+        reset_offset = random.randint(0, 20)
         if reset_offset == 15:
             self.offset_x = random.randrange(-25, 25)
             self.offset_y = random.randrange(-25, 25)
@@ -76,7 +78,7 @@ class MeleeEnemy(Creature):
 
     def render(self, display):
         display.blit(self.getCurrentAnimation(), (self.rect.x - self.world.state.game.gameCamera.xOffset,
-                                                self.rect.y - self.world.state.game.gameCamera.yOffset))
+                                                  self.rect.y - self.world.state.game.gameCamera.yOffset))
         self.weapon.render(display)
 
     def die(self):
@@ -85,7 +87,7 @@ class MeleeEnemy(Creature):
             health = HealthDrop(self.world, self.rect.x, self.rect.y)
             self.world.resource_list.add(health)
         elif resource <= 60:
-            self.world.resource_list.add(MoneyDrop(self.world,self.rect.x, self.rect.y))
+            self.world.resource_list.add(MoneyDrop(self.world, self.rect.x, self.rect.y))
         elif resource <= 70:
             self.world.resource_list.add(AmmoDrop(self.world, self.rect.x, self.rect.y))
         else:
@@ -96,7 +98,3 @@ class MeleeEnemy(Creature):
             return self.walkingRight.getCurrentFrame()
         else:
             return self.walkingLeft.getCurrentFrame()
-
-
-
-

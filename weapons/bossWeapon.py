@@ -17,12 +17,8 @@ class EnemyAttack(Weapon):
         self.xOffset = 2
 
     def attack(self):
-        if self.entity.enemies[0].visible:
-            x = self.entity.enemies[0].rect.x
-            y = self.entity.enemies[0].rect.y
-        else:
-            x = random.randint(0, self.entity.world.state.game.width)
-            y = random.randint(0, self.entity.world.state.game.height)
+        x = self.entity.enemies[0].rect.x
+        y = self.entity.enemies[0].rect.y
         eBullet = BossBullet(self, x, y)
         eBullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - eBullet.rect.width / 2,
                              self.entity.rect.y + self.entity.rect.width / 2 - eBullet.rect.height / 2)

@@ -13,6 +13,7 @@ class FinalBoss(Creature):
         super().__init__(world)
         self.image = assets.boss
         self.rect = self.image.get_rect()
+        self.maxHealth = 1500
         self.health = 1500
         self.reset_offset = 0
         self.offset_x = random.randrange(-450, 450)
@@ -48,15 +49,15 @@ class FinalBoss(Creature):
         else:
             self.xmove = 0
             self.ymove = 0
-            if self.world.player.rect.x + self.offset_x > self.rect.x:
+            if self.enemies[0].rect.x + self.offset_x > self.rect.x:
                 self.xmove += 7
                 self.direction = 0
-            elif self.world.player.rect.x + self.offset_x < self.rect.x:
+            elif self.enemies[0].rect.x + self.offset_x < self.rect.x:
                 self.xmove -= 7
                 self.direction = 1
-            if self.world.player.rect.y + self.offset_y > self.rect.y:
+            if self.enemies[0].rect.y + self.offset_y > self.rect.y:
                 self.ymove += 7
-            elif self.world.player.rect.y + self.offset_y < self.rect.y:
+            elif self.enemies[0].rect.y + self.offset_y < self.rect.y:
                 self.ymove -= 7
             self.move()
         hit_list = pygame.sprite.spritecollide(self, self.enemies, False)

@@ -28,6 +28,8 @@ class World:
         self.target_list = pygame.sprite.Group()  # store all the enemies in the world
         self.resource_list = EntityManager()  # store all the resource drops
         self.wave = 0
+        self.finalWave = 1
+        self.boss = None
         self.waveStart()
 
         self.player.enemies = self.target_list  # make all the enemies the player's enemies
@@ -91,6 +93,10 @@ class World:
         else:
             self.itemShop.render(display)
 
+        if self.wave == self.finalWave:
+            pygame.draw.rect(display, assets.bgWhite, (100, 550, 600, 20))
+            pygame.draw.rect(display, (200, 0, 0), (100, 550, (self.boss.health / self.boss.maxHealth) * 600, 20))
+
         # draw game over message and restart button
         if self.gameOver:
             assets.renderFont(display, self.endingMessage, (186, 200, 216), (32, 51, 67), self.state.game.width / 2,
@@ -99,8 +105,9 @@ class World:
             assets.renderFont(display, "Restart", (186, 200, 216), (32, 51, 67), self.state.game.width / 2,
                               self.state.game.height / 2 + 100, assets.fonts[2])
 
+
     def waveCleared(self):
-        if self.wave == 3:
+        if self.wave == self.finalWave:
             self.gameOver = True
             self.endingMessage = "You win! Now do it again."
         else:
@@ -112,45 +119,46 @@ class World:
 
     def waveStart(self):
         # choose a random amount of enemies
-        x = random.randint(2, 5)
-        y = random.randint(2, 3)
         self.wave += 1
-        x = x + self.wave // 3 * 2
 
-        # ranged enemy
-        for i in range(x):
-            target = RangedEnemy(self, "easy")
-            while True:
-                posX = random.randint(0, self.mapImg.get_width())  # place enemy at a random position
-                posY = random.randint(0, self.mapImg.get_height())
-
-                # if the tile is not blank and not solid
-                if self.getTile(posX, posY).color != (0, 1, 0, 255) and not self.getTile(posX, posY).isSolid:
-                    break
-            target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
-            self.target_list.add(target)
-            self.entityManager.add(target)
-        for i in range(y):
-            target = MeleeEnemy(self, "easy")
-            while True:
-                posX = random.randint(0, self.mapImg.get_width())
-                posY = random.randint(0, self.mapImg.get_height())
-                if self.getTile(posX, posY).color != (0, 1, 0, 255) and not self.getTile(posX, posY).isSolid:
-                    break
-            target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
-            self.target_list.add(target)
-            self.entityManager.add(target)
-        if self.wave == 3:
+        if self.wave == self.finalWave:
             assets.bossSound[0].play()
-            boss = FinalBoss(self)
+            self.boss = FinalBoss(self)
             while True:
                 posX = random.randint(0, self.mapImg.get_width())
                 posY = random.randint(0, self.mapImg.get_height())
                 if self.getTile(posX, posY).color != (0, 1, 0, 255) and not self.getTile(posX, posY).isSolid:
                     break
-            boss.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
-            self.target_list.add(boss)
-            self.entityManager.add(boss)
+            self.boss.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
+            self.target_list.add(self.boss)
+            self.entityManager.add(self.boss)
+        else:
+            x = random.randint(2, 5)
+            y = random.randint(1, 3)
+            x = x + self.wave // 3 * 2
+            # ranged enemy
+            for i in range(x):
+                target = RangedEnemy(self, "easy")
+                while True:
+                    posX = random.randint(0, self.mapImg.get_width())  # place enemy at a random position
+                    posY = random.randint(0, self.mapImg.get_height())
+
+                    # if the tile is not blank and not solid
+                    if self.getTile(posX, posY).color != (0, 1, 0, 255) and not self.getTile(posX, posY).isSolid:
+                        break
+                target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
+                self.target_list.add(target)
+                self.entityManager.add(target)
+            for i in range(y):
+                target = MeleeEnemy(self, "easy")
+                while True:
+                    posX = random.randint(0, self.mapImg.get_width())
+                    posY = random.randint(0, self.mapImg.get_height())
+                    if self.getTile(posX, posY).color != (0, 1, 0, 255) and not self.getTile(posX, posY).isSolid:
+                        break
+                target.setxy(posX * Tile.WIDTH, posY * Tile.HEIGHT)
+                self.target_list.add(target)
+                self.entityManager.add(target)
 
 
     def loadMap(self):

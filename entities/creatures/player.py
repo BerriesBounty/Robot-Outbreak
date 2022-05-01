@@ -36,7 +36,7 @@ class Player(Creature):
         self.direction = 0  # direction of clock
 
         self.weapons = []
-        self.weapons.append(CoolSword())
+        self.weapons.append(AssaultRifle())
         self.weapons[0].entity = self
         self.equippedWeapon = self.weapons[0]
 
