@@ -2,8 +2,7 @@ import pygame
 
 pygame.mixer.init()
 
-spriteSheet = cannon = target = leftCannon\
-    = rightCannon = font36 = font18 = hand = None
+spriteSheet = target = rightCannon = hand = None
 
 assaultRifle = []
 pistol = []
@@ -20,6 +19,9 @@ playerWalkingRight = []
 playerWalkingLeft = []
 playerDeath = []
 
+meleeEnemyWalkingRight = []
+meleeEnemyWalkingLeft = []
+
 hudbar = []
 hudAssets = []
 uiAssets = []
@@ -30,6 +32,7 @@ arSound = []
 pistolSound = []
 backgroundSound = []
 pierceSound = []
+resourceSound = []
 
 WIDTH = 34
 HEIGHT = 48
@@ -37,12 +40,14 @@ HEIGHT = 48
 # colors
 purple = (98,  22, 107)
 bluegray = (186, 200, 216)
+white = (229, 229, 242)
+bgWhite = (68, 68, 97)
 
 def init():
     global spriteSheet, bullet, cannon, target, leftCannon, rightCannon,\
         assaultRifle, hand, sword, coolSword, playerIdleRight, playerIdleLeft, arSound, hudAssets, \
         hudbar, pistol, uiAssets, backgroundSound, swordSlash, fonts, buttons, slashBullet, playerDeath, pierceGun, \
-        pierceSound
+        pierceSound, resourceSound, meleeEnemyWalkingRight, meleeEnemyWalkingLeft
 
     # sprite sheets
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
@@ -53,6 +58,7 @@ def init():
     hudSheet = pygame.image.load("res/hudSheet.png").convert_alpha()
     uiSheet = pygame.image.load("res/itemShopSheet.png").convert_alpha()
     slashSheet = pygame.image.load("res/slash.png").convert_alpha()
+    meleeEnemySheet = pygame.image.load("res/meleeEnemySheet.png").convert_alpha()
 
     bullet.append(pygame.image.load("res/bullet.png").subsurface((40, 46, 45, 34)))
     bullet.append(pygame.transform.flip(bullet[0], True, False))
@@ -94,6 +100,20 @@ def init():
     playerDeath.append(deathSheet.subsurface((5 * WIDTH, 0, WIDTH, HEIGHT)))
     playerDeath.append(deathSheet.subsurface((6 * WIDTH, 0, WIDTH, HEIGHT)))
     playerDeath.append(deathSheet.subsurface((7 * WIDTH, 0, WIDTH, HEIGHT)))
+
+    meleeEnemyWalkingRight.append(meleeEnemySheet.subsurface((0, 0, WIDTH, HEIGHT)))
+    meleeEnemyWalkingRight.append(meleeEnemySheet.subsurface((WIDTH, 0, WIDTH, HEIGHT)))
+    meleeEnemyWalkingRight.append(meleeEnemySheet.subsurface((2 * WIDTH, 0, WIDTH, HEIGHT)))
+    meleeEnemyWalkingRight.append(meleeEnemySheet.subsurface((3 * WIDTH, 0, WIDTH, HEIGHT)))
+    meleeEnemyWalkingRight.append(meleeEnemySheet.subsurface((4 * WIDTH, 0, WIDTH, HEIGHT)))
+    meleeEnemyWalkingRight.append(meleeEnemySheet.subsurface((5 * WIDTH, 0, WIDTH, HEIGHT)))
+
+    meleeEnemyWalkingLeft.append(pygame.transform.flip(meleeEnemyWalkingRight[0], True, False).convert_alpha())
+    meleeEnemyWalkingLeft.append(pygame.transform.flip(meleeEnemyWalkingRight[1], True, False).convert_alpha())
+    meleeEnemyWalkingLeft.append(pygame.transform.flip(meleeEnemyWalkingRight[2], True, False).convert_alpha())
+    meleeEnemyWalkingLeft.append(pygame.transform.flip(meleeEnemyWalkingRight[3], True, False).convert_alpha())
+    meleeEnemyWalkingLeft.append(pygame.transform.flip(meleeEnemyWalkingRight[4], True, False).convert_alpha())
+    meleeEnemyWalkingLeft.append(pygame.transform.flip(meleeEnemyWalkingRight[5], True, False).convert_alpha())
 
     baseRifle = pygame.transform.scale(pygame.image.load("res/ar.png").subsurface((0, 0, 32, 32)), (64, 64))
     assaultRifle.append(baseRifle)
@@ -145,9 +165,9 @@ def init():
     greenbar2 = hudSheet.subsurface((153, 44, 8, 15))
     hudbar.append([greenbar1, greenbar2])
 
-    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 0, 32 * 11, 260)), (528, 390)))
-    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 32 * 9, 32 * 6, 40)), (288, 60)))
-    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 6, 32 * 9, 32 * 6, 40)), (288, 60)))
+    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 0, 32 * 11, 260)), (528, 390)))  # item shop
+    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 32 * 9, 32 * 6, 40)), (288, 60)))  # item block
+    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 6, 32 * 9, 32 * 6, 40)), (288, 60)))  # light item block
     uiAssets.append(
         pygame.transform.scale(uiSheet.subsurface((32 * 15, 0, 32 * 5, 32 * 4)), (32 * 5 * (3/2), 32 * 4 * (3/2))))
     uiAssets.append(
@@ -158,6 +178,8 @@ def init():
         pygame.transform.scale(uiSheet.subsurface((32 * 14, 32 * 12, 32 * 6, 40)), (32 * 6 * (3 / 2), 40 * (3 / 2))))
     uiAssets.append(
         pygame.transform.scale(uiSheet.subsurface((32 * 20, 32 * 12, 32 * 6, 40)), (32 * 6 * (3 / 2), 40 * (3 / 2))))
+    uiAssets.append(
+        pygame.transform.scale(uiSheet.subsurface((32 * 21, 32 * 1, 32 * 5, 32 * 4)), (32 * 5 * (3 / 2), 32 * 4 * (3 / 2))))
 
     buttons.append(pygame.transform.scale(uiSheet.subsurface((32 * 20, 0, 32, 32)), (48, 48)))
     buttons.append(pygame.transform.scale(uiSheet.subsurface((32 * 21, 0, 32, 32)), (48, 48)))
@@ -182,6 +204,9 @@ def init():
 
     backgroundSound.append(pygame.mixer.Sound("res/sfx/bg.mp3"))
     backgroundSound[0].set_volume(0.02)
+    backgroundSound.append(pygame.mixer.Sound("res/sfx/waveClear.wav"))
+
+    resourceSound.append(pygame.mixer.Sound("res/sfx/cashSound.mp3"))
 
 
 def rot_center(image, angle):

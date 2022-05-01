@@ -27,8 +27,9 @@ class Game:
         self.stateManager = states.state.StateManager()
         self.gameState = gameState.GameState(self)  # the actual gameplay
         self.startingState = startingState.StartingState(self)  # the stating menu
-        self.stateManager.set_state(self.startingState)  #set the current state the game is in
-        self.background = pygame.transform.scale(pygame.image.load("res/menuBg.jpg"), (800, 600))
+        self.stateManager.set_state(self.startingState)  # set the current state the game is in
+        self.background = pygame.transform.scale(pygame.image.load("res/menuBg.jpg"),
+                                                 (800, 600))  # the background image
         assets.backgroundSound[0].play()
 
     def start(self):  # the main while loop of the game
@@ -36,16 +37,15 @@ class Game:
         fps = 30  # how many ticks per second
         timesPerTick = 1000000000 / fps  # number of nanosecond between each tick
         delta = 0
-        now = None
         lastTime = time.perf_counter_ns()  # the last time it ticked
         timer = 0
         ticks = 0
 
         while True:
 
-            now = time.perf_counter_ns() #time of the current loop
-            delta += (now - lastTime) / timesPerTick #how many ticks can be performed in the
-            timer += now - lastTime #amount of time past
+            now = time.perf_counter_ns()  # time of the current loop
+            delta += (now - lastTime) / timesPerTick  # how many ticks can be performed in the
+            timer += now - lastTime  # amount of time past
             lastTime = now
 
             if delta >= 1:
@@ -54,7 +54,7 @@ class Game:
                 ticks += 1
                 delta -= 1
 
-            if timer >= 1000000000:#if it has been a second
+            if timer >= 1000000000:  # if it has been a second
                 print(f"fps: {ticks}")
                 ticks = 0
                 timer = 0
@@ -63,9 +63,9 @@ class Game:
             # self.render(self.display)  # drawing all the sprites
 
             pygame.display.update()
-            # self.clock.tick(60)
+            # self.clock.tick(30)
 
-    def tick(self):  # basically the same as update
+    def tick(self):  # basically update
         self.inputManager.tick()  # manage what key and mouse button is hold down and the position of mouse
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -82,16 +82,14 @@ class Game:
                 self.inputManager.mousePressed()
             if event.type == pygame.MOUSEBUTTONUP:
                 self.inputManager.mouseReleased()  # if a mouse button is released
-            # if event.type == pygame.MOUSEMOTION:
-            #     self.inputManager.mouseMoved()
 
-        pygame.display.set_caption(f"X: {self.inputManager.x} Y: {self.inputManager.y}")
+        pygame.display.set_caption(f"X: {self.inputManager.x} Y: {self.inputManager.y}")  # show the mouse position
 
         if self.stateManager.get_state() is not None:  # if there is a current state
             self.stateManager.get_state().tick()  # update the state
 
     def render(self, display):  # draws what is on screen every loop. Display is the screen to blit on
-        display.fill((0,0,0))
-        display.blit(self.background, (0, 0))
-        if self.stateManager.get_state() is not None:
+        display.fill((0, 0, 0))  # clear the display
+        display.blit(self.background, (0, 0))  # display background image
+        if self.stateManager.get_state() is not None:  # make sure no error will happen
             self.stateManager.get_state().render(display)  # render the state

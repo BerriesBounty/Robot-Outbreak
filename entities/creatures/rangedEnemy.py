@@ -1,16 +1,22 @@
+from entities.resources.ammo import AmmoDrop
+from entities.resources.money import MoneyDrop
 from gfx import assets
 from entities.creatures.creature import Creature
 import random
 import time
 import pygame
 from entities.creatures.player import Player
+from gfx.animation import Animation
 from weapons.enemyWeapon import  EnemyAttack
 import math
+from entities.resources.healthpot import HealthDrop
 from timer import Timer
 
 class RangedEnemy(Creature):
     def __init__(self, world, difficulty):
         super().__init__(world)
+        self.walkingRight = Animation(0.15, assets.meleeEnemyWalkingRight, 0)
+        self.walkingLeft = Animation(0.15, assets.meleeEnemyWalkingLeft, 0)
         self.image = assets.target
         self.rect = self.image.get_rect()
         self.difficulty = difficulty
@@ -29,16 +35,19 @@ class RangedEnemy(Creature):
 
     def checkdiff(self):
         if self.difficulty == "easy":
-            self.health = 3
+            self.health = 50
         elif self.difficulty == "medium":
-            self.health = 5
+            self.health = 75
         elif self.difficulty == "hard":
-            self.health = 7
+            self.health = 100
     def setxy(self, x, y):
         self.rect.x = x
         self.rect.y = y
 
     def update(self):
+        self.walkingLeft.tick()
+        self.walkingRight.tick()
+
         if self.timer.update() is True:
             self.timer = Timer(random.randint(1, 7))
             self.weapon.attack()
@@ -49,6 +58,7 @@ class RangedEnemy(Creature):
             self.offset_y = random.randrange(-450, 450)
 
         if self.health <= 0:
+            self.die()
             self.world.player.kills += 1
             if len(self.world.target_list) == 1:
                 self.world.waveCleared()
@@ -70,20 +80,27 @@ class RangedEnemy(Creature):
         self.weapon.update()
 
     def render(self, display):
-        display.blit(self.image, (self.rect.x - self.world.state.game.gameCamera.xOffset,
+        display.blit(self.getCurrentAnimation(), (self.rect.x - self.world.state.game.gameCamera.xOffset,
                                   self.rect.y - self.world.state.game.gameCamera.yOffset))
         self.weapon.render(display)
 
     def die(self):
-        resource = random.randint(1,100)
-        if resource == range(1,50):
-            pass
-        elif resource == range(51,90):
-            pass
+        resource = random.randint(1, 100)
+        if resource <= 10:
+            health = HealthDrop(self.world, self.rect.x, self.rect.y)
+            self.world.resource_list.add(health)
+        elif resource <= 60:
+            self.world.resource_list.add(MoneyDrop(self.world, self.rect.x, self.rect.y))
+        elif resource <= 70:
+            self.world.resource_list.add(AmmoDrop(self.world, self.rect.x, self.rect.y))
         else:
             pass
 
-        pass
+    def getCurrentAnimation(self):
+        if self.xmove > 0:
+            return self.walkingRight.getCurrentFrame()
+        else:
+            return self.walkingLeft.getCurrentFrame()
 
 
 

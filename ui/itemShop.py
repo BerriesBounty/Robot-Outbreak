@@ -1,8 +1,7 @@
 import random
 
-import numpy.random
+import numpy
 import pygame
-
 from gfx import assets
 from ultimates.ultManager import UltManager
 from upgrades.upgradeManager import UpgradeManager
@@ -55,9 +54,14 @@ class ItemShop:
                     self.index = 3
                 else:
                     self.index -= 1
+            if self.world.state.game.inputManager.keyReleased.get("tab"):
+                self.world.timer = None
+                self.world.stage += 1
+                self.world.player.canMove = True
+                self.world.waveStart()
             if self.world.state.game.inputManager.keyReleased.get("enter"):  # player has chosen
                 self.chosen = self.choices[self.index]
-                if self.chosen in WeaponManager.weaponList:  # if the player bought a weapon
+                if self.chosen in WeaponManager.weaponList and self.world.player.money > self.chosen.cost:  # if the player bought a weapon
                     if len(self.world.player.weapons) < 2:  # if the player only had one weapon
                         self.chosen.entity = self.world.player
                         self.world.player.weapons.append(self.chosen)  # give the player the weapon bought
@@ -65,9 +69,10 @@ class ItemShop:
                     else:
                         #let them choose to replace a weapon
                         self.msg = f"Choose a weapon to replace: press 1 - {self.world.player.weapons[0].name}, 2 - {self.world.player.weapons[1].name}, or close the window"
+                        self.world.player.money -= self.chosen.cost
                         self.stage = 1
 
-                elif self.chosen in UltManager.ultimateList:  # if the player chose an ultimate
+                elif self.chosen in UltManager.ultimateList and self.world.player.money > self.chosen.cost:  # if the player chose an ultimate
                     if self.world.player.ultimate is None:  # if the plaer did not have a ultimate
                         self.chosen.player = self.world.player
                         self.world.player.ultimate = self.chosen
@@ -77,15 +82,17 @@ class ItemShop:
                     else:
                         # let them choose to keep the one they had or to replace it
                         self.msg = f"{self.chosen.name} will replace {self.world.player.ultimate.name}, press enter to commit. If not, close the window"
+                        self.world.player.money -= self.chosen.cost
                         self.stage = 2
 
-                elif self.chosen in UpgradeManager.upgradeList:  # if they choose an upgrade
+                elif self.chosen in UpgradeManager.upgradeList and self.world.player.money > self.chosen.cost:  # if they choose an upgrade
                     self.chosen.player = self.world.player
                     self.chosen.activate()  #activate the upgrade
                     self.successfulPurchase()
 
-                else:
+                elif self.world.player.money > self.chosen.cost:
                     self.msg = "Ha! You just got scammed!"
+                    self.world.player.money -= self.chosen.cost
                     self.stage = 3
 
         else:
@@ -126,8 +133,8 @@ class ItemShop:
                 self.world.waveStart()
 
     def render(self, display):
-        if self.stage == 0:
-            image = assets.uiAssets[0].copy()
+        if self.stage == 0:  # still choosing
+            image = assets.uiAssets[0].copy() # the item shop base board
 
             # the four rectangle boxes
             for i in range(4):
@@ -135,24 +142,36 @@ class ItemShop:
                     textbox = assets.uiAssets[2].copy()
                 else:
                     textbox = assets.uiAssets[1].copy()
-                assets.renderFont(textbox, self.choices[i].name, (229, 229, 242), (68, 68, 97), textbox.get_width()/2 + 27,
+                assets.renderFont(textbox, self.choices[i].name, assets.white, assets.bgWhite, textbox.get_width()/2 + 27,
                                   textbox.get_height()/2, assets.fonts[1])
                 image.blit(textbox, (0, 120 + 60 * i + 3 * i))
 
-            assets.drawText(image, self.choices[self.index].description, (229, 229, 242), self.descriptionRect, assets.fonts[0])
+            #writes discription and cost of selected item
+            assets.drawText(image, self.choices[self.index].description, assets.white, self.descriptionRect, assets.fonts[0])
+            if self.choices[self.index].cost > self.world.player.money:
+                assets.drawText(image, f"${self.choices[self.index].cost}", (255, 0, 0),
+                                (240 * (3 / 2), 130,  95 * (3 / 2), 50),
+                                assets.fonts[0])
+            else:
+                assets.drawText(image, f"${self.choices[self.index].cost}", (0, 200, 0),
+                                (240 * (3 / 2), 130, 95 * (3 / 2), 50),
+                                assets.fonts[0])
+            assets.drawText(image, "Press tab to exit", assets.white, (240 * 3/2, 224 * 3/2, 96 * 3/2, 25 * 3/2),
+                            assets.fonts[0])
 
             renderRect = image.get_rect(
                 center=(self.world.state.game.width / 2, self.world.state.game.height / 2))
             display.blit(image, renderRect)
 
-            assets.renderFont(display, "Item Shop", (229, 229, 242), (68, 68, 97), self.world.state.game.width / 2,
+            assets.renderFont(display, "Item Shop", assets.white, assets.bgWhite, self.world.state.game.width / 2,
                               self.world.state.game.height / 2 - 150, assets.fonts[2])
         else:
             self.box.blit(self.button, (32 * 4 * (3 / 2), 0))  # display the x button
             display.blit(self.box, self.boxRect)
-            assets.drawText(display, self.msg, (229, 229, 242), self.msgRect, assets.fonts[0])
+            assets.drawText(display, self.msg, assets.white, self.msgRect, assets.fonts[0])
 
 
     def successfulPurchase(self):
         self.msg = "Thanks for purchasing, now please just die."
+        self.world.player.money -= self.chosen.cost
         self.stage = 3

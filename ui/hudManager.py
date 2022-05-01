@@ -56,12 +56,21 @@ class HUDManager():
             for i in range(1, self.ammoBar):
                 display.blit(assets.hudbar[3][1],
                              (assets.hudAssets[0].get_width() + 10 + assets.hudbar[0][1].get_width() * i, 54))
-        #end of health bars
+        # end of health bars
         display.blit(assets.hudAssets[1],
                      (assets.hudAssets[0].get_width() + assets.hudbar[0][0].get_width() * 10 + 10, 10))
 
-        #current weapon magazine
+        # current weapon magazine
         if self.player.equippedWeapon is not None and self.player.equippedWeapon.maxAmmo != -1:
             assets.renderFont(display, f"{self.player.equippedWeapon.curMag}/{self.player.equippedWeapon.ammo}"
                               , (255, 0, 0), (172, 50, 50),
                               self.world.state.game.width - 100, self.world.state.game.height - 50, assets.fonts[2])
+
+        assets.renderFont(display, f"wave number {self.world.wave}", (200, 0, 0), (172, 50, 50),
+                          self.world.state.game.width - 200,
+                          50, assets.fonts[2])
+
+        # money
+        assets.renderFont(display, f"${self.player.money}", (0, 200, 0), (50, 170, 50),
+                          self.world.state.game.width - 100,
+                          self.world.state.game.height - 150, assets.fonts[2])

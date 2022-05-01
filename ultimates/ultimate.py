@@ -8,6 +8,7 @@ class Ultimate(ABC):
         self.player = None
         self.name = ""
         self.description = ""
+        self.cost = 0
         self.duration = duration
         self.energy = energy
         self.id = id

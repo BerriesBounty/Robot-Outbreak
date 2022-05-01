@@ -10,6 +10,7 @@ class Rage(Ultimate):
         super().__init__(duration, energy, id)
         self.name = "Rage"
         self.description = "WHY DOESN'T THIS CODE WORK! WHY! (Gain increase fire rate and heal for each enemy killed)"
+        self.cost = 125
         self.timer = None
         self.lastKillAmount = None
         self.curKillAmount = None

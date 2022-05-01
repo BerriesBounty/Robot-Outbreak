@@ -8,6 +8,7 @@ class Invisible(Ultimate):
         super().__init__(duration, energy, id)
         self.name = "Invisibility"
         self.description = "Why does no one notice me? (Become invisible and gain fire rate)"
+        self.cost = 100
         self.timer = None
 
     def tick(self):

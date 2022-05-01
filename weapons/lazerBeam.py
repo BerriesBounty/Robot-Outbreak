@@ -12,8 +12,9 @@ class PiercingGun(Weapon):
         super().__init__()
         self.name = "Piercing Gun"
         self.description = "Nothing can stop this gun!"
+        self.cost = 150
         self.attackSpeed = 0.2
-        self.damage = 1
+        self.damage = 20
         self.spread = 3
         self.maxAmmo = 100
         self.ammo = 100

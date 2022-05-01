@@ -12,8 +12,9 @@ class Pistol(Weapon):
         self.name = "Pistol"
         self.description = "It's a gun and it works. It might not be the best, but what other choice do you have?" \
                            " (hint: the other three options)"
+        self.cost = 50
         self.attackSpeed = 0.25
-        self.damage = 2
+        self.damage = 20
         self.spread = 7
         self.maxAmmo = 20
         self.ammo = 20

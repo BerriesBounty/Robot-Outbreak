@@ -25,8 +25,8 @@ class World:
 
         self.bullet_list = EntityManager()  # store all the bullets in the world
         self.target_list = pygame.sprite.Group()  # store all the enemies in the world
-
-        self.wave = 1
+        self.resource_list = EntityManager()
+        self.wave = 0
         self.waveStart()
 
         self.player.enemies = self.target_list
@@ -46,11 +46,14 @@ class World:
         if self.stage % 2 == 1:
             self.bullet_list.update()
             self.entityManager.update()
+            self.resource_list.update()
             self.hud.tick()
             if self.timer is not None and self.timer.update():
                 self.stage += 1
         else:
             if self.timer.update():
+                self.player.ismoving = False
+                self.player.canMove = False
                 self.itemShop.tick()
         if self.gameOver:
             if self.endRect.collidepoint(self.state.game.inputManager.x, self.state.game.inputManager.y):
@@ -76,6 +79,7 @@ class World:
         if self.stage % 2 == 1:
             self.bullet_list.draw(display)
             self.entityManager.draw(display)
+            self.resource_list.draw(display)
             self.hud.render(display)
         else:
             self.itemShop.render(display)
@@ -88,14 +92,11 @@ class World:
                               self.state.game.height / 2 + 100, assets.fonts[2])
 
     def waveCleared(self):
-        if self.stage == 3:
+        if self.stage == 5:
             self.gameOver = True
-            self.player.ismoving = False
-            self.player.canMove = False
             self.endingMessage = "You win! Now do it again."
         else:
-            self.player.ismoving = False
-            self.player.canMove = False
+            assets.backgroundSound[1].play()
             self.itemShop = ItemShop(self)
             self.timer = Timer(2)
             self.player.reset()

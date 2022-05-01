@@ -8,6 +8,7 @@ class Shockwave(Ultimate):
         super().__init__(duration, energy, id)
         self.name = "Shockwave"
         self.description = "Ew, don't touch me! (Destroy all bullets in the room)"
+        self.cost = 50
         self.timer = None
 
     def tick(self):

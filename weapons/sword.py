@@ -14,9 +14,10 @@ class Sword(Weapon):
         super().__init__()
         self.name = "sword"
         self.description = "Your starting weapon will come back to haunt you forever until you buy it!"
+        self.cost = 10
         self.maxAmmo = -1
         self.attackSpeed = 1
-        self.damage = 3
+        self.damage = 50
         self.rimage = assets.sword[0]
         self.limage = assets.sword[1]
         self.timer = Timer(self.attackSpeed)

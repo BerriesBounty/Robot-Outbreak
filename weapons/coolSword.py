@@ -14,11 +14,12 @@ class CoolSword(Weapon):
         super().__init__()
         self.name = "Cooler Sword"
         self.description = "Hey, this sword is all shiny and stuff, that must mean it's good, right?"
+        self.cost = 175
         self.maxAmmo = -1
         self.attackSpeed = 0.25
-        self.damage = 3
-        self.rimage = assets.sword[0]
-        self.limage = assets.sword[1]
+        self.damage = 50
+        self.rimage = assets.coolSword[0]
+        self.limage = assets.coolSword[1]
         self.timer = Timer(self.attackSpeed)
 
         self.image = self.rimage

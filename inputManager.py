@@ -40,6 +40,8 @@ class InputManager:
             self.keyReleased["1"] = True
         if event.key == pygame.K_2:
             self.keyReleased["2"] = True
+        if event.key == pygame.K_TAB:
+            self.keyReleased["tab"] = True
 
     def keyDown(self, event):  # when a key is pressed down
         if event.key == pygame.K_SPACE:

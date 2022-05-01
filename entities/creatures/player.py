@@ -15,6 +15,7 @@ from weapons.sword import Sword
 class Player(Creature):
     def __init__(self, world):
         super().__init__(world)
+        self.money = 100
         self.maxHealth = 100
         self.health = self.maxHealth - 40
         self.idleRight = Animation(0.15, assets.playerIdleRight, 0)  # the animations for different actions
@@ -35,7 +36,7 @@ class Player(Creature):
         self.direction = 0  # direction of clock
 
         self.weapons = []
-        self.weapons.append(PiercingGun())
+        self.weapons.append(CoolSword())
         self.weapons[0].entity = self
         self.equippedWeapon = self.weapons[0]
 
