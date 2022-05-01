@@ -19,10 +19,8 @@ class Ultimate(ABC):
     def tick(self):
         pass
 
-    @abstractmethod
     def activiate(self):
         pass
 
-    @abstractmethod
     def deactivate(self):
         pass

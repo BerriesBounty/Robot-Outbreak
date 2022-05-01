@@ -24,7 +24,7 @@ class Player(Creature):
         self.walkingLeft = Animation(0.15, assets.playerWalkingLeft, 0)
         self.dying = Animation(0.15, assets.playerDeath, 1)
 
-        self.ismoving = False  # is the player currently moving
+        self.isMoving = False  # is the player currently moving
         self.canMove = True  # does the game allow the player to take action
 
         self.curAnimation = self.idleRight
@@ -40,7 +40,7 @@ class Player(Creature):
         self.weapons[0].entity = self
         self.equippedWeapon = self.weapons[0]
 
-        self.ultimate = UltManager.ultimateList[2]
+        self.ultimate = UltManager.ultimateList[0]
         self.ultimate.player = self
         self.maxEnergy = self.ultimate.energy
         self.energy = self.ultimate.energy
@@ -51,6 +51,7 @@ class Player(Creature):
         self.kills = 0
 
         self.world.entityManager.add(self)
+
     def setxy(self):
         self.rect.x = self.world.state.game.width / 2 - self.rect.width / 2
         self.rect.y = self.world.state.game.height - self.rect.height - 100
@@ -76,7 +77,7 @@ class Player(Creature):
     def update(self):
         self.idleRight.tick()
         self.idleLeft.tick()
-        if self.ismoving:
+        if self.isMoving:
             self.walkingLeft.tick()
             self.walkingRight.tick()
         else:
@@ -92,13 +93,13 @@ class Player(Creature):
             self.world.gameOver = True
             self.world.endingMessage = "I'm not mad, just disappointed"
 
-        #movement & camera
+        # movement & camera
         if self.canMove:
             self.getInput()
             self.move()
             self.world.state.game.gameCamera.centerOnPlayer(self)
 
-            #the direction the player should face
+            # the direction the player should face
             mx = self.world.state.game.inputManager.offsetX
             if mx - self.rect.x - (self.rect.width / 2) > 0:
                 self.direction = 0
@@ -110,8 +111,8 @@ class Player(Creature):
             self.equippedWeapon.update()  # update weapon related tasks
 
         if self.canMove:
-            #update ultimate ability
-            if self.world.state.game.inputManager.keyJustPressed.get("q") and self.energy == self.maxEnergy\
+            # update ultimate ability
+            if self.world.state.game.inputManager.keyJustPressed.get("q") and self.energy == self.maxEnergy \
                     and self.ultimate != None:
                 self.ultimateOn = True
                 self.ultimate.activiate()
@@ -123,7 +124,6 @@ class Player(Creature):
         self.canMove = False
         self.equippedWeapon = None
         self.dead = True
-
 
     def getInput(self):
         self.xmove = 0
@@ -139,9 +139,9 @@ class Player(Creature):
             self.xmove -= self.speed
 
         if self.xmove != 0 or self.ymove != 0:
-            self.ismoving = True
+            self.isMoving = True
         else:
-            self.ismoving = False
+            self.isMoving = False
 
         if keys[pygame.K_1]:
             if self.equippedWeapon != self.weapons[0]:
@@ -153,7 +153,7 @@ class Player(Creature):
 
     def render(self, display):
         display.blit(self.image, (self.rect.x - self.world.state.game.gameCamera.xOffset,
-                                                self.rect.y - self.world.state.game.gameCamera.yOffset))
+                                  self.rect.y - self.world.state.game.gameCamera.yOffset))
         if self.equippedWeapon is not None:
             self.equippedWeapon.render(display)
 
@@ -163,7 +163,7 @@ class Player(Creature):
                 return self.dying.getCurrentFrame()
             else:
                 return self.dying.frames[7]
-        if not self.ismoving:
+        if not self.isMoving:
             if self.direction == 0:
                 return self.idleRight.getCurrentFrame()
             else:
@@ -173,6 +173,3 @@ class Player(Creature):
                 return self.walkingRight.getCurrentFrame()
             else:
                 return self.walkingLeft.getCurrentFrame()
-
-
-

@@ -14,7 +14,7 @@ class EnemySword(Weapon):
         super().__init__()
         self.name = "sword"
         self.attackSpeed = 1
-        self.damage = 20
+        self.damage = 30
         self.rimage = assets.sword[0]
         self.limage = assets.sword[1]
         self.timer = Timer(self.attackSpeed)

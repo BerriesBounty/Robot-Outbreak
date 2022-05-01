@@ -6,7 +6,7 @@ from weapons.weaponManager import WeaponManager
 class GameState(State):
     def __init__(self, game):
         super().__init__(game)
-        WeaponManager.init()
+        WeaponManager.init()  # initialize all the weapons
         self.world1 = world.World(self)  # store a world that runs a level of the game
 
     def tick(self):
@@ -15,10 +15,9 @@ class GameState(State):
     def render(self, display):
         self.world1.render(display)  # render the current level
 
-    def start(self): # reset the enemies attack timer so they don't attack right as the game starts
+    def start(self):  # reset the enemies attack timer, so they don't attack right as the game starts
         for i in self.world1.target_list:
             i.timer.reset()
 
     def restart(self):
-        self.world1 = world.World(self)
-
+        self.world1 = world.World(self)  # make a new world and restart everything

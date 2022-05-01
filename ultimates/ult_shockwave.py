@@ -1,5 +1,6 @@
 import time
 
+from gfx import assets
 from timer import Timer
 from ultimates.ultimate import Ultimate
 
@@ -23,7 +24,9 @@ class Shockwave(Ultimate):
                 i.kill()
 
     def activiate(self):
+        assets.ultSound[0].play()
         self.timer = Timer(self.duration)
+
 
     def deactivate(self):
         pass

@@ -1,15 +1,21 @@
 import time
 
+from entities.creatures.decoy import Decoy
+from gfx import assets
 from timer import Timer
 from ultimates.ultimate import Ultimate
+
 
 class Invisible(Ultimate):
     def __init__(self, duration, energy, id):
         super().__init__(duration, energy, id)
-        self.name = "Invisibility"
-        self.description = "Why does no one notice me? (Become invisible and gain fire rate)"
+        self.name = "Escape no Jutsu"
+        self.description = "I will become the Hokage! (Become invisible and deploy a decoy to confuse the enemy)"
         self.cost = 100
         self.timer = None
+        self.x = 0
+        self.y = 0
+        self.decoy = None
 
     def tick(self):
         if self.timer.update():
@@ -24,12 +30,17 @@ class Invisible(Ultimate):
         self.player.equippedWeapon.image = newGunImage
 
     def activiate(self):
+        assets.ultSound[1].play()
         self.timer = Timer(self.duration)
         self.player.visible = False
-        self.player.equippedWeapon.attackSpeed /= 1.25
+        self.decoy = Decoy(self.player.world, self.player.rect.x, self.player.rect.y)
+        self.player.world.entityManager.add(self.decoy)
+
 
     def deactivate(self):
         self.player.ultimateOn = False
         self.player.visible = True
-        self.player.equippedWeapon.attackSpeed *= 1.25
         self.timer = 0
+        self.decoy.die()
+
+

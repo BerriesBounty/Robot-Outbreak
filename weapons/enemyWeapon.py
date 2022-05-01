@@ -8,7 +8,7 @@ from weapons.weapon import Weapon
 class EnemyAttack(Weapon):
     def __init__(self):
         super().__init__()
-        self.damage = 10
+        self.damage = 20
         self.spread = 7
         self.rimage = assets.pistol[0]
         self.limage = assets.pistol[1]
@@ -17,12 +17,8 @@ class EnemyAttack(Weapon):
         self.xOffset = 2
 
     def attack(self):
-        if self.entity.enemies[0].visible:
-            x = self.entity.enemies[0].rect.x
-            y = self.entity.enemies[0].rect.y
-        else:
-            x = random.randint(0, self.entity.world.state.game.width)
-            y = random.randint(0, self.entity.world.state.game.height)
+        x = self.entity.enemies[0].rect.x
+        y = self.entity.enemies[0].rect.y
         eBullet = EnemyBullet(self, x, y)
         eBullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - eBullet.rect.width / 2,
                              self.entity.rect.y + self.entity.rect.width / 2 - eBullet.rect.height / 2)

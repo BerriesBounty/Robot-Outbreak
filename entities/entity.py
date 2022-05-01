@@ -13,7 +13,8 @@ class Entity(ABC, pygame.sprite.Sprite):  # all entities are sprites
         self.isActive = True
         self.image = None  # the image of the entity
         self.rect = None  # the size of the image
-        self.collisionrect = pygame.rect.Rect(9, 30, 16, 18)
+        self.collide = True
+        self.collisionRect = pygame.rect.Rect(9, 30, 16, 18)  # part of the image that crashes into wall
 
     @abstractmethod
     def update(self):  # update the entity
@@ -35,7 +36,7 @@ class Entity(ABC, pygame.sprite.Sprite):  # all entities are sprites
         # create the rect that the entity would be in  if it moves dx amount and dy amount
         collisionRect = pygame.rect.Rect(self.rect.x + dx, self.rect.y + dy, self.rect.width, self.rect.height)
         for e in self.world.entityManager:  # loop through all the entities
-            if e == self:  # if the entity is itself, don't check for collision
+            if e == self or not e.collide:  # if the entity is itself, don't check for collision
                 continue
             elif collisionRect.colliderect(e.rect):  # if the entities collide
                 return True

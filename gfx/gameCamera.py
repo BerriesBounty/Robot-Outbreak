@@ -5,5 +5,7 @@ class GameCamera:
         self.yOffset = yOffset
 
     def centerOnPlayer(self, player):
-        self.xOffset = player.rect.x - self.game.width / 2 + player.rect.width / 2
-        self.yOffset = player.rect.y - self.game.height / 2 + player.rect.height / 2
+        # x is + if on the right of center
+        # y is + if on the bottom of center
+        self.xOffset = player.rect.x + player.rect.width / 2 - self.game.width / 2
+        self.yOffset = player.rect.y + player.rect.height / 2 - self.game.height / 2

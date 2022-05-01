@@ -6,22 +6,22 @@ from gfx import assets
 from ultimates.ultManager import UltManager
 from upgrades.upgradeManager import UpgradeManager
 from weapons.fake import Fake
-from weapons.weapon import Weapon
 from weapons.weaponManager import WeaponManager
 
-#appears once a wave is cleared
+
+# appears once a wave is cleared
 class ItemShop:
     def __init__(self, world):
         self.world = world
         self.choices = []  # the four items the player can buy
         self.chosen = None  # what item the play bought
-        itemType = [20, random.randint(1, 75), random.randint(1, 100), random.randint(1, 100)]
+        itemType = [random.randint(1, 70), random.randint(1, 70), random.randint(31, 100), random.randint(31, 100)]
         for item in itemType:
             if item <= 30:
                 self.choices.append(numpy.random.choice(UpgradeManager.upgradeList, p=[0.4, 0.4, 0.2]))
-            elif item <= 60:
+            elif item <= 70:
                 self.choices.append(numpy.random.choice(WeaponManager.weaponList, p=[0.3, 0.3, 0.3, 0.05, 0.05]))
-            elif item <= 80:
+            elif item <= 90:
                 self.choices.append(numpy.random.choice(UltManager.ultimateList, p=[0.4, 0.3, 0.3]))
             else:
                 self.choices.append(Fake())
@@ -91,7 +91,7 @@ class ItemShop:
                     self.successfulPurchase()
 
                 elif self.world.player.money > self.chosen.cost:
-                    self.msg = "Ha! You just got scammed!"
+                    self.msg = "Ha! You just bought a fake item! You receive nothing!"
                     self.world.player.money -= self.chosen.cost
                     self.stage = 3
 

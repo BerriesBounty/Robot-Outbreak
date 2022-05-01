@@ -28,7 +28,6 @@ class MeleeEnemy(Creature):
         self.direction = 0
         self.enemies = [self.world.player]
 
-
     def checkdiff(self):
         if self.difficulty == "easy":
             self.health = 50
@@ -36,6 +35,7 @@ class MeleeEnemy(Creature):
             self.health = 100
         elif self.difficulty == "hard":
             self.health = 150
+
     def setxy(self, x, y):
         self.rect.x = x
         self.rect.y = y
@@ -44,7 +44,7 @@ class MeleeEnemy(Creature):
         self.walkingLeft.tick()
         self.walkingRight.tick()
 
-        if self.world.player.rect.x - self.rect.x == 50:
+        if self.enemies[0].rect.x - self.rect.x == 50:
             self.weapon.attack()
 
         reset_offset = random.randint(0,20)
@@ -61,32 +61,32 @@ class MeleeEnemy(Creature):
         else:
             self.xmove = 0
             self.ymove = 0
-            if self.world.player.rect.x + self.offset_x > self.rect.x:
+            if self.enemies[0].rect.x + self.offset_x > self.rect.x:
                 self.xmove += 3
                 self.direction = 0
-            elif self.world.player.rect.x + self.offset_x < self.rect.x:
+            elif self.enemies[0].rect.x + self.offset_x < self.rect.x:
                 self.xmove -= 3
                 self.direction = 1
-            if self.world.player.rect.y + self.offset_y > self.rect.y:
+            if self.enemies[0].rect.y + self.offset_y > self.rect.y:
                 self.ymove += 3
-            elif self.world.player.rect.y + self.offset_y < self.rect.y:
+            elif self.enemies[0].rect.y + self.offset_y < self.rect.y:
                 self.ymove -= 3
             self.move()
         self.weapon.update()
 
     def render(self, display):
         display.blit(self.getCurrentAnimation(), (self.rect.x - self.world.state.game.gameCamera.xOffset,
-                                  self.rect.y - self.world.state.game.gameCamera.yOffset))
+                                                self.rect.y - self.world.state.game.gameCamera.yOffset))
         self.weapon.render(display)
 
     def die(self):
         resource = random.randint(1, 100)
-        if resource <= 20:
+        if resource <= 10:
             health = HealthDrop(self.world, self.rect.x, self.rect.y)
             self.world.resource_list.add(health)
         elif resource <= 60:
             self.world.resource_list.add(MoneyDrop(self.world,self.rect.x, self.rect.y))
-        elif resource <= 80:
+        elif resource <= 70:
             self.world.resource_list.add(AmmoDrop(self.world, self.rect.x, self.rect.y))
         else:
             pass

@@ -14,56 +14,64 @@ slashBullet = []
 bullet = []
 bossWeapon = []
 
+# player image
 playerIdleRight = []
 playerIdleLeft = []
 playerWalkingRight = []
 playerWalkingLeft = []
 playerDeath = []
 
+# enemy image
 meleeEnemyWalkingRight = []
 meleeEnemyWalkingLeft = []
 
-hudbar = []
+# ui images
+hudBar = []  # health bars and stuff like it
 hudAssets = []
 uiAssets = []
 buttons = []
 fonts = []
 
+# sound effects
 arSound = []
 pistolSound = []
 backgroundSound = []
 pierceSound = []
 resourceSound = []
 bossSound = []
+ultSound = []
 
+# size of player images
 WIDTH = 34
 HEIGHT = 48
 
 # colors
 purple = (98,  22, 107)
-bluegray = (186, 200, 216)
+blueGray = (186, 200, 216)
 white = (229, 229, 242)
 bgWhite = (68, 68, 97)
 
+
+# set up the images after pygame has been initialized
 def init():
-    global spriteSheet, bullet, cannon, target, leftCannon, rightCannon,\
+    global spriteSheet, bullet, target, rightCannon,\
         assaultRifle, hand, sword, coolSword, playerIdleRight, playerIdleLeft, arSound, hudAssets, \
         hudbar, pistol, uiAssets, backgroundSound, swordSlash, fonts, buttons, slashBullet, playerDeath, pierceGun, \
-        pierceSound, resourceSound, meleeEnemyWalkingRight, meleeEnemyWalkingLeft, boss, bossWeapon, bossSound
+        pierceSound, resourceSound, meleeEnemyWalkingRight, meleeEnemyWalkingLeft, boss, bossWeapon, bossSound, ultSound
 
     # sprite sheets
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
     gunSheet = loadImage("res/gunSheet.png", purple)
-    playerSheet = pygame.transform.scale(loadImage("res/oneHandSheet.png", bluegray), (144, 208))
-    playerWalkingSheet = pygame.transform.scale(loadImage("res/playerWalkingSheet.png", bluegray), (212, 232))
-    deathSheet = loadImage("res/deathSheet.png", bluegray)
+    playerSheet = pygame.transform.scale(loadImage("res/oneHandSheet.png", blueGray), (144, 208))
+    playerWalkingSheet = pygame.transform.scale(loadImage("res/playerWalkingSheet.png", blueGray), (212, 232))
+    deathSheet = loadImage("res/deathSheet.png", blueGray)
     hudSheet = pygame.image.load("res/hudSheet.png").convert_alpha()
     uiSheet = pygame.image.load("res/itemShopSheet.png").convert_alpha()
     slashSheet = pygame.image.load("res/slash.png").convert_alpha()
     meleeEnemySheet = pygame.image.load("res/meleeEnemySheet.png").convert_alpha()
 
-    bullet.append(pygame.image.load("res/bullet.png").subsurface((40, 46, 45, 34)))
-    bullet.append(pygame.transform.flip(bullet[0], True, False))
+    bullet.append(pygame.image.load("res/bullet.png").subsurface((40, 46, 45, 34)))  # crop the sprite sheet
+    bullet.append(pygame.transform.flip(bullet[0], True, False))  # flip the image
     bullet.append(pygame.image.load("res/enemyBullet.png").subsurface((40, 46, 45, 34)))
     bullet.append(pygame.transform.flip(bullet[2], True, False))
     bullet.append(pygame.transform.scale(pygame.image.load("res/pierceBullet.png"), (100, 100)))
@@ -145,7 +153,7 @@ def init():
     slashBullet.append(baseSB)
     slashBullet.append(pygame.transform.flip(slashBullet[0], True, False))
 
-    basePistol = pygame.transform.scale(pygame.image.load("res/ar.png").subsurface((32,0,32,32)), (64, 64))
+    basePistol = pygame.transform.scale(pygame.image.load("res/ar.png").subsurface((32, 0, 32, 32)), (64, 64))
     pistol.append(basePistol)
     pistol.append(pygame.transform.flip(pistol[0], True, False))
 
@@ -161,34 +169,38 @@ def init():
 
     hudAssets.append(hudSheet.subsurface((0, 0, 84, 64)))
     hudAssets.append(hudSheet.subsurface((103, 0, 32, 64)))
-    graybar1 = hudSheet.subsurface((85, 4, 8, 15))
-    graybar2 = hudSheet.subsurface((94, 4, 8, 15))
-    hudbar.append([graybar1, graybar2])
-    redbar1 = hudSheet.subsurface((144, 4, 8, 15))
-    redbar2 = hudSheet.subsurface((153, 4, 8, 15))
-    hudbar.append([redbar1, redbar2])
-    bluebar1 = hudSheet.subsurface((144, 24, 8, 15))
-    bluebar2 = hudSheet.subsurface((153, 24, 8, 15))
-    hudbar.append([bluebar1, bluebar2])
-    greenbar1 = hudSheet.subsurface((144, 44, 8, 15))
-    greenbar2 = hudSheet.subsurface((153, 44, 8, 15))
-    hudbar.append([greenbar1, greenbar2])
+    grayBar1 = hudSheet.subsurface((85, 4, 8, 15))
+    grayBar2 = hudSheet.subsurface((94, 4, 8, 15))
+    hudBar.append([grayBar1, grayBar2])
+    redBar1 = hudSheet.subsurface((144, 4, 8, 15))
+    redBar2 = hudSheet.subsurface((153, 4, 8, 15))
+    hudBar.append([redBar1, redBar2])
+    blueBar1 = hudSheet.subsurface((144, 24, 8, 15))
+    blueBar2 = hudSheet.subsurface((153, 24, 8, 15))
+    hudBar.append([blueBar1, blueBar2])
+    greenBar1 = hudSheet.subsurface((144, 44, 8, 15))
+    greenBar2 = hudSheet.subsurface((153, 44, 8, 15))
+    hudBar.append([greenBar1, greenBar2])
 
     uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 0, 32 * 11, 260)), (528, 390)))  # item shop
     uiAssets.append(pygame.transform.scale(uiSheet.subsurface((0, 32 * 9, 32 * 6, 40)), (288, 60)))  # item block
-    uiAssets.append(pygame.transform.scale(uiSheet.subsurface((32 * 6, 32 * 9, 32 * 6, 40)), (288, 60)))  # light item block
     uiAssets.append(
-        pygame.transform.scale(uiSheet.subsurface((32 * 15, 0, 32 * 5, 32 * 4)), (32 * 5 * (3/2), 32 * 4 * (3/2))))
+        pygame.transform.scale(uiSheet.subsurface((32 * 6, 32 * 9, 32 * 6, 40)), (288, 60)))  # light item block
     uiAssets.append(
-        pygame.transform.scale(uiSheet.subsurface((32 * 15, 32 * 3, 32 * 6, 106)), (32 * 6 * (3/2), 106 * (3/2))))
+        pygame.transform.scale(uiSheet.subsurface((32 * 15, 0, 32 * 5, 32 * 4)),
+                               (32 * 5 * (3/2), 32 * 4 * (3/2))))  # small text box
     uiAssets.append(
-        pygame.transform.scale(uiSheet.subsurface((32 * 15, 32 * 4, 32 * 6, 228)), (32 * 6 * (3/2), 228 * (3/2))))
+        pygame.transform.scale(uiSheet.subsurface((32 * 15, 32 * 4, 32 * 6, 228)),
+                               (32 * 6 * (3/2), 228 * (3/2))))  # main menu
     uiAssets.append(
-        pygame.transform.scale(uiSheet.subsurface((32 * 14, 32 * 12, 32 * 6, 40)), (32 * 6 * (3 / 2), 40 * (3 / 2))))
+        pygame.transform.scale(uiSheet.subsurface((32 * 14, 32 * 12, 32 * 6, 40)),
+                               (32 * 6 * (3 / 2), 40 * (3 / 2))))  # menu text box
     uiAssets.append(
-        pygame.transform.scale(uiSheet.subsurface((32 * 20, 32 * 12, 32 * 6, 40)), (32 * 6 * (3 / 2), 40 * (3 / 2))))
+        pygame.transform.scale(uiSheet.subsurface((32 * 20, 32 * 12, 32 * 6, 40)),
+                               (32 * 6 * (3 / 2), 40 * (3 / 2))))  # light menu text box
     uiAssets.append(
-        pygame.transform.scale(uiSheet.subsurface((32 * 21, 32 * 1, 32 * 5, 32 * 4)), (32 * 5 * (3 / 2), 32 * 4 * (3 / 2))))
+        pygame.transform.scale(uiSheet.subsurface((32 * 21, 32 * 1, 32 * 5, 32 * 4)),
+                               (32 * 5 * (3 / 2), 32 * 4 * (3 / 2))))  # instruction box
 
     buttons.append(pygame.transform.scale(uiSheet.subsurface((32 * 20, 0, 32, 32)), (48, 48)))
     buttons.append(pygame.transform.scale(uiSheet.subsurface((32 * 21, 0, 32, 32)), (48, 48)))
@@ -199,7 +211,7 @@ def init():
     fonts.append(pygame.font.Font("res/slkscr.ttf", 36))
 
     arSound.append(pygame.mixer.Sound("res/sfx/arShot.wav"))
-    arSound[0].set_volume(0.01)
+    arSound[0].set_volume(0.05)
     arSound.append(pygame.mixer.Sound("res/sfx/arReload.wav"))
     arSound[1].set_volume(0.05)
 
@@ -222,6 +234,11 @@ def init():
     resourceSound[1].set_volume(0.1)
     resourceSound.append(pygame.mixer.Sound("res/sfx/arReload.wav"))
 
+    ultSound.append(pygame.mixer.Sound("res/sfx/shockwave.wav"))
+    ultSound.append(pygame.mixer.Sound("res/sfx/invisibility.wav"))
+
+
+# rotate a square image
 def rot_center(image, angle):
     """rotate an image while keeping its center and size"""
     """code works for square shaped images"""
@@ -233,22 +250,24 @@ def rot_center(image, angle):
     return rot_image
 
 
+# load an image and make the selected color transparent
 def loadImage(path, key):
     image = pygame.image.load(path).convert_alpha()
     image.set_colorkey(key)
     return image
 
 
-def renderFont(display, string, color, bgcolor, centerX, centerY, font):
-    msg = font.render(string, False, bgcolor)
-    msg_rect = msg.get_rect(center=(centerX, centerY + 3))
-    drawText(display, string, bgcolor, msg_rect, font)
+# render a font with a darker color behind it
+def renderFont(display, string, color, bg_color, center_x, center_y, font):
+    msg = font.render(string, False, bg_color)
+    msg_rect = msg.get_rect(center=(center_x, center_y + 3))
+    drawText(display, string, bg_color, msg_rect, font)
     msg = font.render(string, False, color)
-    msg_rect = msg.get_rect(center=(centerX, centerY))
-    # display.blit(msg, msg_rect)
+    msg_rect = msg.get_rect(center=(center_x, center_y))
     drawText(display, string, color, msg_rect, font)
 
 
+# render a text within a rect
 def drawText(surface, text, color, rect, font, aa=False, bkg=None):
     rect = pygame.Rect(rect)
     y = rect.top
@@ -282,7 +301,7 @@ def drawText(surface, text, color, rect, font, aa=False, bkg=None):
         surface.blit(image, (rect.left, y))
         y += fontHeight + lineSpacing
 
-        # remove the text we just blitted
+        # remove the text we just blit
         text = text[i:]
 
     return text
