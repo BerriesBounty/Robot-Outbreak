@@ -1,6 +1,7 @@
 import pygame
 from pygame import display
 from timer import Timer
+from gfx import assets
 
 class HealthDrop(pygame.sprite.Sprite):
     def __init__(self, world, x, y):
@@ -20,10 +21,11 @@ class HealthDrop(pygame.sprite.Sprite):
             difference = self.world.player.maxHealth - self.world.player.health
             if difference < 5:
                 self.world.player.health = self.world.player.maxHealth
-                self.kill()
             else:
                 self.world.player.health += 5
-                self.kill()
+
+            assets.resourceSound[1].play()
+            self.kill()
 
     def render(self, display):
         display.blit(self.image, (self.rect.x - self.world.state.game.gameCamera.xOffset,

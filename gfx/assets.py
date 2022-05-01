@@ -207,7 +207,9 @@ def init():
     backgroundSound.append(pygame.mixer.Sound("res/sfx/waveClear.wav"))
 
     resourceSound.append(pygame.mixer.Sound("res/sfx/cashSound.mp3"))
-
+    resourceSound.append(pygame.mixer.Sound("res/sfx/healthSound.wav"))
+    resourceSound[1].set_volume(0.1)
+    resourceSound.append(pygame.mixer.Sound("res/sfx/arReload.wav"))
 
 def rot_center(image, angle):
     """rotate an image while keeping its center and size"""

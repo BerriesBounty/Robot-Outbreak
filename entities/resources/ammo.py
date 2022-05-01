@@ -1,6 +1,7 @@
 import pygame
 from pygame import display
 from timer import Timer
+from gfx import assets
 
 class AmmoDrop(pygame.sprite.Sprite):
     def __init__(self, world, x, y):
@@ -21,6 +22,7 @@ class AmmoDrop(pygame.sprite.Sprite):
             self.world.player.equippedWeapon.ammo = round(min(self.world.player.equippedWeapon.maxAmmo,
                                                         self.world.player.equippedWeapon.ammo + self.world.player.equippedWeapon.curMag
                                                         + (self.world.player.equippedWeapon.maxAmmo * 0.05)))
+            assets.resourceSound[2].play()
             self.kill()
 
     def render(self, display):
