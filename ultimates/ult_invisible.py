@@ -7,8 +7,8 @@ from ultimates.ultimate import Ultimate
 
 
 class Invisible(Ultimate):
-    def __init__(self, duration, energy, id):
-        super().__init__(duration, energy, id)
+    def __init__(self, duration, energy):
+        super().__init__(duration, energy)
         self.name = "Escape no Jutsu"
         self.description = "I will become the Hokage! (Become invisible and deploy a decoy to confuse the enemy)"
         self.cost = 100
@@ -29,7 +29,7 @@ class Invisible(Ultimate):
         newGunImage.set_alpha(100)
         self.player.equippedWeapon.image = newGunImage
 
-    def activiate(self):
+    def activate(self):
         assets.ultSound[1].play()
         self.timer = Timer(self.duration)
         self.player.visible = False

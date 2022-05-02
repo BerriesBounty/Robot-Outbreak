@@ -28,7 +28,7 @@ class World:
         self.target_list = pygame.sprite.Group()  # store all the enemies in the world
         self.resource_list = EntityManager()  # store all the resource drops
         self.wave = 0
-        self.finalWave = 1
+        self.finalWave = 7
         self.boss = None
         self.waveStart()
 
@@ -120,7 +120,6 @@ class World:
     def waveStart(self):
         # choose a random amount of enemies
         self.wave += 1
-
         if self.wave == self.finalWave:
             assets.bossSound[0].play()
             self.boss = FinalBoss(self)
@@ -133,8 +132,12 @@ class World:
             self.target_list.add(self.boss)
             self.entityManager.add(self.boss)
         else:
-            x = random.randint(2, 5)
-            y = random.randint(1, 3)
+            if self.wave == 1:
+                x = random.randint(2,3)
+                y = random.randint(1,2)
+            else:
+                x = random.randint(2, 5)
+                y = random.randint(1, 3)
             x = x + self.wave // 3 * 2
             # ranged enemy
             for i in range(x):

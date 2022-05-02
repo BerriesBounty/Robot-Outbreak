@@ -31,13 +31,14 @@ class HealthPack(Upgrade):
 class AmmoPack(Upgrade):
     def __init__(self):
         self.name = "Ammo Pack"
-        self.description = "It's just ammo, nothing interesting to say about it (gain 25% of ammo for your equipped weapon)"
+        self.description = "It's just ammo, nothing interesting to say about it (gain 50% of ammo for your equipped weapon)"
         self.cost = 20
 
     def activate(self):
         self.player.equippedWeapon.ammo = round(min(self.player.equippedWeapon.maxAmmo,
                                                     self.player.equippedWeapon.ammo + self.player.equippedWeapon.curMag
-                                                    + (self.player.equippedWeapon.maxAmmo * 0.25)))
+                                                    + (self.player.equippedWeapon.maxAmmo * 0.5)))
+
 
 class MaxHealthUp(Upgrade):
     def __init__(self):
@@ -47,4 +48,5 @@ class MaxHealthUp(Upgrade):
 
     def activate(self):
         self.player.maxHealth += 20
+        self.player.health = min(self.player.maxHealth, self.player.health + 20)
 

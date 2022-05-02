@@ -4,7 +4,4 @@ from ultimates.ult_shockwave import Shockwave
 
 
 class UltManager:
-    ultimateList = []
-    ultimateList.append(Invisible(5, 100, 0))
-    ultimateList.append(Rage(5, 100, 1))
-    ultimateList.append(Shockwave(2, 50, 2))
+    ultimateList = [Invisible(5, 100), Rage(5, 100), Shockwave(2, 50)]

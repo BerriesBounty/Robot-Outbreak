@@ -17,7 +17,7 @@ class Player(Creature):
         super().__init__(world)
         self.money = 100
         self.maxHealth = 100
-        self.health = self.maxHealth - 40
+        self.health = self.maxHealth
         self.idleRight = Animation(0.15, assets.playerIdleRight, 0)  # the animations for different actions
         self.idleLeft = Animation(0.15, assets.playerIdleLeft, 0)
         self.walkingRight = Animation(0.15, assets.playerWalkingRight, 0)
@@ -36,14 +36,13 @@ class Player(Creature):
         self.direction = 0  # direction of clock
 
         self.weapons = []
-        self.weapons.append(AssaultRifle())
+        self.weapons.append(Sword())
         self.weapons[0].entity = self
         self.equippedWeapon = self.weapons[0]
 
-        self.ultimate = UltManager.ultimateList[0]
-        self.ultimate.player = self
-        self.maxEnergy = self.ultimate.energy
-        self.energy = self.ultimate.energy
+        self.ultimate = None
+        self.maxEnergy = 100
+        self.energy = 0
         self.ultimateOn = False
         self.visible = True
         self.dead = False
@@ -115,7 +114,7 @@ class Player(Creature):
             if self.world.state.game.inputManager.keyJustPressed.get("q") and self.energy == self.maxEnergy \
                     and self.ultimate != None:
                 self.ultimateOn = True
-                self.ultimate.activiate()
+                self.ultimate.activate()
                 self.energy = 0
             if self.ultimateOn:
                 self.ultimate.tick()

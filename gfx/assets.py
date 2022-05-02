@@ -236,6 +236,8 @@ def init():
 
     ultSound.append(pygame.mixer.Sound("res/sfx/shockwave.wav"))
     ultSound.append(pygame.mixer.Sound("res/sfx/invisibility.wav"))
+    ultSound.append(pygame.mixer.Sound("res/sfx/rage.wav"))
+    ultSound[2].set_volume(0.5)
 
 
 # rotate a square image

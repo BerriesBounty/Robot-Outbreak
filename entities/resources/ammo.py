@@ -21,7 +21,7 @@ class AmmoDrop(pygame.sprite.Sprite):
 
             self.world.player.equippedWeapon.ammo = round(min(self.world.player.equippedWeapon.maxAmmo,
                                                         self.world.player.equippedWeapon.ammo + self.world.player.equippedWeapon.curMag
-                                                        + (self.world.player.equippedWeapon.maxAmmo * 0.05)))
+                                                        + (self.world.player.equippedWeapon.maxAmmo * 0.1)))
             assets.resourceSound[2].play()
             self.kill()
 

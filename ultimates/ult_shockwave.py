@@ -4,9 +4,10 @@ from gfx import assets
 from timer import Timer
 from ultimates.ultimate import Ultimate
 
+
 class Shockwave(Ultimate):
-    def __init__(self, duration, energy, id):
-        super().__init__(duration, energy, id)
+    def __init__(self, duration, energy):
+        super().__init__(duration, energy)
         self.name = "Shockwave"
         self.description = "Ew, don't touch me! (Destroy all bullets in the room)"
         self.cost = 50
@@ -23,10 +24,9 @@ class Shockwave(Ultimate):
             else:
                 i.kill()
 
-    def activiate(self):
+    def activate(self):
         assets.ultSound[0].play()
         self.timer = Timer(self.duration)
-
 
     def deactivate(self):
         pass

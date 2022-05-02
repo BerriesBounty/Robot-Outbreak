@@ -22,7 +22,7 @@ class HealthDrop(pygame.sprite.Sprite):
             if difference < 5:
                 self.world.player.health = self.world.player.maxHealth
             else:
-                self.world.player.health += 5
+                self.world.player.health += 10
 
             assets.resourceSound[1].play()
             self.kill()
