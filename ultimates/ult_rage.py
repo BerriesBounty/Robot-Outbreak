@@ -23,10 +23,9 @@ class Rage(Ultimate):
             return
 
         self.curKillAmount = self.player.kills
-        print(self.curKillAmount,  self.lastKillAmount)
         if self.curKillAmount > self.lastKillAmount:
             self.player.health = min(self.player.maxHealth, self.player.health + 10)
-            self.timer.timer -= 3
+            self.timer.timer -= 2
         self.lastKillAmount = self.player.kills
 
     def activate(self):

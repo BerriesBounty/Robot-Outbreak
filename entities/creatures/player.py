@@ -3,12 +3,6 @@ import pygame
 from gfx import assets
 from entities.creatures.creature import Creature
 from gfx.animation import Animation
-from ultimates.ultManager import UltManager
-from ultimates.ult_rage import Rage
-from weapons.assaultRifle import AssaultRifle
-from weapons.coolSword import CoolSword
-from weapons.lazerBeam import PiercingGun
-from weapons.pistol import Pistol
 from weapons.sword import Sword
 
 
@@ -18,7 +12,9 @@ class Player(Creature):
         self.money = 100
         self.maxHealth = 100
         self.health = self.maxHealth
-        self.idleRight = Animation(0.15, assets.playerIdleRight, 0)  # the animations for different actions
+
+        # the animations for different actions
+        self.idleRight = Animation(0.15, assets.playerIdleRight, 0)
         self.idleLeft = Animation(0.15, assets.playerIdleLeft, 0)
         self.walkingRight = Animation(0.15, assets.playerWalkingRight, 0)
         self.walkingLeft = Animation(0.15, assets.playerWalkingLeft, 0)
@@ -30,50 +26,50 @@ class Player(Creature):
         self.curAnimation = self.idleRight
         self.image = self.curAnimation.getCurrentFrame()
         self.rect = self.image.get_rect()
-        self.collisionRect = pygame.rect.Rect(9, 30, 16, 18)
+        self.collisionRect = pygame.rect.Rect(9, 30, 16, 18)  # the rectangle that collides with walls
 
         self.setxy()
         self.direction = 0  # direction of clock
 
-        self.weapons = []
-        self.weapons.append(Sword())
+        self.weapons = []  # player can hold two weapons
+        self.weapons.append(Sword())  # starting weapon
         self.weapons[0].entity = self
-        self.equippedWeapon = self.weapons[0]
+        self.equippedWeapon = self.weapons[0]  # which weapon the player is currently using
 
         self.ultimate = None
         self.maxEnergy = 100
-        self.energy = 0
+        self.energy = 100
         self.ultimateOn = False
-        self.visible = True
         self.dead = False
 
-        self.kills = 0
+        self.kills = 0  # amount of kills
 
         self.world.entityManager.add(self)
 
-    def setxy(self):
+    def setxy(self):  # set player in the middle of the screen
         self.rect.x = self.world.state.game.width / 2 - self.rect.width / 2
         self.rect.y = self.world.state.game.height - self.rect.height - 100
 
-    def reset(self):
+    def reset(self):  # when a wave is cleared, stop the ultimate ability
         self.ultimateOn = False
         self.ultimate.deactivate()
 
     def removeWeapon(self):
-        if len(self.weapons) == 2:
-            if self.equippedWeapon == self.weapons[0]:
+        if len(self.weapons) == 2:  # if the player has another weapon to use
+            if self.equippedWeapon == self.weapons[0]:  # if equipped weapon is first weapon
                 self.weapons[0] = self.weapons[1]
-                self.equippedWeapon = self.weapons[0]
+                self.equippedWeapon = self.weapons[0]  # make the player equipped the other weapon
                 self.weapons = [self.weapons[0]]
             if self.equippedWeapon == self.weapons[1]:
                 self.equippedWeapon = self.weapons[0]
                 self.weapons = [self.weapons[0]]
         else:
-            self.weapons[0] = Sword()
+            self.weapons[0] = Sword()  # replace current weapon with sword
             self.weapons[0].entity = self
             self.equippedWeapon = self.weapons[0]
 
     def update(self):
+        # tick the animations to update the frame of it
         self.idleRight.tick()
         self.idleLeft.tick()
         if self.isMoving:
@@ -94,9 +90,9 @@ class Player(Creature):
 
         # movement & camera
         if self.canMove:
-            self.getInput()
+            self.getInput()  # get the keyboard inputs
             self.move()
-            self.world.state.game.gameCamera.centerOnPlayer(self)
+            self.world.state.game.gameCamera.centerOnPlayer(self)  # center the camera
 
             # the direction the player should face
             mx = self.world.state.game.inputManager.offsetX
@@ -105,14 +101,14 @@ class Player(Creature):
             else:
                 self.direction = 1
 
-        self.image = self.getAnimationFrame()
+        self.image = self.getAnimationFrame()  # update the image
         if self.equippedWeapon is not None:
             self.equippedWeapon.update()  # update weapon related tasks
 
         if self.canMove:
             # update ultimate ability
             if self.world.state.game.inputManager.keyJustPressed.get("q") and self.energy == self.maxEnergy \
-                    and self.ultimate != None:
+                    and self.ultimate is not None:  # if the player can use ultimate
                 self.ultimateOn = True
                 self.ultimate.activate()
                 self.energy = 0
@@ -150,13 +146,13 @@ class Player(Creature):
                 if self.equippedWeapon != self.weapons[1]:
                     self.equippedWeapon = self.weapons[1]
 
-    def render(self, display):
+    def render(self, display):  # draw the player and the weapon
         display.blit(self.image, (self.rect.x - self.world.state.game.gameCamera.xOffset,
                                   self.rect.y - self.world.state.game.gameCamera.yOffset))
         if self.equippedWeapon is not None:
             self.equippedWeapon.render(display)
 
-    def getAnimationFrame(self):
+    def getAnimationFrame(self):  # which image from which animation to take
         if self.dead:
             if self.dying.loops != 0:
                 return self.dying.getCurrentFrame()

@@ -1,11 +1,10 @@
 import math
 
-import pygame
-
 from gfx import assets
 from bullets.bullet import PierceBullet
 from timer import Timer
 from weapons.weapon import Weapon
+
 
 class PiercingGun(Weapon):
     def __init__(self):

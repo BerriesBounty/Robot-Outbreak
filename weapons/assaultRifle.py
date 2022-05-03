@@ -13,8 +13,8 @@ class AssaultRifle(Weapon):
         self.attackSpeed = 0.11
         self.damage = 20
         self.spread = 4
-        self.maxAmmo = 150
-        self.ammo = 120
+        self.maxAmmo = 200
+        self.ammo = 200
         self.magSize = 30
         self.curMag = 30
         self.reloadSpeed = 0.5

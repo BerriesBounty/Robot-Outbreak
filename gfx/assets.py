@@ -2,7 +2,7 @@ import pygame
 
 pygame.mixer.init()
 
-spriteSheet = target = rightCannon = hand = hurt = None
+spriteSheet = target = rightCannon = hand = hurt = boss = None
 
 assaultRifle = []
 pistol = []
@@ -56,11 +56,10 @@ bgWhite = (68, 68, 97)
 def init():
     global spriteSheet, bullet, target, rightCannon,\
         assaultRifle, hand, sword, coolSword, playerIdleRight, playerIdleLeft, arSound, hudAssets, hurt, \
-        hudbar, pistol, uiAssets, backgroundSound, swordSlash, fonts, buttons, slashBullet, playerDeath, pierceGun, \
-        pierceSound, resourceSound, meleeEnemyWalkingRight, meleeEnemyWalkingLeft, boss, bossWeapon, bossSound, ultSoun
+        hudBar, pistol, uiAssets, backgroundSound, swordSlash, fonts, buttons, slashBullet, playerDeath, pierceGun, \
+        pierceSound, resourceSound, meleeEnemyWalkingRight, meleeEnemyWalkingLeft, boss, bossWeapon, bossSound, ultSound
 
     # sprite sheets
-    spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
     gunSheet = loadImage("res/gunSheet.png", purple)
     playerSheet = pygame.transform.scale(loadImage("res/oneHandSheet.png", blueGray), (144, 208))
     playerWalkingSheet = pygame.transform.scale(loadImage("res/playerWalkingSheet.png", blueGray), (212, 232))
@@ -76,7 +75,6 @@ def init():
     bullet.append(pygame.transform.flip(bullet[2], True, False))
     bullet.append(pygame.transform.scale(pygame.image.load("res/pierceBullet.png"), (100, 100)))
     bullet.append(pygame.transform.flip(bullet[4], True, False))
-    target = spriteSheet.subsurface((0, 0, 32, 32))
 
     playerIdleRight.append(playerSheet.subsurface((0, HEIGHT, WIDTH, HEIGHT)))
     playerIdleRight.append(playerSheet.subsurface((WIDTH, HEIGHT, WIDTH, HEIGHT)))
@@ -161,7 +159,6 @@ def init():
     bossWeapon.append(bossWeaponBase)
     bossWeapon.append(pygame.transform.flip(bossWeapon[0], True, False))
 
-
     hand = pygame.transform.scale(pygame.image.load("res/hand.png"), (8, 8))
     hand.set_colorkey((186, 200, 216))
 
@@ -206,25 +203,27 @@ def init():
     buttons.append(pygame.transform.scale(uiSheet.subsurface((32 * 21, 0, 32, 32)), (48, 48)))
     buttons.append(pygame.transform.scale(uiSheet.subsurface((32 * 22, 0, 32, 32)), (48, 48)))
 
+    # fonts
     fonts.append(pygame.font.Font("res/slkscr.ttf", 16))
     fonts.append(pygame.font.Font("res/slkscr.ttf", 18))
     fonts.append(pygame.font.Font("res/slkscr.ttf", 36))
 
+    # sounds
     arSound.append(pygame.mixer.Sound("res/sfx/arShot.wav"))
-    arSound[0].set_volume(0.05)
+    arSound[0].set_volume(0.5)
     arSound.append(pygame.mixer.Sound("res/sfx/arReload.wav"))
-    arSound[1].set_volume(0.05)
+    arSound[1].set_volume(0.5)
 
     pistolSound.append(pygame.mixer.Sound("res/sfx/pistolShot.wav"))
-    pistolSound[0].set_volume(0.01)
+    pistolSound[0].set_volume(0.5)
     pistolSound.append(pygame.mixer.Sound("res/sfx/pistolReload.wav"))
-    pistolSound[1].set_volume(0.05)
+    pistolSound[1].set_volume(0.5)
 
     pierceSound.append(pygame.mixer.Sound("res/sfx/pierceShot.wav"))
-    pierceSound[0].set_volume(0.05)
+    pierceSound[0].set_volume(0.5)
 
     backgroundSound.append(pygame.mixer.Sound("res/sfx/bg.mp3"))
-    backgroundSound[0].set_volume(0.02)
+    backgroundSound[0].set_volume(0.5)
     backgroundSound.append(pygame.mixer.Sound("res/sfx/waveClear.wav"))
 
     bossSound.append(pygame.mixer.Sound("res/sfx/bossSpawn.wav"))

@@ -17,7 +17,7 @@ class RangedEnemy(Creature):
         super().__init__(world)
         self.walkingRight = Animation(0.15, assets.meleeEnemyWalkingRight, 0)
         self.walkingLeft = Animation(0.15, assets.meleeEnemyWalkingLeft, 0)
-        self.image = assets.target
+        self.image = assets.meleeEnemyWalkingLeft[0]
         self.rect = self.image.get_rect()
         self.difficulty = difficulty
         self.health = 0
@@ -35,7 +35,7 @@ class RangedEnemy(Creature):
 
     def checkdiff(self):
         if self.difficulty == "easy":
-            self.health = 50
+            self.health = 80
         elif self.difficulty == "medium":
             self.health = 75
         elif self.difficulty == "hard":

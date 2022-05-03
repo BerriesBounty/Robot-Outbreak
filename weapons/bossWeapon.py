@@ -17,12 +17,16 @@ class EnemyAttack(Weapon):
         self.xOffset = 2
 
     def attack(self):
-        x = self.entity.enemies[0].rect.x
-        y = self.entity.enemies[0].rect.y
-        eBullet = BossBullet(self, x, y)
-        eBullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - eBullet.rect.width / 2,
-                             self.entity.rect.y + self.entity.rect.width / 2 - eBullet.rect.height / 2)
-        self.entity.world.bullet_list.add(eBullet)
+        centerx = self.entity.rect.x + self.entity.rect.width / 2 - assets.bullet[2].get_width()
+        centery = self.entity.rect.y + self.entity.rect.width / 2 - assets.bullet[2].get_height()
+        bulletDirection = [[centerx, centery - 10], [centerx + 10, centery - 10], [centerx + 10, centery],
+                           [centerx + 10, centery + 10], [centerx, centery + 10], [centerx - 10, centery + 10],
+                           [centerx - 10, centery], [centerx - 10, centery - 10]]
+        for pos in bulletDirection:
+            eBullet = BossBullet(self, pos[0], pos[1])
+            eBullet.setxy(centerx,
+                          centery)
+            self.entity.world.bullet_list.add(eBullet)
         assets.pistolSound[0].play()
 
     def update(self):

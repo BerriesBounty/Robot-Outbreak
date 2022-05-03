@@ -42,7 +42,7 @@ class Creature(Entity, ABC):
             else:
                 self.rect.x = dx * Tile.WIDTH + Tile.WIDTH - self.collisionRect.x  # put it right of tile
 
-    def moveY(self):
+    def moveY(self):  # same logic
         if self.ymove > 0:
             dy = int(self.rect.y + self.ymove + self.collisionRect.y + self.collisionRect.height) // Tile.HEIGHT
             dx = int(self.rect.x + self.collisionRect.x) // Tile.WIDTH

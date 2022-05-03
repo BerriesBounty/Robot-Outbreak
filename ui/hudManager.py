@@ -66,6 +66,7 @@ class HUDManager():
                               , (255, 0, 0), (172, 50, 50),
                               self.world.state.game.width - 100, self.world.state.game.height - 100, assets.fonts[2])
 
+        #wave number
         assets.renderFont(display, f"wave number {self.world.wave}", (200, 0, 0), (172, 50, 50),
                           self.world.state.game.width - 200,
                           50, assets.fonts[2])
@@ -74,3 +75,9 @@ class HUDManager():
         assets.renderFont(display, f"${self.player.money}", (0, 200, 0), (50, 170, 50),
                           self.world.state.game.width - 100,
                           self.world.state.game.height - 150, assets.fonts[2])
+
+        #ultimate
+        if self.player.ultimate is not None and self.player.energy == self.player.maxEnergy:
+            assets.renderFont(display, "Ultimate (Q)", (64, 147, 153), (13, 91, 170),
+                              self.world.state.game.width - 150,
+                              self.world.state.game.height - 200, assets.fonts[2])

@@ -5,6 +5,7 @@ import pygame
 
 from bullets.projectile import Projectile
 from gfx import assets
+from gfx.tiles import Tile
 
 
 class BossBullet(Projectile):
@@ -13,16 +14,17 @@ class BossBullet(Projectile):
         self.rImage = assets.bullet[2]
         self.lImage = assets.bullet[3]
         self.image = assets.bullet[2]
-        self.rImage = pygame.transform.scale(self.rImage, (50,50))
+        self.rImage = pygame.transform.scale(self.rImage, (50, 50))
         self.lImage = pygame.transform.scale(self.lImage, (50, 50))
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect = self.image.get_rect()
         self.damage = 5
         self.bulletSpeed = 7.5
+        self.bounce = 2  # how many times the bullet bounces
 
     def checkdiff(self):
         if self.entity.difficulty == "easy":
-            self.damage = 5
+            self.damage = 3
         elif self.entity.difficulty == "medium":
             self.damage = 7.5
         elif self.entity.difficulty == "hard":
