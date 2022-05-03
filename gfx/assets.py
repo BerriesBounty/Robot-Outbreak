@@ -2,7 +2,7 @@ import pygame
 
 pygame.mixer.init()
 
-spriteSheet = target = rightCannon = hand = None
+spriteSheet = target = rightCannon = hand = hurt = None
 
 assaultRifle = []
 pistol = []
@@ -55,9 +55,9 @@ bgWhite = (68, 68, 97)
 # set up the images after pygame has been initialized
 def init():
     global spriteSheet, bullet, target, rightCannon,\
-        assaultRifle, hand, sword, coolSword, playerIdleRight, playerIdleLeft, arSound, hudAssets, \
+        assaultRifle, hand, sword, coolSword, playerIdleRight, playerIdleLeft, arSound, hudAssets, hurt, \
         hudbar, pistol, uiAssets, backgroundSound, swordSlash, fonts, buttons, slashBullet, playerDeath, pierceGun, \
-        pierceSound, resourceSound, meleeEnemyWalkingRight, meleeEnemyWalkingLeft, boss, bossWeapon, bossSound, ultSound
+        pierceSound, resourceSound, meleeEnemyWalkingRight, meleeEnemyWalkingLeft, boss, bossWeapon, bossSound, ultSoun
 
     # sprite sheets
     spriteSheet = pygame.image.load("res/SpriteSheet.png").convert_alpha()
@@ -238,6 +238,7 @@ def init():
     ultSound.append(pygame.mixer.Sound("res/sfx/invisibility.wav"))
     ultSound.append(pygame.mixer.Sound("res/sfx/rage.wav"))
     ultSound[2].set_volume(0.5)
+    hurt = pygame.mixer.Sound("res/sfx/hurt.wav")
 
 
 # rotate a square image

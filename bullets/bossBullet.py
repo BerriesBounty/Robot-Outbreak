@@ -32,6 +32,7 @@ class BossBullet(Projectile):
         hit_list = pygame.sprite.spritecollide(self, self.entity.enemies, False)
         for hit in hit_list:
             hit.hurt(self.weapon.damage)
+            assets.hurt.play()
             self.kill()
 
     def render(self, display):

@@ -34,16 +34,16 @@ class ItemShop:
         self.boxRect = self.box.get_rect(
             center=(self.world.state.game.width / 2, self.world.state.game.height / 2))  # place in middle of screen
         self.msg = ""  # what message to display in the box
-        self.msgRect = pygame.Rect(self.boxRect.x + 15, self.boxRect.y + 60, 140 * (3/2), 75 * (3/2))
+        self.msgRect = pygame.Rect(self.boxRect.x + 15, self.boxRect.y + 60, 140 * (3 / 2), 75 * (3 / 2))
         self.button = assets.buttons[0]  # the button to close the box
         # the rect of the button is smaller than the image bcs only part of the image is the actual button
         self.buttonRect = pygame.Rect(self.boxRect.x + (32 * 4 + 8) * (3 / 2), self.boxRect.y + 6 * (3 / 2),
                                       14 * (3 / 2), 14 * (3 / 2))
         self.descriptionRect = pygame.Rect(240 * (3 / 2), 110 * (3 / 2),
-                                      95 * (3 / 2), 135 * (3 / 2))
+                                           95 * (3 / 2), 135 * (3 / 2))
 
     def tick(self):
-        if self.stage == 0: # if the player is still choosing
+        if self.stage == 0:  # if the player is still choosing
             if self.world.state.game.inputManager.keyJustPressed.get("down"):
                 if self.index == 3:
                     self.index = 0
@@ -67,13 +67,14 @@ class ItemShop:
                         self.world.player.weapons.append(self.chosen)  # give the player the weapon bought
                         self.successfulPurchase()
                     else:
-                        #let them choose to replace a weapon
-                        self.msg = f"Choose a weapon to replace: press 1 - {self.world.player.weapons[0].name}, 2 - {self.world.player.weapons[1].name}, or close the window"
+                        # let them choose to replace a weapon
+                        self.msg = f"Choose a weapon to replace: press 1 - {self.world.player.weapons[0].name}, " \
+                                   f"2 - {self.world.player.weapons[1].name}, or close the window "
                         self.world.player.money -= self.chosen.cost
                         self.stage = 1
 
                 elif self.chosen in UltManager.ultimateList and self.world.player.money > self.chosen.cost:  # if the player chose an ultimate
-                    if self.world.player.ultimate is None:  # if the plaer did not have a ultimate
+                    if self.world.player.ultimate is None:  # if the player did not have an ultimate
                         self.chosen.player = self.world.player
                         self.world.player.ultimate = self.chosen
                         self.world.player.maxEnergy = self.chosen.energy
@@ -87,7 +88,7 @@ class ItemShop:
 
                 elif self.chosen in UpgradeManager.upgradeList and self.world.player.money > self.chosen.cost:  # if they choose an upgrade
                     self.chosen.player = self.world.player
-                    self.chosen.activate()  #activate the upgrade
+                    self.chosen.activate()  # activate the upgrade
                     self.successfulPurchase()
 
                 elif self.world.player.money > self.chosen.cost:
@@ -134,7 +135,7 @@ class ItemShop:
 
     def render(self, display):
         if self.stage == 0:  # still choosing
-            image = assets.uiAssets[0].copy() # the item shop base board
+            image = assets.uiAssets[0].copy()  # the item shop base board
 
             # the four rectangle boxes
             for i in range(4):
@@ -142,21 +143,24 @@ class ItemShop:
                     textbox = assets.uiAssets[2].copy()
                 else:
                     textbox = assets.uiAssets[1].copy()
-                assets.renderFont(textbox, self.choices[i].name, assets.white, assets.bgWhite, textbox.get_width()/2 + 27,
-                                  textbox.get_height()/2, assets.fonts[1])
+                assets.renderFont(textbox, self.choices[i].name, assets.white, assets.bgWhite,
+                                  textbox.get_width() / 2 + 27,
+                                  textbox.get_height() / 2, assets.fonts[1])
                 image.blit(textbox, (0, 120 + 60 * i + 3 * i))
 
-            #writes discription and cost of selected item
-            assets.drawText(image, self.choices[self.index].description, assets.white, self.descriptionRect, assets.fonts[0])
+            # writes discription and cost of selected item
+            assets.drawText(image, self.choices[self.index].description, assets.white, self.descriptionRect,
+                            assets.fonts[0])
             if self.choices[self.index].cost > self.world.player.money:
                 assets.drawText(image, f"${self.choices[self.index].cost}", (255, 0, 0),
-                                (240 * (3 / 2), 130,  95 * (3 / 2), 50),
+                                (240 * (3 / 2), 130, 95 * (3 / 2), 50),
                                 assets.fonts[0])
             else:
                 assets.drawText(image, f"${self.choices[self.index].cost}", (0, 200, 0),
                                 (240 * (3 / 2), 130, 95 * (3 / 2), 50),
                                 assets.fonts[0])
-            assets.drawText(image, "Press tab to exit", assets.white, (240 * 3/2, 224 * 3/2, 96 * 3/2, 25 * 3/2),
+            assets.drawText(image, "Press tab to exit", assets.white,
+                            (240 * 3 / 2, 224 * 3 / 2, 96 * 3 / 2, 25 * 3 / 2),
                             assets.fonts[0])
 
             renderRect = image.get_rect(
@@ -169,7 +173,6 @@ class ItemShop:
             self.box.blit(self.button, (32 * 4 * (3 / 2), 0))  # display the x button
             display.blit(self.box, self.boxRect)
             assets.drawText(display, self.msg, assets.white, self.msgRect, assets.fonts[0])
-
 
     def successfulPurchase(self):
         self.msg = "Thanks for purchasing, now please just die."

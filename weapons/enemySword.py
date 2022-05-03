@@ -43,6 +43,7 @@ class EnemySword(Weapon):
                     hit_list.append(e)
             for hit in hit_list:
                 hit.hurt(self.damage)
+                assets.hurt.play()
 
             self.timer.reset()
         else:
