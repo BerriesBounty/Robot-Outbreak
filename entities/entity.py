@@ -13,7 +13,7 @@ class Entity(ABC, pygame.sprite.Sprite):  # all entities are sprites
         self.isActive = True
         self.image = None  # the image of the entity
         self.rect = None  # the size of the image
-        self.collide = True
+        self.collide = True  # is the entity collidable or not
         self.collisionRect = pygame.rect.Rect(9, 30, 16, 18)  # part of the image that crashes into wall
 
     @abstractmethod

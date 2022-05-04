@@ -9,12 +9,12 @@ class Creature(Entity, ABC):
 
     def __init__(self, world):
         super().__init__(world)
-        self.speed = Creature.DEFAULT_SPEED
+        self.speed = Creature.DEFAULT_SPEED  # how fast the entity moves
         self.ymove = 0  # how much the creature is moving
         self.xmove = 0
 
     def move(self):
-        if not self.checkCollision(self.xmove, 0):  # if it collides with any entities
+        if not self.checkCollision(self.xmove, 0):  # if it collides with any other entities
             self.moveX()
         if not self.checkCollision(0, self.ymove):
             self.moveY()

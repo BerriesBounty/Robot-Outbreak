@@ -2,11 +2,12 @@ from gfx import assets
 from entities.creatures.creature import Creature
 import random
 import pygame
-from weapons.bossWeapon import  EnemyAttack
+from weapons.bossWeapon import EnemyAttack
 from entities.resources.healthpot import HealthDrop
 from entities.resources.ammo import AmmoDrop
 from entities.resources.money import MoneyDrop
 from timer import Timer
+
 
 class FinalBoss(Creature):
     def __init__(self, world):
@@ -15,9 +16,11 @@ class FinalBoss(Creature):
         self.rect = self.image.get_rect()
         self.maxHealth = 1500
         self.health = 1500
-        self.reset_offset = 0
+
+        # same AI as enemies
+        self.reset_offset = 0  # when to change the offset
         self.offset_x = random.randrange(-450, 450)
-        self.offset_y = random.randrange(-450, 450) #the goal of the enemy is to attack the player and as such it will move towards the player, to add variety we have added the offset value so that for example if the player is at 0,0 -> the offset will cause the enemy to move towards a random point in that range - we will reset the offset randomly to offer that variability.
+        self.offset_y = random.randrange(-450, 450)
         self.timer = Timer(random.randint(2, 5))
         self.moveTimer = None
         self.weapon = EnemyAttack()
@@ -31,18 +34,21 @@ class FinalBoss(Creature):
         self.rect.y = y
 
     def update(self):
+        # when the boss attacks, it will stop moving. The move timer checks how long the boss has stopped moving
+        # if it finishes, let the boss move and attack again. Set move timer to none so it doesn't update again
         if self.moveTimer is not None and self.moveTimer.update():
             self.timer.reset()
             self.moveTimer = None
             self.canMove = True
 
-        if self.timer.update():  # if allowed to attack
+        # when the boss attacks, it stops moving
+        if self.timer.update():  # if allowed attacking
             self.moveTimer = Timer(2)  # stop the boss from moving
             self.timer.reset()
             self.canMove = False
             self.weapon.attack()
 
-        reset_offset = random.randint(0,20)
+        reset_offset = random.randint(0, 20)  # 1/20 chance to reset the offset of the boss
         if reset_offset == 15:
             self.offset_x = random.randrange(-450, 450)
             self.offset_y = random.randrange(-450, 450)

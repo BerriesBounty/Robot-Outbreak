@@ -7,5 +7,6 @@ class GameCamera:
     def centerOnPlayer(self, player):
         # x is + if on the right of center
         # y is + if on the bottom of center
+        # the offsets is how much every object has to move so that the player is in the middle
         self.xOffset = player.rect.x + player.rect.width / 2 - self.game.width / 2
         self.yOffset = player.rect.y + player.rect.height / 2 - self.game.height / 2

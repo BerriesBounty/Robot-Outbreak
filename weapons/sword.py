@@ -40,7 +40,7 @@ class Sword(Weapon):
                 x = self.entity.rect.x + self.entity.rect.width
             else:
                 x = self.entity.rect.x - 64
-            attackRect = pygame.Rect((x, self.entity.rect.y), (64, self.entity.rect.height))
+            attackRect = pygame.Rect((x, self.entity.rect.y - 32), (64, self.entity.rect.height + 64))
             hit_list = []
             for e in self.entity.enemies:
                 if attackRect.colliderect(e.rect):

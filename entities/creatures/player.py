@@ -1,4 +1,3 @@
-import time
 import pygame
 from gfx import assets
 from entities.creatures.creature import Creature
@@ -117,15 +116,15 @@ class Player(Creature):
 
     def die(self):
         self.canMove = False
-        self.equippedWeapon = None
+        self.equippedWeapon = None  # do not display weapon
         self.dead = True
 
     def getInput(self):
-        self.xmove = 0
-        self.ymove = 0
+        self.xmove = 0  # how much the player moves horizontally
+        self.ymove = 0  # how much the player moves vertically
         keys = self.world.state.game.inputManager.keys
         if keys[pygame.K_s]:
-            self.ymove += self.speed
+            self.ymove += self.speed  # add the amount to move per frame to ymove
         if keys[pygame.K_w]:
             self.ymove -= self.speed
         if keys[pygame.K_d]:
@@ -133,16 +132,18 @@ class Player(Creature):
         if keys[pygame.K_a]:
             self.xmove -= self.speed
 
+        # if the player is moving or not
         if self.xmove != 0 or self.ymove != 0:
             self.isMoving = True
         else:
             self.isMoving = False
 
+        # switching between weapons
         if keys[pygame.K_1]:
             if self.equippedWeapon != self.weapons[0]:
                 self.equippedWeapon = self.weapons[0]
         if keys[pygame.K_2]:
-            if len(self.weapons) == 2:
+            if len(self.weapons) == 2:  # does the player have more than 1 weapon
                 if self.equippedWeapon != self.weapons[1]:
                     self.equippedWeapon = self.weapons[1]
 
@@ -154,8 +155,8 @@ class Player(Creature):
 
     def getAnimationFrame(self):  # which image from which animation to take
         if self.dead:
-            if self.dying.loops != 0:
-                return self.dying.getCurrentFrame()
+            if self.dying.loops != 0:  # if the animation finished its loop
+                return self.dying.getCurrentFrame()  # display the last image of the animation
             else:
                 return self.dying.frames[7]
         if not self.isMoving:

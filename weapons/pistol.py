@@ -34,9 +34,9 @@ class Pistol(Weapon):
         self.timer.update()
         if self.reloading:
             if self.timer.timer >= self.reloadSpeed:
-                reloadAmmo = min(self.ammo, self.magSize - self.curMag)
-                self.ammo -= reloadAmmo
-                self.curMag = reloadAmmo
+                ammoChange = min(self.ammo, self.magSize - self.curMag)
+                self.curMag = min(self.magSize, self.ammo)
+                self.ammo -= ammoChange
                 self.timer.timer = self.attackSpeed
                 self.reloading = False
 
