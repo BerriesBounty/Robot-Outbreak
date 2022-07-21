@@ -32,7 +32,7 @@ Robot Outbreak is a 2D top-down Roguelike game. Defeat robots in each level - bu
 
 ## Install
 
-Download the latest version from the [releases](https://github.com/p0deje/Maccy/releases/latest) page
+Download the latest version from the [releases](https://github.com/BerriesBounty/Robot-Outbreak/releases/tag/v1.0.0) page
 
 ## Usage
 
