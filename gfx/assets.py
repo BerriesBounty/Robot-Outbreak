@@ -230,7 +230,7 @@ def init():
 
     resourceSound.append(pygame.mixer.Sound("res/sfx/cashSound.mp3"))
     resourceSound.append(pygame.mixer.Sound("res/sfx/healthSound.wav"))
-    resourceSound[1].set_volume(0.1)
+    resourceSound[1].set_volume(0.5)
     resourceSound.append(pygame.mixer.Sound("res/sfx/arReload.wav"))
 
     ultSound.append(pygame.mixer.Sound("res/sfx/shockwave.wav"))

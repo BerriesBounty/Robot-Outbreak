@@ -91,7 +91,7 @@ class StartingState(State):
             renderRect = image.get_rect(center=(self.game.width / 2, self.game.height / 2))
             display.blit(image, renderRect)
 
-            assets.renderFont(display, "Grant theft manual", assets.white, assets.bgWhite, self.game.width / 2,
+            assets.renderFont(display, "Robot outbreak", assets.white, assets.bgWhite, self.game.width / 2,
                               self.game.height / 2 - 120, assets.fonts[1])  # draw the title of the game
 
             # draw the instruction for the controls

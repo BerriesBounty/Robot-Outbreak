@@ -1,5 +1,3 @@
-import random
-
 from gfx import assets
 from bullets.enemyBullet import EnemyBullet
 from weapons.weapon import Weapon
@@ -21,7 +19,7 @@ class EnemyAttack(Weapon):
         y = self.entity.enemies[0].rect.y
         eBullet = EnemyBullet(self, x, y)
         eBullet.setxy(self.entity.rect.x + self.entity.rect.width / 2 - eBullet.rect.width / 2,
-                             self.entity.rect.y + self.entity.rect.width / 2 - eBullet.rect.height / 2)
+                      self.entity.rect.y + self.entity.rect.width / 2 - eBullet.rect.height / 2)
         self.entity.world.bullet_list.add(eBullet)
         assets.pistolSound[0].play()
 
@@ -41,4 +39,3 @@ class EnemyAttack(Weapon):
     def render(self, display):
         display.blit(self.image, (self.rect.x - self.entity.world.state.game.gameCamera.xOffset,
                                   self.rect.y - self.entity.world.state.game.gameCamera.yOffset))
-
