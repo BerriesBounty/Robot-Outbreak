@@ -1,4 +1,4 @@
-<img width="128px" src="[https://maccy.app/img/maccy/Logo.png](https://cdn.dribbble.com/users/162768/screenshots/5895477/media/0eeb049e9b75db91268524653833b441.png?compress=1&resize=400x300)" alt="Logo" align="left" />
+<img width="128px" src="https://cdn.dribbble.com/users/162768/screenshots/5895477/media/0eeb049e9b75db91268524653833b441.png?compress=1&resize=400x300" alt="Logo" align="left" />
 
 # Robot Outbreak
 
